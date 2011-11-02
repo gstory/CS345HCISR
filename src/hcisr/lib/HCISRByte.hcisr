@@ -1,0 +1,45 @@
+this file describes a Class
+.
+external type Byte is a subtype of Object
+	and an instance B understands the following commands
+		B + A (Byte)
+			returns Byte
+		.
+		B - A (Byte)
+			returns Byte
+		.
+		B * A (Byte)
+			returns Byte
+		.
+		B / A (Byte)
+			returns Byte
+		.
+		B % A (Byte)
+			returns Byte
+		.
+		B plus A (Byte)
+			returns Byte
+		.
+		B minus A (Byte)
+			returns Byte
+		.
+		B times A (Byte)
+			returns Byte
+		.
+		B divided by A (Byte)
+			returns Byte
+		.
+		B modulo A (Byte)
+			returns Byte
+		.
+		B initialize byte
+			returns Nothing
+		.
+	.
+	and an instance B is created with the commands
+		make a new byte
+			B initialize byte
+			return B as Byte
+		.
+	.
+.
