@@ -10,7 +10,7 @@ File -> <this file describes> <a Class> NL Importbody <END> NL Class
 NL -> (<SPACE>*<EOL>)+
 Importbody -> Import*
  Import -> <this file uses> (<Chars>|<Ident>) NL
-Class ->  Header (Data)* Methods Constructor <END> NL
+Class ->  Header (Data)? (Methods)? (Constructor)? <END> NL
  Header -> (<type>||<archtype>||<externaltype>) <TIDENT> <is a subtype of> <TIDENT> NL
  Data ->  Dataheader Databody <END>
   Dataheader -> <and has> NL

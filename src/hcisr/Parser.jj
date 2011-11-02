@@ -6,15 +6,17 @@ import java.util.*;
 public class HCISR {
 
 }
+PASER_END(HCISR) 
 
-SKIP :
-{
-
+SKIP:
+{ 
+   " "
+   | "\t"
 }
 
 TOKEN:
 {
-   < S : ((" ") | ("	"))*>
+
    < EOL : "\n" | "\r" | "\n\r" | "\r\n" >
    < IDENT : ["A"-"Z"](["!"-"~"])* >
    < END : "." >
@@ -58,27 +60,27 @@ TOKEN:
 void NL() :
 {}
 {
-   (<S>*<EOL>)+
+   (<EOL>)+
 }
 
 void FTIDENT() :
 {}
 {
-   <IDENT><S> (<OF><S> (<S><IDENT><S> (<S><LP><S> TIDENT()<S> <RP><S>)?)+)?
+   <IDENT> (<OF> (<IDENT> (<LP> TIDENT() <RP>)?)+)?
 } 
 
 void TIDENT() :
 {}
 {
-   <IDENT> <S>(<OF><S> (<S><IDENT><S>|<S><IDENT><S> <OF><S> )+)?
+   <IDENT> (<OF> (<IDENT>|<IDENT> <OF> )+)?
 }
 
 void FILE() :
 {}
 {
-   <S> <this_file_describes> <S> <a_Class> NL() Importbody() <END> NL() Class()
-   |<S> <this_file_describes><S> <Functions> NL() Importbody() <END> NL() Functions()
-   |<S> <this_file_describes><S><a_Program> NL() Importbody() <END> NL() Functions()
+    <this_file_describes> <a_Class> NL() Importbody() <END> NL() Class()
+   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Functions()
+   | <this_file_describes> <a_Program> NL() Importbody() <END> NL() Functions()
 
 }
 
@@ -91,40 +93,136 @@ void Importbody() :
 void Import() :
 {}
 {
-   <this_file_uses> <S> (<CHARS>|<IDENT>) NL
+   <this_file_uses>  (<CHARS>|<IDENT>) NL
 }
 
 void Class() :
 {}
 {
-   <S> Header() <S> (Data())* <S> Methods() <S> Constructor() <S> <END> NL()
+    Header()  (Data())?  (Methods())?  (Constructor())?  <END> NL()
 }
 
 void Header() :
 {}
 {
-   <S> (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>)<S> <TIDENT><S> <is_a_subtype_of><S> <TIDENT> NL()
+    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) <TIDENT> <is_a_subtype_of> <TIDENT> NL()
 }
 
 void Data() :
 {}
 {
-   <S> Dataheader() <S> Databody() <END> NL()
+    Dataheader()  Databody() <END> NL()
 }
 
 void Dataheader() :
 {}
 {
-   <S> <and_has> NL()
+    <and_has> NL()
 }
 
 void Databody():
 {}
 {
-   <S> (<A> <S><TIDENT><S> <NAMED><S> <IDENT><S> (<which_initially_equals> <S>(<STRING>|<INT>|<FLOAT>|Function()|<BOOL>))? NL())*
+    (<A> <TIDENT> <NAMED> <IDENT> (<which_initially_equals> (<STRING>|<INT>|<FLOAT>|Function()|<BOOL>))? NL())*
 }
 
 void Methods() :
 {}
 {
-    
+    Methodhead()  Methodbodies() <END> NL()
+}
+
+void Methodhead():
+{}
+{
+   <and_an_instance>  <IDENT> <understands_the_following_commands> NL()
+}
+
+void Methodbodies():
+{}
+{
+   (Methoddec())*
+}
+
+void Methoddec():
+{}
+{
+   Methodid()  Codebody()  <END> NL()
+}
+
+void Methodid():
+{}
+{
+    <IDENT> (<CHARS>||(<IDENT><LP><TIDENT><RP>))+ NL()
+}
+
+void Codebody():
+{}
+{
+  (Returnsdec() | Codeblock())
+}
+
+void Returnsdec():
+{}
+{
+   <returns>  <TIDENT>
+}
+
+void Constructor():
+{}
+{
+   Constructorhead() Constructorbodies() NL()
+}
+
+void Constructorhead():
+{}
+{
+   <and_an_instance><IDENT><is_created_with_the_commands> NL()
+}
+
+void Constructorbodies():
+{}
+{
+   (Functiondec())*
+}
+
+void Functiondec():
+{}
+{
+    Functionid()  Codebody()  <END> NL()
+}
+
+void Functionid():
+{}
+{
+   <CHARS> (<CHARS> | <S> | (<S><IDENT><S><LP><S><TIDENT><S><RP><S>))* NL()
+}
+
+void Functions():
+{}
+{
+   <S> Fdata() <S> Funcs()
+}
+
+void Fdata():
+{}
+{
+    Fdatahead() <S> Databody() <END> NL()
+}
+
+void Funcs():
+{}
+{
+    (Functiondec())*
+}
+
+void Program():
+{}
+{
+   Codeblock()
+}
+
+void Codeblock():
+{}
+{
+   (Statement())* Returncall()  (Catchcall())*
