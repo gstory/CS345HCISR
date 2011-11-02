@@ -1,4 +1,5 @@
 package hcisr.ast;
+import hcisr.*;
 
 //this class represents a define call in HCISR
 public class HCISRDefineCallAST extends HCISRStatementAST{
@@ -12,6 +13,11 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 	protected String varName;
 	protected String initVal;
 	protected int initType;
+	
+	//what is the initial value
+	protected HCISRInstance initialVal;
+	//and where should it be put (will be on stack)
+	protected int arrayIndex;
 	
 	public HCISRDefineCallAST(String[] typeIdentifier, String variableName, String initialValue, int initialType){
 		typeName = typeIdentifier;

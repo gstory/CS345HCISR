@@ -6,6 +6,10 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 	protected HCISRStatementAST[] trueComs;
 	protected HCISRStatementAST[] falseComs;
 	
+	//where to find the boolean
+	protected boolean stackVar;
+	protected int arrayIndex;
+	
 	public HCISRIfCallAST(String booleanID, HCISRStatementAST[] trueCommands, HCISRStatementAST[] falseCommands){
 		boolID = booleanID;
 		trueComs = trueCommands;
