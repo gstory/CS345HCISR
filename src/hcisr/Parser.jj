@@ -1,0 +1,78 @@
+PARSER_BEGIN(HCISR)
+
+import java.io.*;
+import java.util.*;
+
+public class HCISR {
+
+}
+
+SKIP :
+{
+
+}
+
+TOKEN:
+{
+   < S : ((" ") | ("	"))*>
+   < EOL : "\n" | "\r" | "\n\r" | "\r\n" >
+   < IDENT : ["A"-"Z"](["!"-"~"])* >
+   < END : "." >
+   < OF : "of" >
+   < TYPE : "type" >
+   < ARCHTYPE : "archtype" >
+   < is_a_sub_type_of : "is a subtype of">
+   < and_has : "and has">
+   < and_an_instance : "and an instance">
+   < understands_the_following_commands : "understands the following commands">
+   < which_initially_equals : "which initially equals">
+   < is_created_with_the_commands : "is created with the commands">
+   < this_file_uses : "this file uses">
+   < this_file_describes : "this file describes">
+   < a_Class : "a class">
+   < Functions : "functions" >
+   < a_Program : "a program" >
+   < define_a : "define a ">
+   < SET : "set" >
+   < TO : "to" >
+   < IF : "if" > 
+   < otherwise : "otherwise">
+   < FOR_ALL  : "for all" >
+   < DO: "do">
+   < WHILE: "while" >
+   < COMPLAIN_ABOUT : "complain about">
+   < LABEL: "label">
+   < GOTO : "go to">
+   < NOTE : "note" >
+   < RETURN : "return" >
+   < and_in_the_event_of : "and in the event of">
+   < NUMS : ["0"-"9"]+>
+   < LP : "(" >
+   < RP : ")" > 
+   < CHARS : (["!"-"~"])+>
+}
+
+void NL() :
+{}
+{
+   (<S>*<EOL>)+
+}
+
+void FTIDENT() :
+{}
+{
+   <IDENT> (<OF> (<IDENT> (<LP> TIDENT() <RP>)?)+)?
+} 
+
+void TIDENT() :
+{}
+{
+   <IDENT> <S>(<OF> (<IDENT>|<IDENT> <OF> )+)?
+}
+
+void FILE() :
+{}
+{
+   <S> <this_file_describes> <S> <a_Class> NL() Importbody() <END> NL() Class()
+   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Functions()
+}
