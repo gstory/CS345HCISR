@@ -19,8 +19,11 @@ TOKEN:
    < IDENT : ["A"-"Z"](["!"-"~"])* >
    < END : "." >
    < OF : "of" >
+   < A : "a" >
+   < NAMED : "named" >
    < TYPE : "type" >
    < ARCHTYPE : "archtype" >
+   < EXTERNALTYPE : "externaltype" >
    < is_a_sub_type_of : "is a subtype of">
    < and_has : "and has">
    < and_an_instance : "and an instance">
@@ -61,18 +64,67 @@ void NL() :
 void FTIDENT() :
 {}
 {
-   <IDENT> (<OF> (<IDENT> (<LP> TIDENT() <RP>)?)+)?
+   <IDENT><S> (<OF><S> (<S><IDENT><S> (<S><LP><S> TIDENT()<S> <RP><S>)?)+)?
 } 
 
 void TIDENT() :
 {}
 {
-   <IDENT> <S>(<OF> (<IDENT>|<IDENT> <OF> )+)?
+   <IDENT> <S>(<OF><S> (<S><IDENT><S>|<S><IDENT><S> <OF><S> )+)?
 }
 
 void FILE() :
 {}
 {
    <S> <this_file_describes> <S> <a_Class> NL() Importbody() <END> NL() Class()
-   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Functions()
+   |<S> <this_file_describes><S> <Functions> NL() Importbody() <END> NL() Functions()
+   |<S> <this_file_describes><S><a_Program> NL() Importbody() <END> NL() Functions()
+
 }
+
+void Importbody() :
+{}
+{
+   (Import())*
+}
+
+void Import() :
+{}
+{
+   <this_file_uses> <S> (<CHARS>|<IDENT>) NL
+}
+
+void Class() :
+{}
+{
+   <S> Header() <S> (Data())* <S> Methods() <S> Constructor() <S> <END> NL()
+}
+
+void Header() :
+{}
+{
+   <S> (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>)<S> <TIDENT><S> <is_a_subtype_of><S> <TIDENT> NL()
+}
+
+void Data() :
+{}
+{
+   <S> Dataheader() <S> Databody() <END> NL()
+}
+
+void Dataheader() :
+{}
+{
+   <S> <and_has> NL()
+}
+
+void Databody():
+{}
+{
+   <S> (<A> <S><TIDENT><S> <NAMED><S> <IDENT><S> (<which_initially_equals> <S>(<STRING>|<INT>|<FLOAT>|Function()|<BOOL>))? NL())*
+}
+
+void Methods() :
+{}
+{
+    
