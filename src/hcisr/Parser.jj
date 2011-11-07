@@ -4,9 +4,13 @@ import java.io.*;
 import java.util.*;
 
 public class HCISR {
-
+   public static void main(String args[]) throws ParseException {
+      HCISR parser = new HCISR(System.in);
+      parser.File();
+   }
 }
-PASER_END(HCISR) 
+
+PARSER_END(HCISR)
 
 SKIP:
 { 
@@ -18,49 +22,80 @@ TOKEN:
 {
 
    < EOL : "\n" | "\r" | "\n\r" | "\r\n" >
-   < IDENT : ["A"-"Z"](["!"-"~"])* >
-   < END : "." >
-   < OF : "of" >
-   < A : "a" >
-   < NAMED : "named" >
-   < TYPE : "type" >
-   < ARCHTYPE : "archtype" >
-   < EXTERNALTYPE : "externaltype" >
-   < is_a_sub_type_of : "is a subtype of">
-   < and_has : "and has">
-   < and_an_instance : "and an instance">
-   < understands_the_following_commands : "understands the following commands">
-   < which_initially_equals : "which initially equals">
-   < is_created_with_the_commands : "is created with the commands">
-   < this_file_uses : "this file uses">
-   < this_file_describes : "this file describes">
-   < a_Class : "a class">
-   < Functions : "functions" >
-   < a_Program : "a program" >
-   < define_a : "define a ">
-   < SET : "set" >
-   < TO : "to" >
-   < IF : "if" > 
-   < otherwise : "otherwise">
-   < FOR_ALL  : "for all" >
-   < DO: "do">
-   < WHILE: "while" >
-   < COMPLAIN_ABOUT : "complain about">
-   < LABEL: "label">
-   < GOTO : "go to">
-   < NOTE : "note" >
-   < RETURN : "return" >
-   < and_in_the_event_of : "and in the event of">
-   < NUMS : ["0"-"9"]+>
-   < LP : "(" >
-   < RP : ")" > 
-   < CHARS : (["!"-"~"])+>
+   | < IDENT : ["A"-"Z"](["!"-"~"])* >
+   | < END : "." >
+   | < OF : "of" >
+   | < A : "a" >
+   | < NAMED : "named" >
+   | < TYPE : "type" >
+   | < ARCHTYPE : "archtype" >
+   | < EXTERNALTYPE : "externaltype" >
+   | < is_a_subtype_of : "is a subtype of">
+   | < and_has : "and has">
+   | < and_an_instance : "and an instance">
+   | < understands_the_following_commands : "understands the following commands">
+   | < which_initially_equals : "which initially equals">
+   | < is_created_with_the_commands : "is created with the commands">
+   | < this_file_uses : "this file uses">
+   | < this_file_describes : "this file describes">
+   | < a_Class : "a class">
+   | < Functions : "functions" >
+   | < a_Program : "a program" >
+   | < define_a : "define a">
+   | < SET : "set" >
+   | < TO : "to" >
+   | < IF : "if" > 
+   | < otherwise : "otherwise">
+   | < FOR_ALL  : "for all" >
+   | < DO: "do">
+   | < WHILE: "while" >
+   | < COMPLAIN_ABOUT : "complain about">
+   | < LABEL: "label">
+   | < GOTO : "go to">
+   | < NOTE : "note" >
+   | < RETURNS : "returns" >
+   | < RETURN : "return" >
+   | < THEN : "then" >
+   | < IN : "in" >
+   | < AS : "as" > 
+   | < and_in_the_event_of_a : "and in the event of a">
+   | < the_following_functions_make_use_of: "the following functions make use of">
+   | < NUMS : (["0"-"9"])+ >
+   | < LP : "(" >
+   | < RP : ")" > 
+   | < CHARS : (["!"-"~"])+ >
 }
 
 void NL() :
 {}
 {
    (<EOL>)+
+}
+
+void String():
+{}
+{
+   <CHARS>*
+}
+
+void Int():
+{}
+{
+}
+
+void Float():
+{}
+{
+}
+
+void Functioninit():
+{}
+{
+}
+
+void Bool():
+{}
+{
 }
 
 void FTIDENT() :
@@ -79,8 +114,8 @@ void FILE() :
 {}
 {
     <this_file_describes> <a_Class> NL() Importbody() <END> NL() Class()
-   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Functions()
-   | <this_file_describes> <a_Program> NL() Importbody() <END> NL() Functions()
+   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Function()
+   | <this_file_describes> <a_Program> NL() Importbody() <END> NL() Function()
 
 }
 
@@ -93,7 +128,7 @@ void Importbody() :
 void Import() :
 {}
 {
-   <this_file_uses>  (<CHARS>|<IDENT>) NL
+   <this_file_uses>  (<CHARS>|<IDENT>) NL()
 }
 
 void Class() :
@@ -105,7 +140,7 @@ void Class() :
 void Header() :
 {}
 {
-    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) <TIDENT> <is_a_subtype_of> <TIDENT> NL()
+    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) TIDENT() <is_a_subtype_of> TIDENT() NL()
 }
 
 void Data() :
@@ -123,7 +158,7 @@ void Dataheader() :
 void Databody():
 {}
 {
-    (<A> <TIDENT> <NAMED> <IDENT> (<which_initially_equals> (<STRING>|<INT>|<FLOAT>|Function()|<BOOL>))? NL())*
+    (<A> TIDENT() <NAMED> <IDENT> (<which_initially_equals> (String()|Int()|Float()|Functioninit()|Bool()))? NL())*
 }
 
 void Methods() :
@@ -153,7 +188,7 @@ void Methoddec():
 void Methodid():
 {}
 {
-    <IDENT> (<CHARS>||(<IDENT><LP><TIDENT><RP>))+ NL()
+    <IDENT> (<CHARS>|(<IDENT><LP>TIDENT()<RP>))+ NL()
 }
 
 void Codebody():
@@ -165,7 +200,7 @@ void Codebody():
 void Returnsdec():
 {}
 {
-   <returns>  <TIDENT>
+   <RETURNS>  TIDENT()
 }
 
 void Constructor():
@@ -195,19 +230,25 @@ void Functiondec():
 void Functionid():
 {}
 {
-   <CHARS> (<CHARS> | <S> | (<S><IDENT><S><LP><S><TIDENT><S><RP><S>))* NL()
+   <CHARS> (<CHARS> | (<IDENT><LP>TIDENT()<RP>))* NL()
 }
 
-void Functions():
+void Function():
 {}
 {
-   <S> Fdata() <S> Funcs()
+    Fdata()  Funcs()
 }
 
 void Fdata():
 {}
 {
-    Fdatahead() <S> Databody() <END> NL()
+    Fdatahead()  Databody()  NL()
+}
+
+void Fdatahead():
+{}
+{
+    <the_following_functions_make_use_of> NL() Databody() <END>  NL()
 }
 
 void Funcs():
@@ -226,3 +267,130 @@ void Codeblock():
 {}
 {
    (Statement())* Returncall()  (Catchcall())*
+}
+
+void Statement():
+{}
+{
+   (Methodcall() | Structurecall() | Functioncall())
+}
+
+void Methodcall():
+{}
+{
+   <IDENT> (<CHARS> | <IDENT>)* NL()
+}
+
+void Structurecall():
+{}
+{
+   Definecall() | Setcall() | Ifcall() | Forcall() | Whilecall() | Complaincall() | Labelcall() | Gotocall() | Notecall()
+}
+
+void Definecall():
+{}
+{
+   <define_a>TIDENT()<NAMED><IDENT> (<which_initially_equals>(String()|Int()|Float()|Functioninit()|Bool()))? NL()
+}
+
+void Setcall():
+{}
+{
+   <SET> <IDENT> <TO> (Methodcall() | Functioncall())
+}
+
+void Ifcall():
+{}
+{
+   Conditional() Ifclause() (Elseclause())?
+}
+
+void Conditional():
+{}
+{
+   <IF> <IDENT> <THEN> NL()
+}
+
+void Ifclause():
+{}
+{
+   (Statement())* <END> NL()
+}
+
+void Elseclause():
+{}
+{
+   <otherwise> NL() (Statement())* <END> NL()
+}
+
+void Forcall():
+{}
+{
+   Fordec() (Statement())* <END> NL()
+}
+
+void Fordec():
+{}
+{
+   <FOR_ALL> TIDENT() <NAMED> <IDENT> <IN> <IDENT> <DO> <END> NL()
+}
+
+void Whilecall():
+{}
+{
+   Whiledec() (Statement())* <END> NL()
+}
+
+void Whiledec():
+{}
+{
+   <WHILE> <IDENT> <DO> NL()
+}
+
+void Complaincall():
+{}
+{
+   <COMPLAIN_ABOUT> <IDENT> NL()
+}
+
+void Labelcall():
+{}
+{
+   <LABEL> <IDENT> NL()
+}
+
+void Gotocall():
+{}
+{
+   <GOTO> <IDENT> NL()
+}
+
+void Notecall():
+{}
+{
+   <NOTE> (<CHARS>|<IDENT>)* NL()
+}
+
+void Functioncall():
+{}
+{
+   <CHARS> (<CHARS>|<IDENT>)* NL()
+}
+
+void Returncall():
+{}
+{
+   <RETURN> <IDENT> <AS> TIDENT() NL()
+}
+
+void Catchcall():
+{}
+{
+   Catchhead() (Statement())* <END> NL()
+}
+
+void Catchhead():
+{}
+{
+   <and_in_the_event_of_a>TIDENT()<NAMED><IDENT> NL()
+}
