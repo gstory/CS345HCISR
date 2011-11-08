@@ -45,6 +45,8 @@ TOKEN:
    | < SET : "set" >
    | < TO : "to" >
    | < IF : "if" > 
+   | < TRUE : "true" >
+   | < FALSE : "false" >
    | < otherwise : "otherwise">
    | < FOR_ALL  : "for all" >
    | < DO: "do">
@@ -66,6 +68,19 @@ TOKEN:
    | < CHARS : (["!"-"~"])+ >
 }
 
+void Any():
+{}
+{
+   <CHARS>|<END>|<LP>|<RP>|<NUMS>|<A>|<IDENT>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<define_a>|<SET>|<TO>|<IF>|<TRUE>|<FALSE>|<otherwise>|<FOR_ALL>|<DO>|<WHILE>|<COMPLAIN_ABOUT>|<LABEL>|<GOTO>|<NOTE>|<RETURNS>|<RETURN>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>
+
+}
+
+void Anyfirst():
+{}
+{
+   //ANYTHING BUT RESERVED WORD
+}
+
 void NL() :
 {}
 {
@@ -75,27 +90,31 @@ void NL() :
 void String():
 {}
 {
-   <CHARS>*
+   <CHARS>
 }
 
 void Int():
 {}
 {
+   <NUMS>
 }
 
 void Float():
 {}
 {
+   <NUMS><END><NUMS>
 }
 
 void Functioninit():
 {}
 {
+   (<IDENT>|<CHARS>)*
 }
 
 void Bool():
 {}
-{
+{ 
+   (<TRUE>|<FALSE>)
 }
 
 void FTIDENT() :
