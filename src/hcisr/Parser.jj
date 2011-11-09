@@ -6,7 +6,7 @@ import java.util.*;
 public class HCISR {
    public static void main(String args[]) throws ParseException {
       HCISR parser = new HCISR(System.in);
-      parser.File();
+      parser.FILE();
    }
 }
 
@@ -21,7 +21,7 @@ SKIP:
 TOKEN:
 {
 
-   < EOL : "\n" | "\r" | "\n\r" | "\r\n" >
+   < EOL : "\n" | "\r" >
    | < IDENT : ["A"-"Z"](["!"-"~"])* >
    | < END : "." >
    | < OF : "of" >
@@ -29,7 +29,7 @@ TOKEN:
    | < NAMED : "named" >
    | < TYPE : "type" >
    | < ARCHTYPE : "archtype" >
-   | < EXTERNALTYPE : "externaltype" >
+   | < EXTERNALTYPE : "external type" >
    | < is_a_subtype_of : "is a subtype of">
    | < and_has : "and has">
    | < and_an_instance : "and an instance">
@@ -60,6 +60,13 @@ TOKEN:
    | < THEN : "then" >
    | < IN : "in" >
    | < AS : "as" > 
+   | < WITH : "with">
+   | < STRINGREF : "string" >
+   | < INTREF: "integer" >
+   | < FLOATREF: "float" >
+   | < FUNCTIONREF : "function" >
+   | < BOOLREF : "boolean" >
+   | < make_a_new : "make a new" >
    | < and_in_the_event_of_a : "and in the event of a">
    | < the_following_functions_make_use_of: "the following functions make use of">
    | < NUMS : (["0"-"9"])+ >
@@ -71,50 +78,50 @@ TOKEN:
 void Any():
 {}
 {
-   <CHARS>|<END>|<LP>|<RP>|<NUMS>|<A>|<IDENT>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<define_a>|<SET>|<TO>|<IF>|<TRUE>|<FALSE>|<otherwise>|<FOR_ALL>|<DO>|<WHILE>|<COMPLAIN_ABOUT>|<LABEL>|<GOTO>|<NOTE>|<RETURNS>|<RETURN>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>
+   <CHARS>|<END>|<LP>|<RP>|<NUMS>|<A>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<define_a>|<SET>|<TO>|<IF>|<TRUE>|<FALSE>|<otherwise>|<FOR_ALL>|<DO>|<WHILE>|<COMPLAIN_ABOUT>|<LABEL>|<GOTO>|<NOTE>|<RETURNS>|<RETURN>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>|<make_a_new>|<WITH>|<STRINGREF>|<INTREF>|<FLOATREF>|<BOOLREF>|<FUNCTIONREF>
 
 }
 
 void Anyfirst():
 {}
 {
-   //ANYTHING BUT RESERVED WORD
+   <CHARS>|<END>|<LP>|<RP>|<NUMS>|<A>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<TO>|<TRUE>|<FALSE>|<DO>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>|<make_a_new>|<WITH>|<STRINGREF>|<INTREF>|<FLOATREF>|<BOOLREF>|<FUNCTIONREF>
 }
 
 void NL() :
 {}
 {
-   (<EOL>)+
+   (LOOKAHEAD(2)<EOL>)+
 }
 
 void String():
 {}
 {
-   <CHARS>
+   <STRINGREF><CHARS>
 }
 
 void Int():
 {}
 {
-   <NUMS>
+   <INTREF><NUMS>
 }
 
 void Float():
 {}
 {
-   <NUMS><END><NUMS>
+   <FLOATREF><NUMS><END><NUMS>
 }
 
 void Functioninit():
 {}
 {
-   (<IDENT>|<CHARS>)*
+   <FUNCTIONREF>(<IDENT>|<CHARS>)*
 }
 
 void Bool():
 {}
 { 
-   (<TRUE>|<FALSE>)
+   <BOOLREF>(<TRUE>|<FALSE>)
 }
 
 void FTIDENT() :
@@ -126,16 +133,23 @@ void FTIDENT() :
 void TIDENT() :
 {}
 {
-   <IDENT> (<OF> (<IDENT>|<IDENT> <OF> )+)?
+   <IDENT> (<OF> (LOOKAHEAD(2) <IDENT>|<IDENT> <OF> )+)?
 }
 
 void FILE() :
 {}
 {
-    <this_file_describes> <a_Class> NL() Importbody() <END> NL() Class()
-   | <this_file_describes> <Functions> NL() Importbody() <END> NL() Function()
-   | <this_file_describes> <a_Program> NL() Importbody() <END> NL() Function()
+    <this_file_describes> Fileh() 
+  
 
+}
+
+void Fileh():
+{}
+{
+   <a_Class> NL() Importbody() <END> NL() Class()
+   | <Functions> NL() Importbody() <END> NL() Function()
+   | <a_Program> NL() Importbody() <END> NL() Program()
 }
 
 void Importbody() :
@@ -153,13 +167,13 @@ void Import() :
 void Class() :
 {}
 {
-    Header()  (Data())?  (Methods())?  (Constructor())?  <END> NL()
+    Header()  (Data())?  (LOOKAHEAD(3) Methods())?  (LOOKAHEAD(3) Constructor())?  <END> NL()
 }
 
 void Header() :
 {}
 {
-    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) TIDENT() <is_a_subtype_of> TIDENT() NL()
+    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) FTIDENT() <is_a_subtype_of> TIDENT() NL()
 }
 
 void Data() :
@@ -177,7 +191,7 @@ void Dataheader() :
 void Databody():
 {}
 {
-    (<A> TIDENT() <NAMED> <IDENT> (<which_initially_equals> (String()|Int()|Float()|Functioninit()|Bool()))? NL())*
+    (<A> TIDENT() <NAMED> <IDENT> (<which_initially_equals> (String()| LOOKAHEAD(2) Int()| LOOKAHEAD(2) Float()|Functioninit()|Bool()))? NL())* 
 }
 
 void Methods() :
@@ -189,7 +203,7 @@ void Methods() :
 void Methodhead():
 {}
 {
-   <and_an_instance>  <IDENT> <understands_the_following_commands> NL()
+    <and_an_instance>  <IDENT> <understands_the_following_commands> NL()
 }
 
 void Methodbodies():
@@ -207,7 +221,7 @@ void Methoddec():
 void Methodid():
 {}
 {
-    <IDENT> (<CHARS>|(<IDENT><LP>TIDENT()<RP>))+ NL()
+    <IDENT> (Any() |(<IDENT><LP>TIDENT()<RP>))+ NL()
 }
 
 void Codebody():
@@ -219,25 +233,37 @@ void Codebody():
 void Returnsdec():
 {}
 {
-   <RETURNS>  TIDENT()
+   <RETURNS>  TIDENT() NL()
 }
 
 void Constructor():
 {}
 {
-   Constructorhead() Constructorbodies() NL()
+   Constructorhead() Constructorbodies() <END> NL()
 }
 
 void Constructorhead():
 {}
 {
-   <and_an_instance><IDENT><is_created_with_the_commands> NL()
+    <and_an_instance><IDENT><is_created_with_the_commands> NL()
 }
 
 void Constructorbodies():
 {}
 {
-   (Functiondec())*
+   (Constructordec())*
+}
+
+void Constructordec():
+{}
+{
+   Constructorid() Codebody() <END> NL()
+}
+
+void Constructorid():
+{}
+{
+   <make_a_new> TIDENT() (<WITH> (Any() | (<IDENT><LP>TIDENT()<RP>))*)? NL()
 }
 
 void Functiondec():
@@ -249,7 +275,7 @@ void Functiondec():
 void Functionid():
 {}
 {
-   <CHARS> (<CHARS> | (<IDENT><LP>TIDENT()<RP>))* NL()
+   Anyfirst() (Any() | (<IDENT><LP>TIDENT()<RP>))* NL()
 }
 
 void Function():
@@ -261,13 +287,13 @@ void Function():
 void Fdata():
 {}
 {
-    Fdatahead()  Databody()  NL()
+    Fdatahead()  Databody()  <END> NL()
 }
 
 void Fdatahead():
 {}
 {
-    <the_following_functions_make_use_of> NL() Databody() <END>  NL()
+    <the_following_functions_make_use_of>  NL()
 }
 
 void Funcs():
@@ -413,3 +439,5 @@ void Catchhead():
 {
    <and_in_the_event_of_a>TIDENT()<NAMED><IDENT> NL()
 }
+
+
