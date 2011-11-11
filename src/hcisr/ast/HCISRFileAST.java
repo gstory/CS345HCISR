@@ -22,8 +22,42 @@ public class HCISRFileAST{
 		return isP;
 	}
 	
+	//find a class in the collection of imports
+	public static HCISRClassAST findBaseClass(HashMap<String,HCISRFileAST> imports,String name){
+		for(HCISRFileAST f : imports.values()){
+			if(f.isC){
+				if(f.classDef.typeName[0].equals(name)){
+					return f.classDef;
+				}
+			}
+		}
+		return null;
+	}
+	//see if a class needs parameterization
+	public static void checkForTemplateClass(HashMap<String,HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses, String[] typeName){
+		if(typeName == null){
+			return;
+		}
+		if(HCISRFileAST.findBaseClass(imports, typeName[0]).isTemplate()){
+			HCISRClassAST superT = HCISRFileAST.findBaseClass(imports, typeName[0]);
+			superT.parameterize(imports, newClasses, typeName);
+		}
+	}
+	
+	//run through contents looking for all parameterized types, and tell the base type to make it
+	//provided that this file is not itself a template
 	public void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses){
-		
+		if(isC){
+			classDef.compileTemplates(imports, newClasses);
+		}
+		else if(isF){
+			functionDef.compileTemplates(imports, newClasses);
+		}
+		else{
+			for(HCISRStatementAST s:programDef){
+				s.compileTemplates(imports, newClasses);
+			}
+		}
 	}
 	
 	public void compileHierarchy(HashMap<String,HCISRFileAST> imports){

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 //this class represents a set statement using a function
-public class HCISRSetCallFunctionAST extends HCISRStatementAST{
+public class HCISRSetCallConstructorAST extends HCISRStatementAST{
 	//what variable needs setting
 	protected String varID;
 	//what value should it be set to
-	protected HCISRFunctionCallAST funcID;
+	protected HCISRConstructorCallAST funcID;
 	
 	//these variables describe the location of the variable to be set
 	//is it on the stack, or in an instance
@@ -16,22 +16,21 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 	//what is its index
 	protected int arrayLocation;
 	
-	//set does not, of itself, create new types
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses) {
 		funcID.compileTemplates(imports, newClasses);
 	}
 	
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
-		return new HCISRSetCallFunctionAST(this, bindings);
+		return new HCISRSetCallConstructorAST(this,bindings);
 	}
 	
-	public HCISRSetCallFunctionAST(String variableID, HCISRFunctionCallAST functionID){
+	public HCISRSetCallConstructorAST(String variableID, HCISRConstructorCallAST functionID){
 		varID = variableID;
 		funcID = functionID;
 	}
 	
-	public HCISRSetCallFunctionAST(HCISRSetCallFunctionAST origin, HashMap<String,String[]> bindings){
+	public HCISRSetCallConstructorAST(HCISRSetCallConstructorAST origin, HashMap<String,String[]> bindings){
 		varID = origin.varID;
-		funcID = (HCISRFunctionCallAST)(origin.funcID.copyWithParameters(bindings));
+		funcID = (HCISRConstructorCallAST)(origin.funcID.copyWithParameters(bindings));
 	}
 }
