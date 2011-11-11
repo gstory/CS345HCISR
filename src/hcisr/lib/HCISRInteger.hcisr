@@ -1,35 +1,35 @@
-this file describes a Class
+this file describes a class
 .
 external type Integer is a subtype of Object
 	and an instance I understands the following commands
-		I + B (Integer)
+		I + B (  Integer  )
 			returns Integer
 		.
-		I - B (Integer)
+		I - B (  Integer )
 			returns Integer
 		.
-		I * B (Integer)
+		I * B ( Integer )
 			returns Integer
 		.
-		I / B (Integer)
+		I / B ( Integer )
 			returns Integer
 		.
-		I % B (Integer)
+		I % B ( Integer )
 			returns Integer
 		.
-		I plus B (Integer)
+		I plus B ( Integer )
 			returns Integer
 		.
-		I minus B (Integer)
+		I minus B ( Integer )
 			returns Integer
 		.
-		I times B (Integer)
+		I times B ( Integer )
 			returns Integer
 		.
-		I divided by B (Integer)
+		I divided by B ( Integer )
 			returns Integer
 		.
-		I modulo B (Integer)
+		I modulo B ( Integer )
 			returns Integer
 		.
 		I initialize integer
@@ -37,8 +37,8 @@ external type Integer is a subtype of Object
 		.
 	.
 	and an instance I is created with the commands
-		make a new integer
-			I initialize integer
+		make a new Integer
+			I initialize Integer
 			return I as Integer
 		.
 	.
