@@ -61,7 +61,7 @@ TOKEN:
    | < IN : "in" >
    | < AS : "as" > 
    | < WITH : "with">
-   | < STRINGREF : "string" >
+   | < STRINGREF : ("string")([" "-"~"]|"	")+ >
    | < INTREF: "integer" >
    | < FLOATREF: "float" >
    | < FUNCTIONREF : "function" >
@@ -85,7 +85,7 @@ void Any():
 void Anyfirst():
 {}
 {
-   <CHARS>|<END>|<LP>|<RP>|<NUMS>|<A>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<TO>|<TRUE>|<FALSE>|<DO>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>|<make_a_new>|<WITH>|<STRINGREF>|<INTREF>|<FLOATREF>|<BOOLREF>|<FUNCTIONREF>
+   <CHARS>|<LP>|<RP>|<NUMS>|<A>|<OF>|<NAMED>|<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>|<is_a_subtype_of>|<and_has>|<and_an_instance>|<understands_the_following_commands>|<which_initially_equals>|<is_created_with_the_commands>|<this_file_uses>|<this_file_describes>|<a_Class>|<Functions>|<a_Program>|<TO>|<TRUE>|<FALSE>|<DO>|<THEN>|<IN>|<AS>|<and_in_the_event_of_a>|<the_following_functions_make_use_of>|<WITH>|<STRINGREF>|<INTREF>|<FLOATREF>|<BOOLREF>|<FUNCTIONREF>
 }
 
 void NL() :
@@ -97,7 +97,7 @@ void NL() :
 void String():
 {}
 {
-   <STRINGREF><CHARS>
+   <STRINGREF>
 }
 
 void Int():
@@ -145,23 +145,31 @@ void FILE() :
 }
 
 void Fileh():
-{}
+{HCISRFileAST f; String[] tmp;}
 {
-   <a_Class> NL() Importbody() <END> NL() Class()
-   | <Functions> NL() Importbody() <END> NL() Function()
+   <a_Class> NL() tmp = Importbody() <END> NL() Class()  {for(String s : tmp) {System.out.println(s);}/*return new HCISRFileAST(String[], HCISRClassAST);*/} 
+   | <Functions> NL() Importbody() <END> NL() Function() 
    | <a_Program> NL() Importbody() <END> NL() Program()
+   
 }
 
-void Importbody() :
-{}
+String[] Importbody() :
+{String[] imports; String tmp; ArrayList<String> tobuild;}
 {
-   (Import())*
+   {tobuild = new ArrayList<String>();}(tmp = Import() {tobuild.add(tmp);} )* 
+	{imports = new String[tobuild.size()]; 
+		for(int i = 0; i<tobuild.size(); i++)
+		{
+		   imports[i] = tobuild.get(i);
+		}
+		return imports;
+ 	}
 }
 
-void Import() :
-{}
+String Import() :
+{Token e;}
 {
-   <this_file_uses>  (<CHARS>|<IDENT>) NL()
+   <this_file_uses>  (e = <CHARS>| e = <IDENT>) NL() {return e.image();}
 }
 
 void Class() :
@@ -317,13 +325,19 @@ void Codeblock():
 void Statement():
 {}
 {
-   (Methodcall() | Structurecall() | Functioncall())
+   (Methodcall() | Structurecall() | Functioncall() | Constructorcall())
 }
 
 void Methodcall():
 {}
 {
-   <IDENT> (<CHARS> | <IDENT>)* NL()
+   <IDENT> (Any() | <IDENT>)* NL()
+}
+
+void Constructorcall():
+{}
+{
+   <make_a_new> TIDENT() (<WITH> (Any() | <IDENT>)*)? NL()
 }
 
 void Structurecall():
@@ -419,7 +433,7 @@ void Notecall():
 void Functioncall():
 {}
 {
-   <CHARS> (<CHARS>|<IDENT>)* NL()
+   Anyfirst() (Any()|<IDENT>)* NL()
 }
 
 void Returncall():
