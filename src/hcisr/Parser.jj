@@ -22,7 +22,6 @@ TOKEN:
 {
 
    < EOL : "\n" | "\r" >
-   | < IDENT : ["A"-"Z"](["!"-"~"])* >
    | < END : "." >
    | < OF : "of" >
    | < A : "a" >
@@ -61,14 +60,15 @@ TOKEN:
    | < IN : "in" >
    | < AS : "as" > 
    | < WITH : "with">
-   | < STRINGREF : ("string")([" "-"~"]|"	")+ >
-   | < INTREF: "integer" >
-   | < FLOATREF: "float" >
-   | < FUNCTIONREF : "function" >
-   | < BOOLREF : "boolean" >
+   | < STRINGREF : ("String:")([" "-"~"]|"	")+ >
+   | < INTREF: "Integer:" >
+   | < FLOATREF: "Float:" >
+   | < FUNCTIONREF : "Function:" >
+   | < BOOLREF : "Boolean:" >
    | < make_a_new : "make a new" >
    | < and_in_the_event_of_a : "and in the event of a">
    | < the_following_functions_make_use_of: "the following functions make use of">
+   | < IDENT : ["A"-"Z"](["!"-"~"])* >
    | < NUMS : (["0"-"9"])+ >
    | < LP : "(" >
    | < RP : ")" > 
@@ -124,16 +124,40 @@ void Bool():
    <BOOLREF>(<TRUE>|<FALSE>)
 }
 
-void FTIDENT() :
-{}
+Object[] FTIDENT() :
+{String[] fullTypeName; String[] tmpres; String[][] parameterLimiters; ArrayList<String> tmpname; ArrayList<String[]> tmprestrictions; boolean seenres; Token e; Object[] returnarray;}
 {
-   <IDENT> (<OF> (<IDENT> (<LP> TIDENT() <RP>)?)+)?
+   {tmpname = new ArrayList<String>(); tmprestrictions = new ArrayList<String[]>();}   
+
+
+   e = <IDENT> {tmpname.add(e.image()); tmprestrictions.add(null); }
+	( e = <OF> {tmpname.add(e.image()); tmprestrictions.add(null);} 
+		( e = <IDENT> {tmpname.add(e.image()); seenres = false;} 
+			(<LP> tmpres = TIDENT() {seenres = true;} <RP>)? 
+				{tmprestrictions.add(seenres?tmpres:null);})+)?
+   {fullTypeName = new String[tmpname.size()]; 
+	for(int i = 0; i < fullTypeName.length; i++){
+	   fullTypeName[i] = tmpname.get(i);	
+	}
+	parameterLimiters = new String[tmprestrictions.size()][];
+	for(int i = 0; i < parameterLimiters.length; i++){
+	   parameterLimiters[i] = tmprestrictions.get(i);
+	} 
+	returnarray = new Object[2];
+	returnarray[0] = fullTypeName;
+	returnarray[1] = parameterLimiters;
+	return returnarray;
+   }
 } 
 
-void TIDENT() :
-{}
+String[] TIDENT() :
+{String[] fullTypeName; Token e; ArrayList<String> tmpname;}
 {
-   <IDENT> (<OF> (LOOKAHEAD(2) <IDENT>|<IDENT> <OF> )+)?
+   e = <IDENT> {tmpname.add(e.image());} (e = <OF> {tmpname.add(e.image());} (LOOKAHEAD(2) e = <IDENT>{tmpname.add(e.image());}|e = <IDENT>{tmpname.add(e.image());} e = <OF>{tmpname.add(e.image());} )+)?
+	{fullTypeName = new String[tmpname.size()];
+		for(int i = 0; i < fullTypeName.length; i++){
+			fullTypeName[i] = tmpname.get(i); }
+	return fullTypeName;}
 }
 
 void FILE() :
@@ -148,8 +172,8 @@ void Fileh():
 {HCISRFileAST f; String[] tmp;}
 {
    <a_Class> NL() tmp = Importbody() <END> NL() Class()  {for(String s : tmp) {System.out.println(s);}/*return new HCISRFileAST(String[], HCISRClassAST);*/} 
-   | <Functions> NL() Importbody() <END> NL() Function() 
-   | <a_Program> NL() Importbody() <END> NL() Program()
+   | <Functions> NL() tmp = Importbody() <END> NL() Function() {for(String s : tmp) {System.out.println(s);}/*return new HCISRFileAST(String[], HCISRFunctionFileAST);*/}
+   | <a_Program> NL() tmp = Importbody() <END> NL() Program() {for(String s : tmp) {System.out.println(s);}/*return new HCISRFileAST(String[], HCISRStatementAST[]);*/}
    
 }
 
@@ -173,15 +197,24 @@ String Import() :
 }
 
 void Class() :
-{}
+{int classClassification; String[] fullTypeName; String[][] parameterLimiters; String[] fullSuperTypeName; HCISRVariableAST[] instanceVariableList;HCISRMethodAST[] instanceMethodList;HCISRConstructorAST[] fullConstructorList;String methodSelfReference;String constructorSelfReference; /*starting tmps*/ Object[] headerReturn; Object[] dataReturn;}
 {
-    Header()  (Data())?  (LOOKAHEAD(3) Methods())?  (LOOKAHEAD(3) Constructor())?  <END> NL()
+    headerReturn = Header()  (Data())?  (LOOKAHEAD(3) Methods())?  (LOOKAHEAD(3) Constructor())?  <END> NL()
 }
 
-void Header() :
-{}
+Object[] Header() :
+{String[] fullTypeName; String[] fullSuperTypeName; Object[] filetypeident; String[][] parameterLimiters; int classtype; Object[] returnarray;}
 {
-    (<TYPE>|<ARCHTYPE>|<EXTERNALTYPE>) FTIDENT() <is_a_subtype_of> TIDENT() NL()
+    (<TYPE>{classtype = 0}|<ARCHTYPE>{classtype = 1}|<EXTERNALTYPE>{classtype = 2}) filetypeident = FTIDENT() <is_a_subtype_of> fullSuperTypeName = TIDENT() NL()
+	{
+		fullTypeName = filetypeident[0]; 
+		parameterLimiters = filetypeident[1];
+		returnarray[0] = classClassification;
+		returnarray[1] = fullTypeName;
+		returnarray[2] = parameterLimiters;
+		returnarray[3] = fullSuperTypeName;
+		return returnarray;
+	}
 }
 
 void Data() :
