@@ -1,30 +1,30 @@
-this file describes a Class
+this file describes a class
 .
 external type Boolean is a subtype of Object
 	and an instance B understands the following commands
-		B & A (Boolean)
+		B & A ( Boolean )
 			returns Boolean
 		.
-		B | A (Boolean)
+		B | A ( Boolean )
 			returns Boolean
 		.
-		B * A (Boolean)
-			define a Boolean called C
+		B * A ( Boolean )
+			define a Boolean named C
 			set C to B & A
 			return C as Boolean
 		.
-		B + A (Boolean)
-			define a Boolean called C
+		B + A ( Boolean )
+			define a Boolean named C
 			set C to B | A
 			return C as Boolean
 		.
-		B and A (Boolean)
-			define a Boolean called C
+		B and A ( Boolean )
+			define a Boolean named C
 			set C to B & A
 			return C as Boolean
 		.
-		B or A (Boolean)
-			define a Boolean called C
+		B or A ( Boolean )
+			define a Boolean named C
 			set C to B | A
 			return C as Boolean
 		.
@@ -33,7 +33,7 @@ external type Boolean is a subtype of Object
 		.
 	.
 	and an instance B is created with the commands
-		make a new boolean
+		make a new Boolean
 			B initialize boolean
 			return B as Boolean
 		.
