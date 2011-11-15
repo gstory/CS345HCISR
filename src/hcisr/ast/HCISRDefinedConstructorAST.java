@@ -9,6 +9,7 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 
 	//look at type restrictions and the return declaration, and create any new types
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
+		//compile type restrictions
 		for(String[] tpnm : typeRes){
 			HCISRFileAST.checkForTemplateClass(imports, newClasses, tpnm);
 		}
@@ -18,19 +19,52 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 	public HCISRConstructorAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRDefinedConstructorAST(this,bindings);
 	}
-	public HCISRDefinedConstructorAST(String returnVariable, String[] returnType,String[] methodSignature,String[][] typeRestrictions, HCISRCodeBlockAST commands){
-		retVar = returnVariable;
+	
+	//anything that this calls, find it
+	//this has return type, and a bunch of statements to compile
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST toCreate){
+		toConstruct = toCreate;
+		//create a copy of the variables, and add in any arguments
+		HashMap<String,VariableLocationDescription> methodVars = new HashMap<String,VariableLocationDescription>();
+		methodVars.putAll(classVars);
+		int curLoc = 0;
+		//add in the constructed variable (it's not mentioned elsewhere)
+		methodVars.put(createdVariable, new VariableLocationDescription(false,curLoc,createdVariableType));
+		curLoc++;
+		//and then add in arguments, skipping until you see "with" (get past the type name)
+		boolean skipped = false;
+		for(int i = 0;i<sig.length;i++){
+			if(skipped){
+				//run through the signature looking for arguments
+				if(HCISRFileAST.isIdentifier(sig[i])){
+					methodVars.put(sig[i], new VariableLocationDescription(false,curLoc,typeRes[i]));
+					curLoc += 1;
+				}
+			}
+			else{
+				if(sig[i].equals("with")){
+					skipped = true;
+				}
+			}
+		}
+		
+		//now, with the new method vars, compile the code block
+		stackSize = code.compileReferences(imports, methodVars, curLoc);
+	}
+	
+	public HCISRDefinedConstructorAST(String createdVariable, String[] createdType,String[] methodSignature,String[][] typeRestrictions, HCISRCodeBlockAST commands){
+		this.createdVariable = createdVariable;
 		sig = methodSignature;
 		code = commands;
-		retType = returnType;
+		createdVariableType = createdType;
 		typeRes = typeRestrictions;
 		isDefined = true;
 	}
 	
 	public HCISRDefinedConstructorAST(HCISRDefinedConstructorAST origin, HashMap<String,String[]> bindings){
-		retVar = origin.retVar;
+		createdVariable = origin.createdVariable;
 		sig = origin.sig;
-		retType = HCISRClassAST.replaceTypeNames(origin.retType, bindings);
+		createdVariableType = HCISRClassAST.replaceTypeNames(origin.createdVariableType, bindings);
 		typeRes = HCISRClassAST.replaceTypeRestrictions(origin.typeRes, bindings);
 		code = origin.code.copyWithParameters(bindings);
 		isDefined = true;

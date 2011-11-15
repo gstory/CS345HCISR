@@ -19,6 +19,16 @@ public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 		return new HCISRDeclaredMethodAST(this,bindings);
 	}
 	
+	//anything that this calls, find it
+	//this really has nothing to call, just find the stack size
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST callingClass){
+		for(int i = 0;i<sig.length;i++){
+			if(HCISRFileAST.isIdentifier(sig[i])){
+				stackSize = stackSize + 1;
+			}
+		}
+	}
+	
 	public HCISRDeclaredMethodAST(String instanceName,String[] methodSignature, String[][] parameterRestrictions,HCISRReturnsDeclarationAST retType){
 		instName = instanceName;
 		sig = methodSignature;

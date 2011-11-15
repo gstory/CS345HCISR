@@ -2,6 +2,9 @@ package hcisr.ast;
 import java.util.*;
 
 //this class represents a hcisr type
+//How overloading is done
+//	starting from the left, look for the method that has the best match (same signature, and argument type closest to the signature)
+//	note that it is only possible to upcast for methods, you cannot downcast
 public class HCISRClassAST{
 	public static final int NORMAL = 0;
 	public static final int ARCHTYPE = 1;
@@ -18,14 +21,184 @@ public class HCISRClassAST{
 	protected String methodThisName;
 	protected String constructorThisName;
 	
+	//compiled information about the type
+	protected HCISRClassAST stype;
+	
 	//what has been done to the type
 	protected boolean templateCompiled = false;
+	protected boolean hierarchyCompiled = false;
+	protected boolean referencesCompiled = false;
 	
 	//parameterized types, used for templates (the string is the full, concatenated name)
 	HashMap<String,HCISRClassAST> parameterized;
 	protected boolean filledIn = false;
 	HashMap<String,String[]> typeReps;
 	HCISRClassAST templateType;
+	
+	//get the correctly parameterized type
+	public HCISRClassAST getParameterizedClass(String[] fullTypeName){
+		return parameterized.get(getFullName(fullTypeName));
+	}
+	
+	//look for the location of the best method
+	public int findMatchingMethodLocation(HashMap<String,HCISRFileAST> imports, String[] signature, VariableLocationDescription[] argumentTypes){
+		HCISRMethodAST match = findMatchingMethod(imports, signature, argumentTypes);
+		for(int i = 0;i<methodList.length;i++){
+			if(methodList[i] == match){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	//look for the best method
+	public HCISRMethodAST findMatchingMethod(HashMap<String,HCISRFileAST> imports,String[] signature,VariableLocationDescription[] argumentTypes){
+		ArrayList<HCISRMethodAST> possible = new ArrayList<HCISRMethodAST>();
+		for(HCISRMethodAST m : methodList){
+			possible.add(m);
+		}
+		for(int i = 0;i < signature.length;i++){
+			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
+			String curSig = signature[i];
+			//in the part of the constructor with arguments
+			if(HCISRFileAST.isIdentifier(curSig)){
+				//is an identifier, check type
+				int shortestUpcast = Integer.MAX_VALUE;
+				for(HCISRMethodAST m : possible){
+					if(m.sig.length>i && HCISRFileAST.isIdentifier(m.sig[i])){
+						//both are identifiers, look at hierarchy
+						String[] potentialMatchRestrictions = m.typeRestrictions[i]; //there will be a typeRes
+						String[] callingType = argumentTypes[i].typeNm;
+						//get the types
+						HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+						if(potentialMatchType.isTemplate()){
+							potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
+						}
+						HCISRClassAST callingTypeClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+						if(callingTypeClass.isTemplate()){
+							callingTypeClass = callingTypeClass.getParameterizedClass(callingType);
+						}
+						//and see how far it takes to go from calling type class to potential match restrictions
+						int dist = findUpcastDistance(callingTypeClass, potentialMatchType);
+						if(dist > -1){
+							if(dist == shortestUpcast){
+								best.add(m);
+							}
+							else if(dist < shortestUpcast){
+								best = new ArrayList<HCISRMethodAST>();
+								best.add(m);
+								shortestUpcast = dist;
+							}
+						}
+					}
+				}
+			}
+			else{
+				//is a random string, check equality
+				for(HCISRMethodAST m : possible){
+					if(m.sig.length>i && m.sig[i].equals(curSig)){
+						best.add(m);
+					}
+				}
+			}
+			possible = best;
+		}
+		//there is only one match
+		if(possible.size() == 1){
+			return possible.get(0);
+		}
+		else{
+			return null;
+			//there is an error, throw exception
+		}
+	}
+	
+	//look for the best constructor
+	public HCISRConstructorAST findMatchingConstructor(HashMap<String,HCISRFileAST> imports,String[] signature,VariableLocationDescription[] argumentTypes){
+		ArrayList<HCISRConstructorAST> possible = new ArrayList<HCISRConstructorAST>();
+		for(HCISRConstructorAST c : constructorList){
+			possible.add(c);
+		}
+		boolean crossedWith = false;
+		for(int i = 0;i < signature.length;i++){
+			ArrayList<HCISRConstructorAST> best = new ArrayList<HCISRConstructorAST>();
+			String curSig = signature[i];
+			if(crossedWith){
+				//in the part of the constructor with arguments
+				if(HCISRFileAST.isIdentifier(curSig)){
+					//is an identifier, check type
+					int shortestUpcast = Integer.MAX_VALUE;
+					for(HCISRConstructorAST c : possible){
+						if(c.sig.length>i && HCISRFileAST.isIdentifier(c.sig[i])){
+							//both are identifiers, look at hierarchy
+							String[] potentialMatchRestrictions = c.typeRes[i]; //there will be a typeRes
+							String[] callingType = argumentTypes[i].typeNm;
+							//get the types
+							HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+							if(potentialMatchType.isTemplate()){
+								potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
+							}
+							HCISRClassAST callingTypeClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+							if(callingTypeClass.isTemplate()){
+								callingTypeClass = callingTypeClass.getParameterizedClass(callingType);
+							}
+							//and see how far it takes to go from calling type class to potential match restrictions
+							int dist = findUpcastDistance(callingTypeClass, potentialMatchType);
+							if(dist > -1){
+								if(dist == shortestUpcast){
+									best.add(c);
+								}
+								else if(dist < shortestUpcast){
+									best = new ArrayList<HCISRConstructorAST>();
+									best.add(c);
+									shortestUpcast = dist;
+								}
+							}
+						}
+					}
+				}
+				else{
+					//is a random string, check equality
+					for(HCISRConstructorAST c : possible){
+						if(c.sig.length>i && c.sig[i].equals(curSig)){
+							best.add(c);
+						}
+					}
+				}
+			}
+			else{
+				//still in the first part of the constructor name, just check equality
+				for(HCISRConstructorAST c : possible){
+					if(c.sig.length>i && c.sig[i].equals(curSig)){
+						best.add(c);
+					}
+				}
+				if(curSig.equals("with")){
+					crossedWith = true;
+				}
+			}
+			possible = best;
+		}
+		//there is only one match
+		if(possible.size() == 1){
+			return possible.get(0);
+		}
+		else{
+			return null;
+			//there is an error, throw exception
+		}
+	}
+	
+	//find out how many classes the suspectedSubclass is beneath the suspectedSuperClass (-1 if there is no connection)
+	public static int findUpcastDistance(HCISRClassAST suspectedSubclass, HCISRClassAST suspectedSuperclass){
+		if(suspectedSubclass == null){
+			return -1;
+		}
+		if(suspectedSubclass==suspectedSuperclass){
+			return 0;
+		}
+		return 1 + findUpcastDistance(suspectedSubclass.stype,suspectedSuperclass);
+	}
 	
 	//is the type a template
 	public boolean isTemplate(){
@@ -146,6 +319,149 @@ public class HCISRClassAST{
 		}
 	}
 	
+	//look for your super class and take it's methods and variables from it
+	public void compileHierarchy(HashMap<String,HCISRFileAST> imports){
+		//if the class is a template, compile the lower stuff and return
+		if(isTemplate()){
+			for(HCISRClassAST params : parameterized.values()){
+				params.compileHierarchy(imports);
+			}
+			return;
+		}
+		
+		if(hierarchyCompiled){
+			return; //already found super class, do nothing
+		}
+		hierarchyCompiled = true;
+		
+		//find the super class
+		HCISRClassAST superClassInstance = HCISRFileAST.findBaseClass(imports, supertypeName[0]);
+		if(superClassInstance.isTemplate()){
+			//the super class is a template, get the parameterized version
+			superClassInstance = superClassInstance.getParameterizedClass(supertypeName);
+		}
+		stype = superClassInstance;
+		
+		//now, super type must be compiled before following steps
+		stype.compileHierarchy(imports);
+		
+		//now, get a full list of variables and methods
+		//variables are easy, just tack on the new stuff at the end
+		HCISRVariableAST[] superVars = stype.variableList;
+		HCISRVariableAST[] newVarList = new HCISRVariableAST[superVars.length + variableList.length];
+		for(int i = 0;i<superVars.length;i++){
+			newVarList[i] = superVars[i];
+		}
+		for(int i = 0;i<variableList.length;i++){
+			newVarList[i + superVars.length] = variableList[i];
+		}
+		variableList = newVarList;
+		
+		//methods require more care, as overriding must be watched (exact same method signature, including restrictions)
+		HCISRMethodAST[] superMeth = stype.methodList;
+		ArrayList<HCISRMethodAST> newMethList = new ArrayList<HCISRMethodAST>();
+		for(int i = 0;i<superMeth.length;i++){
+			newMethList.add(i, superMeth[i]);
+		}
+		//for every method currently in the class, run through the array list
+		//if any method signature matches, replace
+		for(int i = 0;i<methodList.length;i++){
+			HCISRMethodAST curM = methodList[i];
+			boolean matched = false;
+			for(int j = 0;j<newMethList.size();j++){
+				if(areMethodSignaturesEqual(curM,newMethList.get(j))){
+					newMethList.set(j, curM);
+					matched = true;
+					break;
+				}
+				else{}
+				if(!matched){
+					newMethList.add(curM);
+				}
+			}
+		}
+		//now, turn array list to an array
+		methodList = new HCISRMethodAST[newMethList.size()];
+		for(int i = 0;i<methodList.length;i++){
+			methodList[i] = newMethList.get(i);
+		}
+		
+		//done, don't need constructors (it wouldn't make sense)
+	}
+	
+	public boolean areMethodSignaturesEqual(HCISRMethodAST m1, HCISRMethodAST m2){
+		String[] m1sig = m1.sig;
+		String[][] m1tr = m1.typeRestrictions;
+		String[] m2sig = m2.sig;
+		String[][] m2tr = m2.typeRestrictions;
+		//first, check lengths
+		if(m1sig.length != m2sig.length){
+			return false;
+		}
+		for(int i = 0;i<m1sig.length;i++){
+			String m1v = m1sig[i];
+			String m2v = m2sig[i];
+			if(HCISRFileAST.isIdentifier(m1v)){
+				if(HCISRFileAST.isIdentifier(m2v)){
+					//both are identifiers, check their types, if not equal, quit, otherwise continue
+					String[] m1vt = m1tr[i];
+					String[] m2vt = m2tr[i];
+					if(m1vt.length!=m2vt.length){
+						return false;
+					}
+					for(int j = 0;j<m1vt.length;j++){
+						if(!(m1vt[j].equals(m2vt[j]))){
+							//if any types are unequal, they are not the same signature
+							return false;
+						}
+					}
+				}
+				else{
+					//one is an identifier, and one is not, so not equal
+					return false;
+				}
+			}
+			else{
+				if(!(m1v.equals(m2v))){
+					return false;
+				}
+			}
+		}
+		//it failed to fail, so it must pass
+		return true;
+	}
+	
+	//tell all sub nodes to figure out who has their shit
+	public void compileReferences(HashMap<String,HCISRFileAST> imports){
+		//methods and constructors still have loose ends, and parameterized types need to compile, but everything else is resolved
+		if(isTemplate()){
+			//if it is a template, do not find references, only let parameterized types compile
+			for(HCISRClassAST c : parameterized.values()){
+				c.compileReferences(imports);
+			}
+		}
+		else{
+			if(referencesCompiled){
+				return;
+			}
+			referencesCompiled = true;
+			
+			//first order of business is to compile the supertype (I'd like methods to be compiled with their original type first)
+			stype.compileReferences(imports);
+			//next, create a map of variable names and variables, and then compile methods and constructors
+			HashMap<String,VariableLocationDescription> classVars = new HashMap<String,VariableLocationDescription>();
+			for(int i = 0;i<variableList.length;i++){
+				classVars.put(variableList[i].name, new VariableLocationDescription(true,i,variableList[i].type));
+			}
+			for(HCISRMethodAST m : methodList){
+				m.compileReferences(imports,classVars,this);
+			}
+			for(HCISRConstructorAST c : constructorList){
+				c.compileReferences(imports, classVars, this);
+			}
+		}
+	}
+	
 	//the usual constructor to use straight from the parser
 	public HCISRClassAST(int classClassification, String[] fullTypeName, String[][] parameterLimiters, String[] fullSuperTypeName, HCISRVariableAST[] instanceVariableList,HCISRMethodAST[] instanceMethodList,HCISRConstructorAST[] fullConstructorList,String methodSelfReference,String constructorSelfReference){
 		classType = classClassification;
@@ -159,6 +475,10 @@ public class HCISRClassAST{
 		constructorThisName = constructorSelfReference;
 		if(typeName.length>1){
 			parameterized = new HashMap<String,HCISRClassAST>();
+		}
+		//now, tell all constructors whom they make
+		for(int i = 0;i<constructorList.length;i++){
+			constructorList[i].toConstruct = this;
 		}
 	}
 	
@@ -196,6 +516,7 @@ public class HCISRClassAST{
 		constructorList = new HCISRConstructorAST[origCons.length];
 		for(int i = 0;i<constructorList.length;i++){
 			constructorList[i] = origCons[i].copyWithParameters(bindings);
+			constructorList[i].toConstruct = this;
 		}
 		
 		//the this names do not change

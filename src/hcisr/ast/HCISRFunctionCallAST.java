@@ -2,6 +2,7 @@ package hcisr.ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 //this class represents a function call
 public class HCISRFunctionCallAST extends HCISRStatementAST{
@@ -11,7 +12,7 @@ public class HCISRFunctionCallAST extends HCISRStatementAST{
 	//what is the function to call
 	protected HCISRFunctionAST toCall;
 	//a description of where to find the arguments for the function
-	protected boolean[] stackVar;
+	protected boolean[] specialVar;
 	protected int[] arrayIndex;
 	
 	//function calls do not define new types
@@ -22,6 +23,39 @@ public class HCISRFunctionCallAST extends HCISRStatementAST{
 	//just make a new copy
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRFunctionCallAST(argumentIDs);
+	}
+
+	//there are no goto statements here, do nothing
+	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
+		
+	}
+	
+	//look for the function and collect argument locations
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		//construct argument types (should parallel argumentIDs
+		VariableLocationDescription[] argumentTypes = new VariableLocationDescription[argumentIDs.length];
+		int numArgs = 0;
+		for(int i = 0; i<argumentIDs.length;i++){
+			if(HCISRFileAST.isIdentifier(argumentIDs[i])){
+				numArgs++;
+				VariableLocationDescription curArg = currentScope.findVariable(argumentIDs[i]);
+				argumentTypes[i] = curArg;
+			}
+		}
+		//find the function to call
+		toCall = HCISRFileAST.findFuntion(imports, argumentIDs, argumentTypes);
+		//now, find out where the arguments are
+		specialVar = new boolean[numArgs];
+		arrayIndex = new int[numArgs];
+		int curArgNum = 0;
+		for(int i = 0; i<argumentIDs.length;i++){
+			if(HCISRFileAST.isIdentifier(argumentIDs[i])){
+				VariableLocationDescription curArg = currentScope.findVariable(argumentIDs[i]);
+				specialVar[curArgNum] = curArg.special;
+				arrayIndex[curArgNum] = curArg.location;
+				curArgNum++;
+			}
+		}
 	}
 	
 	public HCISRFunctionCallAST(String[] methodSignature){

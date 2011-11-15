@@ -19,6 +19,29 @@ public class HCISRDefinedMethodAST extends HCISRMethodAST{
 		return new HCISRDefinedMethodAST(this, bindings);
 	}
 	
+	//anything that this calls, find it
+	//this has return type, and a bunch of statements to compile
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST callingClass){
+		//create a copy of the variables, and add in any arguments
+		HashMap<String,VariableLocationDescription> methodVars = new HashMap<String,VariableLocationDescription>();
+		methodVars.putAll(classVars);
+		int curLoc = 0;
+		//add in the calling variable
+		methodVars.put(instName, new VariableLocationDescription(false,curLoc,callingClass.typeName));
+		curLoc++;
+		//and then add the rest
+		for(int i = 1;i<sig.length;i++){
+			//run through the signature looking for arguments (skip calling variable)
+			if(HCISRFileAST.isIdentifier(sig[i])){
+				methodVars.put(sig[i], new VariableLocationDescription(false,curLoc,typeRestrictions[i]));
+				curLoc += 1;
+			}
+		}
+		
+		//now, with the new method vars, compile the code block
+		stackSize = code.compileReferences(imports, methodVars, curLoc);
+	}
+	
 	public HCISRDefinedMethodAST(String instanceName,String[] methodSignature, String[][] parameterRestrictions, HCISRCodeBlockAST commands){
 		instName = instanceName;
 		sig = methodSignature;

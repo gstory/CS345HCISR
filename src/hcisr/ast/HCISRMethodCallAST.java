@@ -2,6 +2,7 @@ package hcisr.ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 //this class represents a method call
 public class HCISRMethodCallAST extends HCISRStatementAST{
@@ -11,7 +12,7 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	//where inside the class for the calling object is the definition of the method
 	protected int methodIndex;
 	//a description of where to find the arguments for the method (starting with the calling instance)
-	protected boolean[] stackVar;
+	protected boolean[] specialVar;
 	protected int[] arrayIndex;
 	
 	//methods do not introduce new types
@@ -22,6 +23,47 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	//just do a shallow copy
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRMethodCallAST(argumentIDs);
+	}
+	
+
+	//there are no goto statements here, do nothing
+	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
+		
+	}
+	
+	//look for the method and collect argument locations
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		//construct argument types (should parallel argumentIDs
+		VariableLocationDescription[] argumentTypes = new VariableLocationDescription[argumentIDs.length];
+		int numArgs = 0;
+		for(int i = 0; i<argumentIDs.length;i++){
+			if(HCISRFileAST.isIdentifier(argumentIDs[i])){
+				numArgs++;
+				VariableLocationDescription curArg = currentScope.findVariable(argumentIDs[i]);
+				argumentTypes[i] = curArg;
+			}
+		}
+		//first, find the type of the calling variable
+		String[] callingType = argumentTypes[0].typeNm;
+		HCISRClassAST callingClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+		if(callingClass.isTemplate()){
+			callingClass = callingClass.getParameterizedClass(callingType);
+		}
+		//find the method to call
+		methodIndex = HCISRFileAST.findMethodIndex(imports, argumentIDs, callingType, argumentTypes);
+		//now, find out where the arguments are
+		//note that the calling variable is always in slot 0, and the arguments are in order on the stack
+		specialVar = new boolean[numArgs];
+		arrayIndex = new int[numArgs];
+		int curArgNum = 0;
+		for(int i = 0; i<argumentIDs.length;i++){
+			if(HCISRFileAST.isIdentifier(argumentIDs[i])){
+				VariableLocationDescription curArg = currentScope.findVariable(argumentIDs[i]);
+				specialVar[curArgNum] = curArg.special;
+				arrayIndex[curArgNum] = curArg.location;
+				curArgNum++;
+			}
+		}
 	}
 	
 	public HCISRMethodCallAST(String[] methodSignature){

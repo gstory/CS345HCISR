@@ -1,6 +1,7 @@
 package hcisr.ast;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import hcisr.*;
 
@@ -11,6 +12,10 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 	public static final int FLOAT = 2;
 	public static final int FUNCTION = 3;
 	public static final int BOOL = 4;
+	
+	public static void getInitialValue(){
+		
+	}
 	
 	protected String[] typeName;
 	protected String varName;
@@ -30,6 +35,17 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 	//and may need some type replacement
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRDefineCallAST(this,bindings);
+	}
+	
+	//there are no goto statements here, do nothing
+	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
+		
+	}
+	
+	//add the variable to the scope (and figure out the initial value)
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		currentScope.addStackVariable(varName,typeName);
+		getInitialValue();
 	}
 	
 	public HCISRDefineCallAST(String[] typeIdentifier, String variableName, String initialValue, int initialType){

@@ -2,6 +2,7 @@ package hcisr.ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 //this class represents a set statement using a function
 public class HCISRSetCallFunctionAST extends HCISRStatementAST{
@@ -12,7 +13,7 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 	
 	//these variables describe the location of the variable to be set
 	//is it on the stack, or in an instance
-	protected boolean stackVar;
+	protected boolean specialVar;
 	//what is its index
 	protected int arrayLocation;
 	
@@ -23,6 +24,19 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 	
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRSetCallFunctionAST(this, bindings);
+	}
+	
+	//there are no goto statements here, do nothing
+	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
+		
+	}
+	
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		//compile the function call, nothing more
+		funcID.compileReferences(imports, currentScope, line);
+		VariableLocationDescription toSet = currentScope.findVariable(varID);
+		specialVar = toSet.special;
+		arrayLocation = toSet.location;
 	}
 	
 	public HCISRSetCallFunctionAST(String variableID, HCISRFunctionCallAST functionID){

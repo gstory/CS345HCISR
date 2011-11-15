@@ -2,6 +2,7 @@ package hcisr.ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 //this class represents an if statement
 public class HCISRIfCallAST extends HCISRStatementAST{
@@ -10,7 +11,7 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 	protected HCISRStatementAST[] falseComs;
 	
 	//where to find the boolean
-	protected boolean stackVar;
+	protected boolean specialVar;
 	protected int arrayIndex;
 	
 	//just compile the statement lists
@@ -25,6 +26,37 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 	
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRIfCallAST(this, bindings);
+	}
+	
+
+	//there are no goto statements here, but check the lower code
+	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
+		//get the true scope
+		Scope trueScope = subScopes.next();
+		//run through the statements, looking for goto
+		HCISRFileAST.compileStatementGotoReferences(trueComs, trueScope, trueScope.subScopes.iterator());
+		
+		//then get the false scope
+		Scope falseScope = subScopes.next();
+		HCISRFileAST.compileStatementGotoReferences(falseComs, falseScope, falseScope.subScopes.iterator());
+	}
+	
+	//look for the loop variable and the loop list
+	//the methods to call on the list can be hard coded
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		//first, find the boolean variable
+		VariableLocationDescription listVarLoc = currentScope.findVariable(boolID);
+		specialVar = listVarLoc.special;
+		arrayIndex = listVarLoc.location;
+		
+		//then, make a new scope for the true stuff
+		Scope trueScope = new Scope(currentScope);
+		//then run through the code
+		HCISRFileAST.compileStatementReferencesSansGoto(imports, trueComs, trueScope);
+		
+		//then, make a new scope for the false stuff
+		Scope falseScope = new Scope(currentScope);
+		HCISRFileAST.compileStatementReferencesSansGoto(imports, falseComs, falseScope);
 	}
 	
 	public HCISRIfCallAST(String booleanID, HCISRStatementAST[] trueCommands, HCISRStatementAST[] falseCommands){

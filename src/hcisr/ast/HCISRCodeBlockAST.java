@@ -1,7 +1,6 @@
 package hcisr.ast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 //this class represents a block of code with its return and catch clauses
 public class HCISRCodeBlockAST{
@@ -22,6 +21,37 @@ public class HCISRCodeBlockAST{
 	
 	public HCISRCodeBlockAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRCodeBlockAST(this,bindings);
+	}
+	
+	//find out where everything is and return the number of things on the stack
+	public int compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> methodVars, int initStackSize){
+		//first, make a basic scope
+		Scope mainScope = new Scope(methodVars,initStackSize);
+		//take two passes through the code, one to find labels and assign variables, the second to figure out goto
+		//first go through the code
+		int lineNum = 0;
+		for(HCISRStatementAST s : codeContents){
+			s.compileReferences(imports,mainScope,lineNum);
+			lineNum++;
+		}
+		//can skip return type
+		//and go straight to the catch clauses
+		for(HCISRCatchClauseAST c : errorCorrect){
+			c.compileReferences(imports, mainScope);
+		}
+		//and now compile goto
+		Iterator<Scope> subScopes = mainScope.subScopes.iterator();
+		for(HCISRStatementAST s : codeContents){
+			s.compileLabelReferences(mainScope, subScopes);
+		}
+		for(HCISRCatchClauseAST c : errorCorrect){
+			c.compileLabelReferences(mainScope, subScopes);
+		}
+		int numStackVars = mainScope.numStackVars;
+		//remember to free up memory
+		mainScope.kill();
+		//and return stack size
+		return numStackVars;
 	}
 	
 	public HCISRCodeBlockAST(HCISRStatementAST[] codeConts,HCISRReturnsClauseAST toRet,HCISRCatchClauseAST[] errCor){

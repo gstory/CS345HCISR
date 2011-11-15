@@ -19,19 +19,30 @@ public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 		return new HCISRDeclaredConstructorAST(this,bindings);
 	}
 	
-	public HCISRDeclaredConstructorAST(String returnVariable, String[] returnType,String[] methodSignature,String[][] typeRestrictions, HCISRReturnsDeclarationAST retDec){
-		retVar = returnVariable;
+	//anything that this calls, find it
+	//this really only has the stack to worry about (and the class to create)
+	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST toCreate){
+		toConstruct = toCreate;
+		for(int i = 0;i<sig.length;i++){
+			if(HCISRFileAST.isIdentifier(sig[i])){
+				stackSize = stackSize + 1;
+			}
+		}
+	}
+	
+	public HCISRDeclaredConstructorAST(String createdVariable, String[] createdType,String[] methodSignature,String[][] typeRestrictions, HCISRReturnsDeclarationAST retDec){
+		this.createdVariable = createdVariable;
 		sig = methodSignature;
 		decRetType = retDec;
-		retType = returnType;
+		createdVariableType = createdType;
 		typeRes = typeRestrictions;
 		isDefined = false;
 	}
 	
 	public HCISRDeclaredConstructorAST(HCISRDeclaredConstructorAST origin, HashMap<String,String[]> bindings){
-		retVar = origin.retVar;
+		createdVariable = origin.createdVariable;
 		sig = origin.sig;
-		retType = HCISRClassAST.replaceTypeNames(origin.retType, bindings);
+		createdVariableType = HCISRClassAST.replaceTypeNames(origin.createdVariableType, bindings);
 		typeRes = HCISRClassAST.replaceTypeRestrictions(origin.typeRes, bindings);
 		decRetType = origin.decRetType.copyWithParameters(bindings);
 		isDefined = false;

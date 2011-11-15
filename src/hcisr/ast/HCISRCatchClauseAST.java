@@ -16,7 +16,23 @@ public class HCISRCatchClauseAST{
 	}
 	
 	public HCISRCatchClauseAST copyWithParameters(HashMap<String, String[]> bindings) {
-		return null;
+		return new HCISRCatchClauseAST(this, bindings);
+	}
+	
+	public void compileReferences(HashMap<String,HCISRFileAST> imports, Scope mainScope){
+		//first, make a new scope (these variables are only visible in the exception
+		Scope exceptScope = new Scope(mainScope);
+		//add the exception to the list
+		exceptScope.addStackVariable(errVar,errType);
+		//and run through the code
+		HCISRFileAST.compileStatementReferencesSansGoto(imports, toDo, exceptScope);
+	}
+	
+	public void compileLabelReferences(Scope currentScope,Iterator<Scope> subScopes){
+		//catch clauses start a new scope
+		Scope curScope = subScopes.next();
+		//run through the statements, looking for goto
+		HCISRFileAST.compileStatementGotoReferences(toDo, curScope, curScope.subScopes.iterator());
 	}
 	
 	public HCISRCatchClauseAST(String[] errorType, String errorVariable, HCISRStatementAST[] commandList){
