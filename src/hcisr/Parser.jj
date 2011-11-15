@@ -197,9 +197,20 @@ String Import() :
 }
 
 void Class() :
-{int classClassification; String[] fullTypeName; String[][] parameterLimiters; String[] fullSuperTypeName; HCISRVariableAST[] instanceVariableList;HCISRMethodAST[] instanceMethodList;HCISRConstructorAST[] fullConstructorList;String methodSelfReference;String constructorSelfReference; /*starting tmps*/ Object[] headerReturn; Object[] dataReturn;}
+{int classClassification; String[] fullTypeName; String[][] parameterLimiters; String[] fullSuperTypeName; HCISRVariableAST[] instanceVariableList;HCISRMethodAST[] instanceMethodList;HCISRConstructorAST[] fullConstructorList;String methodSelfReference;String constructorSelfReference; /*starting tmps*/ Object[] headerReturn; Object[] methodReturn; Object[] constructorReturn; }
 {
-    headerReturn = Header()  (Data())?  (LOOKAHEAD(3) Methods())?  (LOOKAHEAD(3) Constructor())?  <END> NL()
+	{instanceVariableList = null; instanceMethodList = null; fullConstructorList = null;}
+    headerReturn = Header()  (instanceVariableList = Data())?  (LOOKAHEAD(3) methodReturn = Methods())?  (LOOKAHEAD(3) constructorReturn = Constructor())?  <END> NL()
+	{
+		
+		if (instanceVariableList == null) { instanceVariableList = new HCISRVariableAST[0];}
+		methodSelfReference = methodReturn[0];
+		instanceMethodList = methodReturn[1];
+		if (instanceMethodList == null) { instanceMethodList = new HCISRMethodAST[0];}
+		constructorSelfReference = constructorReturn[0];
+		fullConstructorList = constructorReturn[1];
+		if (fullConstructorList == null) { fullConstructorList = new HCISRConstructorAST[0];}
+	}
 }
 
 Object[] Header() :
@@ -217,8 +228,8 @@ Object[] Header() :
 	}
 }
 
-void Data() :
-{}
+HCISRVariableAST[] Data() :
+{String[] typeDeclaration; String variableName; int initializedType; String initializedValue;}
 {
     Dataheader()  Databody() <END> NL()
 }
@@ -229,22 +240,30 @@ void Dataheader() :
     <and_has> NL()
 }
 
-void Databody():
+HCISRVariableAST[] Databody():
 {}
 {
     (<A> TIDENT() <NAMED> <IDENT> (<which_initially_equals> (String()| LOOKAHEAD(2) Int()| LOOKAHEAD(2) Float()|Functioninit()|Bool()))? NL())* 
 }
 
-void Methods() :
-{}
+Object[] Methods() :
+{Object[] returnarray; String methodselfreference;}
 {
-    Methodhead()  Methodbodies() <END> NL()
+    methodselfreference = Methodhead()  Methodbodies() <END> NL()
+	{
+		returnarray[0] = methodselfreference;
+		//need something here for Methodbodies
+	}
 }
 
-void Methodhead():
-{}
+String Methodhead():
+{String methodselfreference; Token e;}
 {
-    <and_an_instance>  <IDENT> <understands_the_following_commands> NL()
+    <and_an_instance>  e = <IDENT> <understands_the_following_commands> NL()
+	{
+		methodselfreference = e.image();
+		return methodselfreference;
+	}
 }
 
 void Methodbodies():
@@ -277,16 +296,24 @@ void Returnsdec():
    <RETURNS>  TIDENT() NL()
 }
 
-void Constructor():
-{}
+Object[] Constructor():
+{Object[] returnarray; String constructorselfreference;}
 {
-   Constructorhead() Constructorbodies() <END> NL()
+   constructorselfreference = Constructorhead() Constructorbodies() <END> NL()
+	{
+		returnarray[0] = constructorselfreference;
+		//need something here for constructorbodies
+	}
 }
 
-void Constructorhead():
-{}
+String Constructorhead():
+{String constructorselfreference; Token e;}
 {
-    <and_an_instance><IDENT><is_created_with_the_commands> NL()
+    <and_an_instance> e = <IDENT><is_created_with_the_commands> NL()
+	{
+		constructorselfreference = e.image();
+		return constructorselfreference;	
+	}
 }
 
 void Constructorbodies():
