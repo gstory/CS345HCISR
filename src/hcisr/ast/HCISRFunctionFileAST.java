@@ -41,7 +41,7 @@ public class HCISRFunctionFileAST implements HCISRHeapLocation{
 		//then get the global data's initial values
 		globalData = new HCISRInstance[functionGlobalData.length];
 		for(int i = 0;i<globalData.length;i++){
-			globalData[i] = HCISRVariableAST.getInitialValue(functionGlobalData[i].initType,functionGlobalData[i].initVal);
+			globalData[i] = HCISRVariableAST.getInitialValue(functionGlobalData[i].initType,functionGlobalData[i].initVal,imports);
 		}
 		//then compile the functions
 		for(HCISRFunctionAST f : functions){

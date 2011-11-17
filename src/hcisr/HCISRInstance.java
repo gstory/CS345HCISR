@@ -29,6 +29,10 @@ public class HCISRInstance implements HCISRHeapLocation{
 	
 	public HCISRInstance(HCISRClassAST tp){
 		type = tp;
-		contents = new HCISRInstance[type.getNumberOfVariables()]; //initially, everything is nothing
+		contents = new HCISRInstance[type.getNumberOfVariables()]; //initially, everything is initialized to what the class says it is
+		HCISRInstance[] vars = type.getVariables();
+		for(int i = 0;i<contents.length;i++){
+			contents[i] = vars[i];
+		}
 	}
 }

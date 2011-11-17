@@ -7,6 +7,8 @@ import java.util.HashMap;
 public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 	protected HCISRReturnsDeclarationAST emptyMeth;
 	
+	protected boolean referenceCompiled = false;
+	
 	//for external types, this may be filled in by another program
 	HCISRExternalCodeBlock theCode;
 	public void setInstructions(HCISRExternalCodeBlock instructions){
@@ -28,6 +30,10 @@ public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 	//anything that this calls, find it
 	//this really has nothing to call, just find the stack size
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST callingClass){
+		if(referenceCompiled){
+			return;
+		}
+		referenceCompiled = true;
 		for(int i = 0;i<sig.length;i++){
 			if(HCISRFileAST.isIdentifier(sig[i])){
 				stackSize = stackSize + 1;

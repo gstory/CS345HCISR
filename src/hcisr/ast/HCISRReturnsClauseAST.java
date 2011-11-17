@@ -13,11 +13,18 @@ public class HCISRReturnsClauseAST{
 	protected String[] retType;
 	
 	//return variable location
+	protected boolean retNull = false;
 	protected int arrayIndex;
 	protected boolean specialVar;
 	
 	//check the return type
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
+		//skip Nothing
+		if(retType.length==1){
+			if(retType[0].equals("Nothing")){
+				return;
+			}
+		}
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, retType);
 	}
 	
@@ -28,12 +35,21 @@ public class HCISRReturnsClauseAST{
 	
 	//find out where everything is
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope){
+		if(retType.length==1){
+			if(retType[0].equals("Nothing")){
+				retNull = true;
+				return;
+			}
+		}
 		VariableLocationDescription var = currentScope.findVariable(retVar);
 		arrayIndex = var.location;
 		specialVar = var.special;
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl){
+		if(retNull){
+			return null;
+		}
 		if(specialVar){
 			return hl.getLocation(arrayIndex);
 		}

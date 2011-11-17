@@ -36,10 +36,11 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
 		currentScope.addStackVariable(varName,typeName);
 		arrayIndex = currentScope.findVariable(varName).location;
+		initialVal = HCISRVariableAST.getInitialValue(initType, initVal, imports);
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-		sf.setLocation(HCISRVariableAST.getInitialValue(initType, initVal), arrayIndex);
+		sf.setLocation(initialVal, arrayIndex);
 		return null;
 	}
 	

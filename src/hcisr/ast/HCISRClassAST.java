@@ -1,5 +1,6 @@
 package hcisr.ast;
 import java.util.*;
+import hcisr.*;
 
 //this class represents a hcisr type
 //How overloading is done
@@ -23,6 +24,9 @@ public class HCISRClassAST{
 	
 	//compiled information about the type
 	protected HCISRClassAST stype;
+	
+	//initial values for the variables
+	HCISRInstance[] initVals;
 	
 	//what has been done to the type
 	protected boolean templateCompiled = false;
@@ -402,7 +406,17 @@ public class HCISRClassAST{
 	//the above asks the question do I need to compile, this actually carries it out
 	protected void reallyCompileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses){
 		//first, check supertypeName to see if it calls a generic type
-		HCISRFileAST.checkForTemplateClass(imports, newClasses, supertypeName);
+		if(supertypeName.length==1){
+			if(supertypeName[0].equals("Nothing")){
+				
+			}
+			else{
+				HCISRFileAST.checkForTemplateClass(imports, newClasses, supertypeName);
+			}
+		}
+		else{
+			HCISRFileAST.checkForTemplateClass(imports, newClasses, supertypeName);
+		}
 		//now, run through the variables, looking at types
 		for(HCISRVariableAST v:variableList){
 			v.compileTemplates(imports, newClasses);
@@ -433,6 +447,12 @@ public class HCISRClassAST{
 		hierarchyCompiled = true;
 		
 		//find the super class
+		//if supertypeName is Nothing, then don't find superclass, and methods are as they should be
+		if(supertypeName.length==1){
+			if(supertypeName[0].equals("Nothing")){
+				return;
+			}
+		}
 		HCISRClassAST superClassInstance = HCISRFileAST.findBaseClass(imports, supertypeName[0]);
 		if(superClassInstance.isTemplate()){
 			//the super class is a template, get the parameterized version
@@ -545,7 +565,17 @@ public class HCISRClassAST{
 			referencesCompiled = true;
 			
 			//first order of business is to compile the supertype (I'd like methods to be compiled with their original type first)
-			stype.compileReferences(imports);
+			if(stype==null){
+				
+			}
+			else{
+				stype.compileReferences(imports);
+			}
+			//next, get variable initial values
+			initVals = new HCISRInstance[variableList.length];
+			for(int i = 0;i<initVals.length;i++){
+				initVals[i] = HCISRVariableAST.getInitialValue(variableList[i].initType, variableList[i].initVal, imports);
+			}
 			//next, create a map of variable names and variables, and then compile methods and constructors
 			HashMap<String,VariableLocationDescription> classVars = new HashMap<String,VariableLocationDescription>();
 			for(int i = 0;i<variableList.length;i++){
@@ -563,6 +593,11 @@ public class HCISRClassAST{
 	//how many variables does this thing have, used at runtime
 	public int getNumberOfVariables(){
 		return variableList.length;
+	}
+	
+	//get the variables, to initialize
+	public HCISRInstance[] getVariables(){
+		return initVals;
 	}
 	
 	//the usual constructor to use straight from the parser

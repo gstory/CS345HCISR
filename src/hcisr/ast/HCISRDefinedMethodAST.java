@@ -8,6 +8,8 @@ import java.util.*;
 public class HCISRDefinedMethodAST extends HCISRMethodAST{
 	protected HCISRCodeBlockAST code;
 	
+	protected boolean referenceCompiled;
+	
 	//look for new types
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
 		for(String[] tpnm : typeRestrictions){
@@ -24,6 +26,10 @@ public class HCISRDefinedMethodAST extends HCISRMethodAST{
 	//anything that this calls, find it
 	//this has return type, and a bunch of statements to compile
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST callingClass){
+		if(referenceCompiled){
+			return;
+		}
+		referenceCompiled = true;
 		//create a copy of the variables, and add in any arguments
 		HashMap<String,VariableLocationDescription> methodVars = new HashMap<String,VariableLocationDescription>();
 		methodVars.putAll(classVars);

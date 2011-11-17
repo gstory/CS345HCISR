@@ -11,6 +11,12 @@ public class HCISRVariableAST{
 	public static final int FUNCTION = 3;
 	public static final int BOOL = 4;
 	
+	public static final String stringClassLoc = "hcisr.lib.HCISRString.hcisr";
+	public static final String intClassLoc = "hcisr.lib.HCISRString.hcisr";
+	public static final String floatClassLoc = "hcisr.lib.HCISRFloat.hcisr";
+	public static final String functionClassLoc = "hcisr.lib.HCISRFloat.hcisr";
+	public static final String booleanClassLoc = "hcisr.lib.HCISRBoolean.hcisr";
+	
 	protected String[] type;
 	protected String name;
 	protected int initType;
@@ -22,12 +28,16 @@ public class HCISRVariableAST{
 	}
 	
 	//get an instance for an initial variable
-	public static HCISRInstance getInitialValue(int type, String val){
+	public static HCISRInstance getInitialValue(int type, String val, HashMap<String,HCISRFileAST> imports){
 		switch(type){
 		case NOINIT: 
 			return null;
 		case STRING: 
-			break;
+			//get the string class
+			HCISRFileAST toUse = imports.get(stringClassLoc);
+			HCISRInstance toRet = new HCISRInstance(toUse.classDef);
+			toRet.addExternalVariables(new HCISRInstanceStringVars(val));
+			return toRet;
 		case INT: 
 			break;
 		case FLOAT: 
