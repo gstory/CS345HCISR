@@ -1,9 +1,10 @@
 package hcisr.ast;
-
+import hcisr.*;
 import java.util.*;
 
 //this class represents a variable in either a class or a function block
 public class HCISRVariableAST{
+	public static final int NOINIT = -1;
 	public static final int STRING = 0;
 	public static final int INT = 1;
 	public static final int FLOAT = 2;
@@ -18,6 +19,25 @@ public class HCISRVariableAST{
 	//see if type is already parameterized
 	public void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses){
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, type);
+	}
+	
+	//get an instance for an initial variable
+	public static HCISRInstance getInitialValue(int type, String val){
+		switch(type){
+		case NOINIT: 
+			return null;
+		case STRING: 
+			break;
+		case INT: 
+			break;
+		case FLOAT: 
+			break;
+		case FUNCTION: 
+			return null;
+		case BOOL: 
+			break;
+		}
+		return null;
 	}
 	
 	public HCISRVariableAST(String[] typeDeclaration, String variableName, int initializedType, String initializedValue){

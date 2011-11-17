@@ -1,0 +1,10 @@
+this file describes a class
+	this file uses hcisr.lib.HCISRIterator.hcisr
+.
+archtype Iterable of E is a subtype of Object
+	and an instance I understands the following commands
+		I get iterator
+			returns Iterator of E
+		.
+	.
+.

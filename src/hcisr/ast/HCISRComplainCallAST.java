@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,11 +24,7 @@ public class HCISRComplainCallAST extends HCISRStatementAST{
 	public HCISRStatementAST copyWithParameters(HashMap<String, String[]> bindings) {
 		return new HCISRComplainCallAST(errorID);
 	}
-	
-	public HCISRComplainCallAST(String errorIdentifier){
-		errorID = errorIdentifier;
-	}
-	
+
 	//there are no goto statements here, do nothing
 	public void compileLabelReferences(Scope currentScope, Iterator<Scope> subScopes) {
 		
@@ -37,5 +35,22 @@ public class HCISRComplainCallAST extends HCISRStatementAST{
 		VariableLocationDescription loc = currentScope.findVariable(errorID);
 		specialVar = loc.special;
 		arrayIndex = loc.location;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		//get the variable to throw
+		HCISRInstance toThrow;
+		if(specialVar){
+			toThrow = hl.getLocation(arrayIndex);
+		}
+		else{
+			toThrow = sf.getLocation(arrayIndex);
+		}
+		HCISRException toThrowJava = new HCISRException("User defined throw.",toThrow);
+		throw toThrowJava;
+	}
+	
+	public HCISRComplainCallAST(String errorIdentifier){
+		errorID = errorIdentifier;
 	}
 }

@@ -1,5 +1,10 @@
 package hcisr.ast;
 
+import hcisr.HCISRException;
+import hcisr.HCISRHeapLocation;
+import hcisr.HCISRInstance;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +42,17 @@ public class HCISRSetCallMethodAST extends HCISRStatementAST{
 		VariableLocationDescription toSet = currentScope.findVariable(varID);
 		specialVar = toSet.special;
 		arrayLocation = toSet.location;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		HCISRInstance newVal = funcID.run(sf, hl);
+		if(specialVar){
+			hl.setLocation(newVal, arrayLocation);
+		}
+		else{
+			sf.setLocation(newVal, arrayLocation);
+		}
+		return null;
 	}
 	
 	public HCISRSetCallMethodAST(String variableID, HCISRMethodCallAST functionID){

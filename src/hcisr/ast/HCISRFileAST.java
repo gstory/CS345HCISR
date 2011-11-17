@@ -1,8 +1,9 @@
 package hcisr.ast;
+import hcisr.*;
 import java.util.*;
 
 //this class holds import statements and the file contents
-public class HCISRFileAST{
+public class HCISRFileAST implements HCISRRunnable{
 	protected String[] importFiles;						public String[] getImports(){return importFiles;};
 	protected HCISRClassAST classDef;
 	protected HCISRFunctionFileAST functionDef;
@@ -21,6 +22,9 @@ public class HCISRFileAST{
 	public boolean isProgram(){
 		return isP;
 	}
+	
+	//if it is a program, need to know the stack size
+	protected int stackSize;
 	
 	//find a class in the collection of imports
 	public static HCISRClassAST findBaseClass(HashMap<String,HCISRFileAST> imports,String name){
@@ -96,6 +100,46 @@ public class HCISRFileAST{
 				}
 			}
 		}
+		//first, find all functions that can match the signature
+		for(int i = 0;i < signature.length;i++){
+			ArrayList<HCISRFunctionAST> best = new ArrayList<HCISRFunctionAST>();
+			String curSig = signature[i];
+			//in the part of the constructor with arguments
+			if(HCISRFileAST.isIdentifier(curSig)){
+				//is an identifier, check type
+				for(HCISRFunctionAST f : possible){
+					if(f.sig.length>i && HCISRFileAST.isIdentifier(f.sig[i])){
+						//both are identifiers, look at hierarchy
+						String[] potentialMatchRestrictions = f.typeRes[i]; //there will be a typeRes
+						String[] callingType = argumentTypes[i].typeNm;
+						//get the types
+						HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+						if(potentialMatchType.isTemplate()){
+							potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
+						}
+						HCISRClassAST callingTypeClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+						if(callingTypeClass.isTemplate()){
+							callingTypeClass = callingTypeClass.getParameterizedClass(callingType);
+						}
+						//and see how far it takes to go from calling type class to potential match restrictions
+						int dist = HCISRClassAST.findUpcastDistance(callingTypeClass, potentialMatchType);
+						if(dist > -1){
+							best.add(f);
+						}
+					}
+				}
+			}
+			else{
+				//is a random string, check equality
+				for(HCISRFunctionAST f : possible){
+					if(f.sig.length>i && f.sig[i].equals(curSig)){
+						best.add(f);
+					}
+				}
+			}
+			possible = best;
+		}
+		//then find the best
 		for(int i = 0;i < signature.length;i++){
 			ArrayList<HCISRFunctionAST> best = new ArrayList<HCISRFunctionAST>();
 			String curSig = signature[i];
@@ -188,6 +232,8 @@ public class HCISRFileAST{
 			//for a program, make an empty scope and run through it
 			Scope mainScope = new Scope(new HashMap<String,VariableLocationDescription>(),0);
 			compileStatementReferences(imports,programDef,mainScope);
+			//note the stack size
+			stackSize = mainScope.getNumberOfStackVariables();
 			//remember to kill scope
 			mainScope.kill();
 		}
@@ -195,6 +241,28 @@ public class HCISRFileAST{
 	
 	public void compileTypeChecking(HashMap<String,HCISRFileAST> imports){
 		
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf) throws HCISRException{
+		if(!isProgram()){
+			throw new UnsupportedOperationException("This file is not a program.");
+		}
+		//run through the code, running the statements
+		try{
+			for(HCISRStatementAST s : programDef){
+				//there are no special locations, so just run with stack frame
+				s.run(sf, null);
+			}
+		}
+		catch(HCISRGotoException e){
+			//there is a bad error
+			throw new UnsupportedOperationException("Malformed goto");
+		}
+		return null; //programs do not return anything
+	}
+	
+	public int getStackSize(){
+		return stackSize;
 	}
 	
 	public static boolean isIdentifier(String s){

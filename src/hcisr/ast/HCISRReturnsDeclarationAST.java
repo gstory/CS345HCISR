@@ -8,6 +8,12 @@ public class HCISRReturnsDeclarationAST{
 	protected String[] typeID;
 	
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
+		//watch out for Nothing
+		if(typeID.length==1){
+			if(typeID[0].equals("Nothing")){
+				return;
+			}
+		}
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, typeID);
 	}
 	

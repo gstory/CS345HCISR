@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +35,10 @@ public class HCISRGoToCallAST extends HCISRStatementAST{
 	//goto targets labels, it does not add things
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
 		
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException,HCISRGotoException{
+		throw new HCISRGotoException(statementIndex,toGoTo);
 	}
 	
 	public HCISRGoToCallAST(String locationIdentifier){

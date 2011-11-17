@@ -1,5 +1,9 @@
 package hcisr.ast;
 
+import hcisr.HCISRException;
+import hcisr.HCISRInstance;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,6 +38,11 @@ public class HCISRDefinedFunctionAST extends HCISRFunctionAST{
 		stackSize = code.compileReferences(imports, methodVars, curLoc);
 		
 		globalDataLoc = globalDataLink;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf) throws HCISRException{
+		//use the global data
+		return code.run(sf, globalDataLoc);
 	}
 	
 	public HCISRDefinedFunctionAST(String[] methodSignature, String[][] typeRestrictions, HCISRCodeBlockAST commands){

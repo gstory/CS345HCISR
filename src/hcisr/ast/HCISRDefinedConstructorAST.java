@@ -1,5 +1,9 @@
 package hcisr.ast;
 
+import hcisr.HCISRException;
+import hcisr.HCISRInstance;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -50,6 +54,14 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 		
 		//now, with the new method vars, compile the code block
 		stackSize = code.compileReferences(imports, methodVars, curLoc);
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf) throws HCISRException {
+		//make the new instance
+		HCISRInstance newInst = new HCISRInstance(toConstruct);
+		sf.setLocation(newInst, 0);
+		//and run the code
+		return code.run(sf, newInst);
 	}
 	
 	public HCISRDefinedConstructorAST(String createdVariable, String[] createdType,String[] methodSignature,String[][] typeRestrictions, HCISRCodeBlockAST commands){

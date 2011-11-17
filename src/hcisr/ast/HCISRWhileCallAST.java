@@ -1,5 +1,12 @@
 package hcisr.ast;
 
+import hcisr.HCISRException;
+import hcisr.HCISRGotoException;
+import hcisr.HCISRHeapLocation;
+import hcisr.HCISRInstance;
+import hcisr.HCISRInstanceBooleanVars;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +51,38 @@ public class HCISRWhileCallAST extends HCISRStatementAST{
 		VariableLocationDescription listVarLoc = currentScope.findVariable(boolID);
 		specialVar = listVarLoc.special;
 		arrayIndex = listVarLoc.location;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException,HCISRGotoException{
+		boolean toRunTrue;
+		if(specialVar){
+			toRunTrue = ((HCISRInstanceBooleanVars)(hl.getLocation(arrayIndex).getExternalVariables())).value;
+		}
+		else{
+			toRunTrue = ((HCISRInstanceBooleanVars)(sf.getLocation(arrayIndex).getExternalVariables())).value;
+		}
+		while(toRunTrue){
+			int i = 0;
+			while(i<loopComs.length){
+				try{
+					loopComs[i].run(sf, hl);
+					i = i + 1;
+				}
+				catch(HCISRGotoException e){
+					i = e.line;
+					if(loopComs[i]!=e.target){
+						throw e;
+					}
+				}
+			}
+			if(specialVar){
+				toRunTrue = ((HCISRInstanceBooleanVars)(hl.getLocation(arrayIndex).getExternalVariables())).value;
+			}
+			else{
+				toRunTrue = ((HCISRInstanceBooleanVars)(sf.getLocation(arrayIndex).getExternalVariables())).value;
+			}
+		}
+		return null;
 	}
 	
 	public HCISRWhileCallAST(String booleanID, HCISRStatementAST[] loopCommands){

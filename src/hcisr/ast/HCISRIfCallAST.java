@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -57,6 +59,47 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 		//then, make a new scope for the false stuff
 		Scope falseScope = new Scope(currentScope);
 		HCISRFileAST.compileStatementReferencesSansGoto(imports, falseComs, falseScope);
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException,HCISRGotoException{
+		boolean toRunTrue;
+		if(specialVar){
+			toRunTrue = ((HCISRInstanceBooleanVars)(hl.getLocation(arrayIndex).getExternalVariables())).value;
+		}
+		else{
+			toRunTrue = ((HCISRInstanceBooleanVars)(sf.getLocation(arrayIndex).getExternalVariables())).value;
+		}
+		if(toRunTrue){
+			int i = 0;
+			while(i<trueComs.length){
+				try{
+					trueComs[i].run(sf, hl);
+					i = i + 1;
+				}
+				catch(HCISRGotoException e){
+					i = e.line;
+					if(trueComs[i]!=e.target){
+						throw e;
+					}
+				}
+			}
+		}
+		else{
+			int i = 0;
+			while(i<falseComs.length){
+				try{
+					falseComs[i].run(sf, hl);
+					i = i + 1;
+				}
+				catch(HCISRGotoException e){
+					i = e.line;
+					if(falseComs[i]!=e.target){
+						throw e;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	public HCISRIfCallAST(String booleanID, HCISRStatementAST[] trueCommands, HCISRStatementAST[] falseCommands){

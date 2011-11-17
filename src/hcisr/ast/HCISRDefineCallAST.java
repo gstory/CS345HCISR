@@ -7,16 +7,6 @@ import hcisr.*;
 
 //this class represents a define call in HCISR
 public class HCISRDefineCallAST extends HCISRStatementAST{
-	public static final int STRING = 0;
-	public static final int INT = 1;
-	public static final int FLOAT = 2;
-	public static final int FUNCTION = 3;
-	public static final int BOOL = 4;
-	
-	public static void getInitialValue(){
-		
-	}
-	
 	protected String[] typeName;
 	protected String varName;
 	protected String initVal;
@@ -45,7 +35,12 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 	//add the variable to the scope (and figure out the initial value)
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
 		currentScope.addStackVariable(varName,typeName);
-		getInitialValue();
+		arrayIndex = currentScope.findVariable(varName).location;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		sf.setLocation(HCISRVariableAST.getInitialValue(initType, initVal), arrayIndex);
+		return null;
 	}
 	
 	public HCISRDefineCallAST(String[] typeIdentifier, String variableName, String initialValue, int initialType){

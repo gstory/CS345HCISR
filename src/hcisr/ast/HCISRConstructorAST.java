@@ -1,8 +1,8 @@
 package hcisr.ast;
-
+import hcisr.*;
 import java.util.*;
 
-public abstract class HCISRConstructorAST{
+public abstract class HCISRConstructorAST implements HCISRRunnable{
 	public boolean isDefined;
 	protected String[] createdVariableType;
 	protected String createdVariable;
@@ -12,6 +12,9 @@ public abstract class HCISRConstructorAST{
 	//something required to make a new instance
 	protected HCISRClassAST toConstruct;
 	protected int stackSize;
+	public int getStackSize(){
+		return stackSize;
+	}
 	
 	public abstract void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses);
 	public abstract HCISRConstructorAST copyWithParameters(HashMap<String,String[]> bindings);

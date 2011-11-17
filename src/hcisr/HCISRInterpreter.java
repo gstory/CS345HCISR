@@ -7,6 +7,19 @@ import java.io.*;
 public class HCISRInterpreter{
 	HashMap<String,HCISRFileAST> loadedFiles = new HashMap<String,HCISRFileAST>();
 	
+	//run a program
+	public HCISRInstance runProgram(HCISRFileAST toRun) throws HCISRException{
+		//first, create a stack frame
+		HCISRStackFrame sf = new HCISRStackFrame(toRun.getStackSize());
+		//then, run program and return
+		return toRun.run(sf);
+	}
+	
+	//run a method or constructor (have to provide arguments) (can also run a program this way, arguments will be ignored)
+	public HCISRInstance runFunction(HCISRRunnable toRun, HCISRStackFrame sf) throws HCISRException{
+		return toRun.run(sf);
+	}
+	
 	public HCISRFileAST loadFile(Class ctu,String resourceName) throws IOException{
 		if(loadedFiles.containsKey(resourceName)){
 			return loadedFiles.get(resourceName);
@@ -52,7 +65,7 @@ public class HCISRInterpreter{
 			f.compileTemplates(loadedFiles, toFurtParam);
 		}
 		while(toFurtParam.size()>0){
-			HCISRClassAST c = toFurtParam.get(toFurtParam.size()-1);
+			HCISRClassAST c = toFurtParam.remove(toFurtParam.size()-1);
 			c.compileTemplates(loadedFiles, toFurtParam);
 		}
 		

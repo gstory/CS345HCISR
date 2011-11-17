@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,6 +77,22 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 				}
 			}
 		}
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		//first, make a stack frame
+		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
+		//and add values to it
+		for(int i = 0;i<specialVar.length;i++){
+			if(specialVar[i]){
+				nsf.setLocation(hl.getLocation(arrayIndex[i]), i);
+			}
+			else{
+				nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
+			}
+		}
+		//now run the constructor and return
+		return toCall.run(nsf);
 	}
 	
 	public HCISRConstructorCallAST(String[] methodSignature,String[] typeIdentifier){

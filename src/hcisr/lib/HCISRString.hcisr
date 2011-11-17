@@ -1,0 +1,15 @@
+this file describes a class
+.
+external type String is a subtype of Object
+	and an instance S understands the following commands
+		S initialize string
+			returns Nothing
+		.
+	.
+	and an instance S is created with the commands
+		make a new String
+			S initialize string
+			return S as String
+		.
+	.
+.

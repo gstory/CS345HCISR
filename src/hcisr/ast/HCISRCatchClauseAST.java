@@ -1,4 +1,5 @@
 package hcisr.ast;
+import hcisr.*;
 
 import java.util.*;
 
@@ -7,12 +8,17 @@ public class HCISRCatchClauseAST{
 	protected String[] errType;
 	protected String errVar;
 	protected HCISRStatementAST[] toDo;
+	protected HCISRReturnsClauseAST toReturn;
+	
+	//what is the exception type
+	protected HCISRClassAST exceptionType;
 	
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, errType);
 		for(int i = 0;i<toDo.length;i++){
 			toDo[i].compileTemplates(imports, newClasses);
 		}
+		toReturn.compileTemplates(imports, newClasses);
 	}
 	
 	public HCISRCatchClauseAST copyWithParameters(HashMap<String, String[]> bindings) {
@@ -26,6 +32,13 @@ public class HCISRCatchClauseAST{
 		exceptScope.addStackVariable(errVar,errType);
 		//and run through the code
 		HCISRFileAST.compileStatementReferencesSansGoto(imports, toDo, exceptScope);
+		//and then run through the return statement
+		toReturn.compileReferences(imports, exceptScope);
+		//find the type
+		exceptionType = HCISRFileAST.findBaseClass(imports, errType[0]);
+		if(exceptionType.isTemplate()){
+			exceptionType = exceptionType.getParameterizedClass(errType);
+		}
 	}
 	
 	public void compileLabelReferences(Scope currentScope,Iterator<Scope> subScopes){
@@ -35,10 +48,38 @@ public class HCISRCatchClauseAST{
 		HCISRFileAST.compileStatementGotoReferences(toDo, curScope, curScope.subScopes.iterator());
 	}
 	
-	public HCISRCatchClauseAST(String[] errorType, String errorVariable, HCISRStatementAST[] commandList){
+	//does an exception match the type of this clause
+	public boolean matchesError(HCISRException e){
+		int upcastDist = HCISRClassAST.findUpcastDistance(e.getType(), exceptionType);
+		if(upcastDist >= 0){
+			return true;
+		}
+		return false;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException,HCISRGotoException{
+		//run through the statements, and then return
+		int i = 0;
+		while(i<toDo.length){
+			try{
+				toDo[i].run(sf, hl);
+				i = i + 1;
+			}
+			catch(HCISRGotoException e){
+				i = e.line;
+				if(toDo[i]!=e.target){
+					throw e;
+				}
+			}
+		}
+		return toReturn.run(sf, hl);
+	}
+	
+	public HCISRCatchClauseAST(String[] errorType, String errorVariable, HCISRStatementAST[] commandList,HCISRReturnsClauseAST toRet){
 		errType = errorType;
 		errVar = errorVariable;
 		toDo = commandList;
+		toReturn = toRet;
 	}
 	
 	public HCISRCatchClauseAST(HCISRCatchClauseAST origin, HashMap<String,String[]> bindings){
@@ -49,5 +90,6 @@ public class HCISRCatchClauseAST{
 		for(int i = 0;i<toDo.length;i++){
 			toDo[i] = origStat[i].copyWithParameters(bindings);
 		}
+		toReturn = origin.toReturn.copyWithParameters(bindings);
 	}
 }

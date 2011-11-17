@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.*;
 
 //this class represents a filled in method
@@ -40,6 +42,17 @@ public class HCISRDefinedMethodAST extends HCISRMethodAST{
 		
 		//now, with the new method vars, compile the code block
 		stackSize = code.compileReferences(imports, methodVars, curLoc);
+	}
+	
+	public String[] getReturnType(){
+		return code.toReturn.retType;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf) throws HCISRException {
+		//get the instance at location 0 (it is the heap location)
+		HCISRInstance calling = sf.getLocation(0);
+		//and run the code
+		return code.run(sf, calling);
 	}
 	
 	public HCISRDefinedMethodAST(String instanceName,String[] methodSignature, String[][] parameterRestrictions, HCISRCodeBlockAST commands){

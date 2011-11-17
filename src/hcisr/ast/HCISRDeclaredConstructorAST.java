@@ -1,12 +1,21 @@
 package hcisr.ast;
 
+import hcisr.HCISRInstance;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 //this class represents a declared constructor
 public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 	protected HCISRReturnsDeclarationAST decRetType;
-
+	
+	//for external types, this may be filled in by another program
+	HCISRExternalCodeBlock theCode;
+	public void setInstructions(HCISRExternalCodeBlock instructions){
+		theCode = instructions;
+	}
+	
 	//look at type restrictions and the return declaration, and create any new types
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports, ArrayList<HCISRClassAST> newClasses) {
 		for(String[] tpnm : typeRes){
@@ -28,6 +37,17 @@ public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 				stackSize = stackSize + 1;
 			}
 		}
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf){
+		//make the new instance
+		HCISRInstance newInst = new HCISRInstance(toConstruct);
+		sf.setLocation(newInst, 0);
+		//run the filled in stuff (or shit a brick if it's undefined)
+		if(theCode==null){
+			throw new UnsupportedOperationException("External or Abstract method not filled in");
+		}
+		return theCode.run(sf, newInst);
 	}
 	
 	public HCISRDeclaredConstructorAST(String createdVariable, String[] createdType,String[] methodSignature,String[][] typeRestrictions, HCISRReturnsDeclarationAST retDec){

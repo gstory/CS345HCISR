@@ -57,6 +57,46 @@ public class HCISRClassAST{
 		for(HCISRMethodAST m : methodList){
 			possible.add(m);
 		}
+		//first, find all methods that could match
+		for(int i = 0;i < signature.length;i++){
+			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
+			String curSig = signature[i];
+			//in the part of the constructor with arguments
+			if(HCISRFileAST.isIdentifier(curSig)){
+				//is an identifier, check type
+				for(HCISRMethodAST m : possible){
+					if(m.sig.length>i && HCISRFileAST.isIdentifier(m.sig[i])){
+						//both are identifiers, look at hierarchy
+						String[] potentialMatchRestrictions = m.typeRestrictions[i]; //there will be a typeRes
+						String[] callingType = argumentTypes[i].typeNm;
+						//get the types
+						HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+						if(potentialMatchType.isTemplate()){
+							potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
+						}
+						HCISRClassAST callingTypeClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+						if(callingTypeClass.isTemplate()){
+							callingTypeClass = callingTypeClass.getParameterizedClass(callingType);
+						}
+						//and see how far it takes to go from calling type class to potential match restrictions
+						int dist = findUpcastDistance(callingTypeClass, potentialMatchType);
+						if(dist > -1){
+							best.add(m);
+						}
+					}
+				}
+			}
+			else{
+				//is a random string, check equality
+				for(HCISRMethodAST m : possible){
+					if(m.sig.length>i && m.sig[i].equals(curSig)){
+						best.add(m);
+					}
+				}
+			}
+			possible = best;
+		}
+		//then find the best fit
 		for(int i = 0;i < signature.length;i++){
 			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
 			String curSig = signature[i];
@@ -119,7 +159,61 @@ public class HCISRClassAST{
 		for(HCISRConstructorAST c : constructorList){
 			possible.add(c);
 		}
+		//first find all possible matches
 		boolean crossedWith = false;
+		for(int i = 0;i < signature.length;i++){
+			ArrayList<HCISRConstructorAST> best = new ArrayList<HCISRConstructorAST>();
+			String curSig = signature[i];
+			if(crossedWith){
+				//in the part of the constructor with arguments
+				if(HCISRFileAST.isIdentifier(curSig)){
+					//is an identifier, check type
+					for(HCISRConstructorAST c : possible){
+						if(c.sig.length>i && HCISRFileAST.isIdentifier(c.sig[i])){
+							//both are identifiers, look at hierarchy
+							String[] potentialMatchRestrictions = c.typeRes[i]; //there will be a typeRes
+							String[] callingType = argumentTypes[i].typeNm;
+							//get the types
+							HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+							if(potentialMatchType.isTemplate()){
+								potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
+							}
+							HCISRClassAST callingTypeClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+							if(callingTypeClass.isTemplate()){
+								callingTypeClass = callingTypeClass.getParameterizedClass(callingType);
+							}
+							//and see how far it takes to go from calling type class to potential match restrictions
+							int dist = findUpcastDistance(callingTypeClass, potentialMatchType);
+							if(dist > -1){
+								best.add(c);
+							}
+						}
+					}
+				}
+				else{
+					//is a random string, check equality
+					for(HCISRConstructorAST c : possible){
+						if(c.sig.length>i && c.sig[i].equals(curSig)){
+							best.add(c);
+						}
+					}
+				}
+			}
+			else{
+				//still in the first part of the constructor name, just check equality
+				for(HCISRConstructorAST c : possible){
+					if(c.sig.length>i && c.sig[i].equals(curSig)){
+						best.add(c);
+					}
+				}
+				if(curSig.equals("with")){
+					crossedWith = true;
+				}
+			}
+			possible = best;
+		}
+		//then find the best match
+		crossedWith = false;
 		for(int i = 0;i < signature.length;i++){
 			ArrayList<HCISRConstructorAST> best = new ArrayList<HCISRConstructorAST>();
 			String curSig = signature[i];
@@ -191,13 +285,17 @@ public class HCISRClassAST{
 	
 	//find out how many classes the suspectedSubclass is beneath the suspectedSuperClass (-1 if there is no connection)
 	public static int findUpcastDistance(HCISRClassAST suspectedSubclass, HCISRClassAST suspectedSuperclass){
+		return findUpcastDist(suspectedSubclass, suspectedSuperclass, 0);
+	}
+	private static int findUpcastDist(HCISRClassAST suspectedSubclass, HCISRClassAST suspectedSuperclass,int cur){
+		//if the subclass is null, is not a child of superclass
 		if(suspectedSubclass == null){
 			return -1;
 		}
 		if(suspectedSubclass==suspectedSuperclass){
-			return 0;
+			return cur;
 		}
-		return 1 + findUpcastDistance(suspectedSubclass.stype,suspectedSuperclass);
+		return findUpcastDist(suspectedSubclass.stype, suspectedSuperclass, cur+1);
 	}
 	
 	//is the type a template
@@ -460,6 +558,11 @@ public class HCISRClassAST{
 				c.compileReferences(imports, classVars, this);
 			}
 		}
+	}
+	
+	//how many variables does this thing have, used at runtime
+	public int getNumberOfVariables(){
+		return variableList.length;
 	}
 	
 	//the usual constructor to use straight from the parser

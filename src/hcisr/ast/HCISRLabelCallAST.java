@@ -1,5 +1,7 @@
 package hcisr.ast;
 
+import hcisr.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +28,11 @@ public class HCISRLabelCallAST extends HCISRStatementAST{
 	//add a label to the scope
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
 		currentScope.addLabel(name, line, this);
+	}
+	
+	//this code does nothing
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl){
+		return null;
 	}
 	
 	public HCISRLabelCallAST(String labelName){

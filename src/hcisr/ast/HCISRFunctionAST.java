@@ -1,12 +1,15 @@
 package hcisr.ast;
-
+import hcisr.*;
 import java.util.*;
 
-public abstract class HCISRFunctionAST{
+public abstract class HCISRFunctionAST implements HCISRRunnable{
 	public boolean isDefined;
 	protected String[] sig;
 	protected String[][] typeRes;
 	protected int stackSize;
+	public int getStackSize(){
+		return stackSize;
+	}
 	
 	//global data location
 	protected HCISRFunctionFileAST globalDataLoc;

@@ -1,5 +1,5 @@
 package hcisr.ast;
-
+import hcisr.*;
 import java.util.*;
 
 //this class represents a block of code with its return and catch clauses
@@ -34,7 +34,8 @@ public class HCISRCodeBlockAST{
 			s.compileReferences(imports,mainScope,lineNum);
 			lineNum++;
 		}
-		//can skip return type
+		//figure out where the return variable is
+		toReturn.compileReferences(imports, mainScope);
 		//and go straight to the catch clauses
 		for(HCISRCatchClauseAST c : errorCorrect){
 			c.compileReferences(imports, mainScope);
@@ -52,6 +53,46 @@ public class HCISRCodeBlockAST{
 		mainScope.kill();
 		//and return stack size
 		return numStackVars;
+	}
+	
+	//actually run the code
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		int i = 0;
+		while(i<codeContents.length){
+			//run through the code, and either return or catch an exception
+			try{
+				//run code
+				codeContents[i].run(sf, hl);
+				i = i + 1;
+			}
+			catch(HCISRException e){
+				//check exceptions, and if any match, run them, otherwise, rethrow e
+				for(int j = 0;j<errorCorrect.length;j++){
+					if(errorCorrect[j].matchesError(e)){
+						try{
+							return errorCorrect[j].run(sf, hl);
+						}
+						catch(HCISRGotoException e2){
+							i = e2.line;
+							if(codeContents[i]!=e2.target){
+								//code blocks cannot throw goto errors, things are bad
+								throw new UnsupportedOperationException("Tried to goto outside a code block");
+							}
+						}
+					}
+				}
+				throw e;
+			}
+			catch(HCISRGotoException e){
+				i = e.line;
+				if(codeContents[i]!=e.target){
+					//code blocks cannot throw goto errors, things are bad
+					throw new UnsupportedOperationException("Tried to goto outside a code block");
+				}
+			}
+		}
+		//then return
+		return toReturn.run(sf, hl);
 	}
 	
 	public HCISRCodeBlockAST(HCISRStatementAST[] codeConts,HCISRReturnsClauseAST toRet,HCISRCatchClauseAST[] errCor){

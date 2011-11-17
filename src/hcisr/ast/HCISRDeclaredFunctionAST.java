@@ -1,11 +1,20 @@
 package hcisr.ast;
 
+import hcisr.HCISRInstance;
+import hcisr.HCISRStackFrame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 //this class represents a declared function
 public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
 	protected HCISRReturnsDeclarationAST emptyMeth;
+	
+	//for external types, this may be filled in by another program
+	HCISRExternalCodeBlock theCode;
+	public void setInstructions(HCISRExternalCodeBlock instructions){
+		theCode = instructions;
+	}
 	
 	public void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses){
 		emptyMeth.compileTemplates(imports, newClasses);
@@ -23,6 +32,15 @@ public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
 			}
 		}
 		globalDataLoc = globalDataLink;
+	}
+	
+	public HCISRInstance run(HCISRStackFrame sf){
+		//use the global data
+		//run the filled in stuff (or shit a brick if it's undefined)
+		if(theCode==null){
+			throw new UnsupportedOperationException("External or Abstract method not filled in");
+		}
+		return theCode.run(sf, globalDataLoc);
 	}
 	
 	public HCISRDeclaredFunctionAST(String[] methodSignature, String[][] typeRestrictions, HCISRReturnsDeclarationAST retType){
