@@ -1,6 +1,6 @@
 package hcisr.ast;
 
-class VariableLocationDescription{
+public class VariableLocationDescription{
 	public boolean special;
 	public int location;
 	public String[] typeNm;

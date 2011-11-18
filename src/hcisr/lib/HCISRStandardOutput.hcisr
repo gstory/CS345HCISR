@@ -1,8 +1,10 @@
 this file describes functions
 .
 the following functions make use of
-	a Boolean named Useless
 .
 print S ( String )
+	returns Nothing
+.
+println
 	returns Nothing
 .

@@ -16,6 +16,9 @@ public class HCISRFileAST implements HCISRRunnable{
 	public boolean isClass(){
 		return isC;
 	}
+	public HCISRClassAST getDefinedClass(){
+		return classDef;
+	}
 	public boolean isFunction(){
 		return isF;
 	}

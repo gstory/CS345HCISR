@@ -11,29 +11,6 @@ external type Boolean is a subtype of Object
 		B ~
 			returns Boolean
 		.
-		B * A ( Boolean )
-			define a Boolean named C
-			set C to B & A
-			return C as Boolean
-		.
-		B + A ( Boolean )
-			define a Boolean named C
-			set C to B | A
-			return C as Boolean
-		.
-		B and A ( Boolean )
-			define a Boolean named C
-			set C to B & A
-			return C as Boolean
-		.
-		B or A ( Boolean )
-			define a Boolean named C
-			set C to B | A
-			return C as Boolean
-		.
-		B not
-			returns Boolean
-		.
 		B initialize boolean
 			returns Nothing
 		.

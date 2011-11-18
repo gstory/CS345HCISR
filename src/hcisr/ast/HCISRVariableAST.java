@@ -11,11 +11,11 @@ public class HCISRVariableAST{
 	public static final int FUNCTION = 3;
 	public static final int BOOL = 4;
 	
-	public static final String stringClassLoc = "hcisr.lib.HCISRString.hcisr";
-	public static final String intClassLoc = "hcisr.lib.HCISRString.hcisr";
-	public static final String floatClassLoc = "hcisr.lib.HCISRFloat.hcisr";
-	public static final String functionClassLoc = "hcisr.lib.HCISRFloat.hcisr";
-	public static final String booleanClassLoc = "hcisr.lib.HCISRBoolean.hcisr";
+	public static final String stringClassLoc = HCISRInterpreter.stringClassLoc;
+	public static final String intClassLoc = HCISRInterpreter.intClassLoc;
+	public static final String floatClassLoc = HCISRInterpreter.floatClassLoc;
+	public static final String functionClassLoc = HCISRInterpreter.functionClassLoc;
+	public static final String booleanClassLoc = HCISRInterpreter.booleanClassLoc;
 	
 	protected String[] type;
 	protected String name;

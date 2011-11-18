@@ -8,8 +8,8 @@ import java.util.Iterator;
 
 //this class represents a for loop
 public class HCISRForCallAST extends HCISRStatementAST{
-	public static final String iterableLoc = "hcisr.lib.HCISRIterable.hcisr";
-	public static final String iteratorLoc = "hcisr.lib.HCISRIterator.hcisr";
+	public static final String iterableLoc = HCISRInterpreter.iterableLoc;
+	public static final String iteratorLoc = HCISRInterpreter.iteratorLoc;
 	public static final String[] getIterator = new String[]{"I","get","iterator"};
 	public static final String[] hasNext = new String[]{"I","has","next"};
 	public static final String[] getNext = new String[]{"I","get","next"};
