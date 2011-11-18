@@ -31,7 +31,7 @@ public class HCISRInterpreter{
 		//first load in the main file (that will be returned)
 		URL floc = ctu.getResource(resourceName);
 		if(floc == null){
-			throw new FileNotFoundException();
+			throw new FileNotFoundException(resourceName);
 		}
 		InputStream fin = floc.openStream();
 		HCISRFileAST toRet = HCISRParser.readFile(fin);
@@ -48,7 +48,7 @@ public class HCISRInterpreter{
 				//otherwise, load
 				floc = ctu.getResource(toImp);
 				if(floc == null){
-					throw new FileNotFoundException();
+					throw new FileNotFoundException(toImp);
 				}
 				fin = floc.openStream();
 				HCISRFileAST toAdd = HCISRParser.readFile(fin);

@@ -61,8 +61,8 @@ public class HCISRClassAST{
 		for(HCISRMethodAST m : methodList){
 			possible.add(m);
 		}
-		//first, find all methods that could match
-		for(int i = 0;i < signature.length;i++){
+		//first, find all methods that could match (skip the first identifier, it is a guaranteed match
+		for(int i = 1;i < signature.length;i++){
 			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
 			String curSig = signature[i];
 			//in the part of the constructor with arguments
@@ -101,7 +101,7 @@ public class HCISRClassAST{
 			possible = best;
 		}
 		//then find the best fit
-		for(int i = 0;i < signature.length;i++){
+		for(int i = 1;i < signature.length;i++){
 			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
 			String curSig = signature[i];
 			//in the part of the constructor with arguments

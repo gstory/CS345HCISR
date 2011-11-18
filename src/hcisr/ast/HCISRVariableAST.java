@@ -29,23 +29,42 @@ public class HCISRVariableAST{
 	
 	//get an instance for an initial variable
 	public static HCISRInstance getInitialValue(int type, String val, HashMap<String,HCISRFileAST> imports){
+		HCISRFileAST toUse;
+		HCISRInstance toRet;
 		switch(type){
 		case NOINIT: 
 			return null;
 		case STRING: 
 			//get the string class
-			HCISRFileAST toUse = imports.get(stringClassLoc);
-			HCISRInstance toRet = new HCISRInstance(toUse.classDef);
+			toUse = imports.get(stringClassLoc);
+			toRet = new HCISRInstance(toUse.classDef);
 			toRet.addExternalVariables(new HCISRInstanceStringVars(val));
 			return toRet;
 		case INT: 
-			break;
+			toUse = imports.get(intClassLoc);
+			toRet = new HCISRInstance(toUse.classDef);
+			toRet.addExternalVariables(new HCISRInstanceIntegerVars(Integer.parseInt(val)));
+			return toRet;
 		case FLOAT: 
-			break;
+			toUse = imports.get(floatClassLoc);
+			toRet = new HCISRInstance(toUse.classDef);
+			//don't do any initialization, skip floats for now
+			return toRet;
 		case FUNCTION: 
-			return null;
+			toUse = imports.get(functionClassLoc);
+			toRet = new HCISRInstance(toUse.classDef);
+			//don't do any initialization, will skip first class functions for now
+			return toRet;
 		case BOOL: 
-			break;
+			toUse = imports.get(booleanClassLoc);
+			toRet = new HCISRInstance(toUse.classDef);
+			if(val.equals("true")){
+				toRet.addExternalVariables(new HCISRInstanceBooleanVars(true));
+			}
+			else{
+				toRet.addExternalVariables(new HCISRInstanceBooleanVars(false));
+			}
+			return toRet;
 		}
 		return null;
 	}
