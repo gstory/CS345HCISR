@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class HCISR {
+	public static String constructorvar;
+	
    public static void main(String args[]) throws ParseException {
       HCISR parser = new HCISR(System.in);
       parser.FILE();
@@ -88,6 +90,7 @@ String Anyfirst():
    (e=<CHARS>|e=<LP>|e=<RP>|e=<NUMS>|e=<A>|e=<OF>|e=<NAMED>|e=<TYPE>|e=<ARCHTYPE>|e=<EXTERNALTYPE>|e=<is_a_subtype_of>|e=<and_has>|e=<and_an_instance>|e=<understands_the_following_commands>|e=<which_initially_equals>|e=<is_created_with_the_commands>|e=<this_file_uses>|e=<this_file_describes>|e=<a_Class>|e=<Functions>|e=<a_Program>|e=<TO>|e=<TRUE>|e=<FALSE>|e=<DO>|e=<THEN>|e=<IN>|e=<AS>|e=<and_in_the_event_of_a>|e=<the_following_functions_make_use_of>|e=<WITH>|e=<STRINGREF>|e=<INTREF>|e=<FLOATREF>|e=<BOOLREF>|e=<FUNCTIONREF>) {return e.image();}
 }
 
+//NL does nothing - done
 void NL() :
 {}
 {
@@ -186,10 +189,10 @@ HCISRFileAST FILE() :
 
 //fileh - done?
 HCISRFileAST Fileh():
-{HCISRFileAST f; String[] filestoimport; HCISRClassAST c; HCISRFunctionAST fun; HCISRStatementAST[] s;}
+{HCISRFileAST f; String[] filestoimport; HCISRClassAST c; HCISRFunctionFileAST fun; HCISRStatementAST[] s;}
 {
    <a_Class> NL() filestoimport = Importbody() <END> NL() c = Class()  {return new HCISRFileAST(filestoimport, c);} 
-   | <Functions> NL() filestoimport = Importbody() <END> NL() f = Function() {return new HCISRFileAST(filestoimport, f);}
+   | <Functions> NL() filestoimport = Importbody() <END> NL() fun = Function() {return new HCISRFileAST(filestoimport, fun);}
    | <a_Program> NL() filestoimport = Importbody() <END> NL() s = Program() {return new HCISRFileAST(filestoimport, s);}
    
 }
@@ -288,7 +291,7 @@ HCISRVariableAST[] Databody():
 		| initializedValue = Bool()               {initializedType = 4;}))? NL() 
 	{ returnarray.add(new HCISRVariableAST(typeDeclaration, e.image(), initializedType, initializedValue)); })*        
 
-	{ return returnarray.toArray(); }
+	{ return returnarray.toArray(new HCISRVariableAST[returnarray.size()]); }
 }
 
 //class -> methods - done?
@@ -320,7 +323,7 @@ HCISRMethodAST[] Methodbodies():
 {
 	{marray = new ArrayList<HCISRMethodAST>();}
    (m = Methoddec() {marray.add(m);})* //put them in array
-	{return marray.toArray();}
+	{return marray.toArray(new HCISRMethodAST[marray.size()]);}
 }
 
 //Methods -> Methodbodies -> Methoddec - returns a defined or declared method ast - done?
@@ -346,7 +349,7 @@ Object[] Methodid():
 {
    e = <IDENT> {instName = e.image(); sig1.add(e.image()); typeRes2.add(null);}
 	(anytmp = Any() {sig1.add(anytmp); typeRes2.add(null);}
-	|(f = <IDENT> <LP>  tidenttmp = TIDENT() <RP>) {sig1.add(f.image()); typeRes2.add(tidenttmp);}    )+ NL()
+	|(f = <IDENT> <LP>  tidenttmp = TIDENT() <RP>{sig1.add(f.image()); typeRes2.add(tidenttmp);} )     )+ NL()
 	{
 		sig = new String[sig1.length];
 		for (int i = 0; i < sig.length; i++) {sig[i] = sig1.get(i);}
@@ -371,14 +374,15 @@ HCISRReturnsDeclarationAST Returnsdec():
    <RETURNS>  tidentreturn = TIDENT() NL() {return new HCISRReturnsDeclarationAST(tidentreturn);}
 }
 
-//constructor - not done
-HCISRConstructorAST Constructor():
-{Object[] returnarray; String constructorselfreference;}
+//constructor - done?
+Object[] Constructor():
+{Object[] returnarray; String constructorselfreference; HCISRConstructorAST[] constructorbodiesreturn;}
 {
-   constructorselfreference = Constructorhead() Constructorbodies() <END> NL()
+   constructorselfreference = Constructorhead() constructorbodiesreturn = Constructorbodies() <END> NL()
 	{
 		returnarray[0] = constructorselfreference;
-		//need something here for constructorbodies
+		returnarray[1] = constructorbodiesreturn;
+		return returnarray;
 	}
 }
 //constructor -> constructorhead returns string constructorselfreference - done?
@@ -388,76 +392,123 @@ String Constructorhead():
     <and_an_instance> e = <IDENT><is_created_with_the_commands> NL()
 	{
 		constructorselfreference = e.image();
+		constructorvar = constructorselfreference;
 		return constructorselfreference;	
 	}
 }
 
-void Constructorbodies():
-{}
+//constructor -> constructorbodies returns array of constructor ast's - done?
+HCISRConstructorAST[] Constructorbodies():
+{HCISRConstructorAST c; ArrayList<HCISRConstructorAST> returnarray;}
 {
-   (Constructordec())*
+	{returnarray = new ArrayList<HCISRConstructorAST>();}
+   (c = Constructordec() {returnarray.add(c);})*
+	{return returnarray.toArray(new HCISRConstructorAST[returnarray.size()]);}
 }
 
-void Constructordec():
-{}
+//constructor -> constructorbodies -> constructordec returns a new constructor AST - done?
+HCISRConstructorAST Constructordec():
+{Object[] constructoridreturn; Object[] codebodyreturn; String[] createdType; String[] methodSignature; String[][] typeRestrictions; }
 {
-   Constructorid() Codebody() <END> NL()
+   constructoridreturn = Constructorid() codebodyreturn = Codebody() <END> NL()
+
+	{
+		createdType = constructoridreturn[0];
+		methodSignature = constructoridreturn[1];
+		typeRestrictions = constructoridreturn[2];		
+		//return declared or defined constructorAST
+		if (codebodyreturn[0] = false)		
+			{return (new HCISRDeclaredConstructorAST(constructorvar, createdType, methodSignature, typeRestrictions, codebodyreturn[1]));}
+		else {return (new HCISRDefinedConstructorAST(constructorvar, createdType, methodSignature, typeRestrictions, codebodyreturn[1]));}
+	}
 }
 
-void Constructorid():
-{}
+//constructor -> constructorbodies -> constructordec -> constructorid - returns object {createdType, methodsig, typeres} - done?
+Object[] Constructorid():
+{Token e; String[] createdType; String[] methodSignature; String[][] typeRestrictions; String[] anytmp; ArrayList<String> msig1; ArrayList<String[]> tres1; String[] tidenttmp;}
 {
-   <make_a_new> TIDENT() (<WITH> (Any() | (<IDENT><LP>TIDENT()<RP>))*)? NL()
+   <make_a_new> createdType = TIDENT() {for(String s: createdType){msig1.add(s); tres1.add(null);}} 
+	(<WITH> (anytmp = Any() {msig1.add(anytmp); tres1.add(null);}
+		| (e = <IDENT><LP> tidenttmp = TIDENT()<RP> {msig1.add(e.image()); tres1.add(tidenttmp);}  ))*)? NL()
+	{
+		return new Object[]{createdType, msig1.toArray(new String[msig1.size()], tres1.toArray(new String[tres1.size()][]))};
+	}
 }
 
-void Functiondec():
-{}
+//file -> function returns a function ast - done?
+HCISRFunctionFileAST Function():
+{HCISRVariableAST[] globalDataDeclaration; HCISRFunctionAST[] functionDeclarations;}
 {
-    Functionid()  Codebody()  <END> NL()
+    globalDataDeclaration = Fdata()  functionDeclarations = Funcs()
+	{return new HCISRFunctionFileAST(globalDataDeclaration, functionDeclarations);}
 }
 
-void Functionid():
-{}
+//function -> fdata returns variable ast - done?
+HCISRVariableAST[] Fdata():
+{HCISRVariableAST[] databodyreturn;}
 {
-   Anyfirst() (Any() | (<IDENT><LP>TIDENT()<RP>))* NL()
+    Fdatahead()  databodyreturn = Databody()  <END> NL() {return databodyreturn;}
 }
 
-void Function():
-{}
-{
-    Fdata()  Funcs()
-}
-
-void Fdata():
-{}
-{
-    Fdatahead()  Databody()  <END> NL()
-}
-
+//function -> fdata -> fdatahead does nothing - done?
 void Fdatahead():
 {}
 {
     <the_following_functions_make_use_of>  NL()
 }
 
-void Funcs():
-{}
+//function -> fdata -> funcs returns an array of function ast - done?
+HCISRFunctionAST[] Funcs():
+{HCISRFunctionAST f; ArrayList<HCISRFunctionAST> returnarray;}
 {
-    (Functiondec())*
-}
-//file -> program plays hot potato 
-HCISRStatementAST[] Program():
-{HCISRStatementAST[] s;}
-{
-   s = Codeblock() {return s;}          ! *TYPE MISMATCH BETWEEN PROGRAM AND CODEBLOCK* !
+	{returnarray = new ArrayList<HCISRFunctionAST>();}
+    (f = Functiondec() {returnarray.add(f);})*
+	{return returnarray.toArray(new HCISRFunctionAST[returnarray.size()]);}
 }
 
-//* -> codeblock returns HCISRCodeblock - not done
-HCISRCodeBlockAST Codeblock():
-{HCISRStatementAST[] codeConts; HCISRReturnsClauseAST toRet; HCISRCatchClauseAST[] errCor; ArrayList<HCISRStatementAST> cc1; HCISRStatementAST s; }
+//function -> fdata -> functiondec returns new function ast - done?
+HCISRFunctionAST Functiondec():
+{Object[] codebodyreturn; Object[] functionidreturn; String[] methodSignature; String[][] typeRestrictions;}
 {
-	{cc1 = new ArrayList<HCISRStatementAST>();}
-   (s = Statement() {cc1.add(s);})* toRet = Returncall()  (Catchcall())*
+    functionidreturn = Functionid()  codebodyreturn = Codebody()  <END> NL()
+	{
+		methodSignature = functionidreturn[0];
+		typeRestrictions = functionidreturn[1];
+		if (codebodyreturn[0] = false){
+			return new HCISRDeclaredFunctionAST(methodSignature, typeRestrictions, codebodyreturn[1]);}
+		 else { return new HCISRDefinedFunctionAST(methodSignature, typeRestrictions, codebodyreturn[1]); }
+	}
+}
+//function -> fdata -> functiondec -> function id returns object array - done?
+Object[] Functionid():
+{String[] methodSignature; String[][] typeRestrictions; String s; Token e; String[] tidentreturn; String anytmp; ArrayList<String> msig1; ArrayList<String[]> tres1;}
+{
+	{msig1 = new ArrayList<String>(); tres1 = new ArrayList<String[]>();}
+   s = Anyfirst() {msig1.add(s); tres1.add(null);}
+	(anytmp = Any() {msig1.add(s); tres1.add(null);}
+	| (e = <IDENT><LP>tidentreturn = TIDENT()<RP> {msig1.add(e.image()); tres1.add(tidentreturn);}))* NL()
+	{return new Object[]{msig1.toArray(new String[msig1.size()]), tres1.toArray(new String[tres1.size()][])};}
+}
+
+//file -> program - done?
+HCISRStatementAST[] Program():
+{HCISRStatementAST s; ArrayList<HCISRStatementAST> returnarray1; HCISRStatementAST[] returnarray; }
+{
+  
+	         {returnarray1 = new ArrayList<HCISRStatementAST>();}
+   (s = Statement() {returnarray1.add(s);})*
+	{return returnarray1.toArray(new HCISRStatementAST[returnarray1.size()]);}
+}
+
+//* -> codeblock returns HCISRCodeblock - done?
+HCISRCodeBlockAST Codeblock():
+{HCISRStatementAST[] codeConts; HCISRReturnsClauseAST toRet; HCISRCatchClauseAST[] errCor; ArrayList<HCISRStatementAST> cc1; HCISRStatementAST s; HCISRCatchClauseAST c; ArrayList<HCISRCatchClauseAST> erc1;}
+{
+	{cc1 = new ArrayList<HCISRStatementAST>(); erc1 = new ArrayList<HCISRCatchClauseAST>();}
+   (s = Statement() {cc1.add(s);})* toRet = Returncall()  (c = Catchcall() {erc1.add(c);})*
+	{
+		return new HCISRCodeBlockAST(cc1.toArray(new HCISRStatementAST[cc1.size()]), toRet, erc1.toArray(new HCISRCatchClauseAST[erc1.size()]));
+	}	
 }
 
 //codeblock -> statement - returns statement ast - done?
@@ -475,7 +526,7 @@ HCISRMethodCallAST Methodcall():
 	{sig = new ArrayList<String>();}
    e = <IDENT> {sig.add(e.image());} (tmp = Any() {sig.add(tmp);}| e = <IDENT> {sig.add(e.image());})* NL()
 	{
-		methodSignature = sig.toArray();
+		methodSignature = sig.toArray(new String[sig.size()]);
 		return new HCISRMethodCallAST(methodSignature);
 	}
 }
@@ -487,7 +538,7 @@ HCISRConstructorCallAST Constructorcall():
 	{typId1 = new ArrayList<String>();}
    <make_a_new> methodSignature = TIDENT() (<WITH> 
 	(tmp = Any() {typId1.add(tmp);} | e = <IDENT> {typeId1.add(e.image());} )*)? NL()
-	{	typeIdentifier = typId1.toArray();
+	{	typeIdentifier = typId1.toArray(new String[typId1.size()]);
 		return new HCISRConstructorCallAST(methodSignature, typeIdentifier);
 	}
 }
@@ -553,7 +604,7 @@ HCISRStatementAST[] Ifclause():
 {
 	{statementarray = new ArrayList<HCISRStatementAST>();}
    (s = Statement() {statementarray.add(s);})* <END> NL()
-	{return statementarray.toArray();}
+	{return statementarray.toArray(new HCISRStatementAST[statementarray.size()]);}
 }
 //codeblock -> statement -> ifcall -> elseclause returns statement ast array - done?
 HCISRStatementAST[] Elseclause():
@@ -561,7 +612,7 @@ HCISRStatementAST[] Elseclause():
 {
 	{statementarray = new ArrayList<HCISRStatementAST>();}
    <otherwise> NL() (s = Statement() {statementarray.add(s);} )* <END> NL()
-	{return statementarray.toArray();}
+	{return statementarray.toArray(new HCISRStatementAST[statementarray.size()]);}
 }
 //codeblock -> statement -> forcall returns for call ast - done?
 HCISRStatementAST Forcall():
@@ -573,7 +624,7 @@ HCISRStatementAST Forcall():
 		typeIdentifier = fordecreturn[0];
 		variableIdentifier = fordecreturn[1];
 		listIdentifier = fordecreturn[2];
-		return new HCISRForCallAST(typeIdentifier, variableIdentifier, listIdentifier, loopCommands.toArray());
+		return new HCISRForCallAST(typeIdentifier, variableIdentifier, listIdentifier, loopCommands.toArray(new HCISRStatementAST[loopCommands.size()]));
 	}
 }
 //codeblock -> statement -> forcall -> fordec returns {typeident[], variableident, listident} - done?
@@ -591,7 +642,7 @@ HCISRStatementAST Whilecall():
 	{loopCommands = new ArrayList<HCISRStatementAST>();}
    booleanID = Whiledec() (s = Statement() {loopCommands.add(s);})* <END> NL()
 
-	{ return new HCISRWhileCallAST(booleanID, loopCommands.toArray()); }
+	{ return new HCISRWhileCallAST(booleanID, loopCommands.toArray(new HCISRStatementAST[loopCommands.size()])); }
 }
 //codeblock -> statement -> whilecall -> whiledec returns booleanID string - done?
 String Whiledec():
@@ -635,7 +686,7 @@ HCISRStatementAST Functioncall():
    s = Anyfirst() {methodSignature.add(s);} 
 	(s = Any() {methodSignature.add(s);}
 	|e = <IDENT> {methodSignature.add(e.image());})* NL()
-	{return new HCISRFunctionCallAST(methodSignature.toArray());}
+	{return new HCISRFunctionCallAST(methodSignature.toArray(new String[methodSignature.size()]));}
 }
 //codeblock -> statement -> returncall returns return clause ast - done?
 HCISRReturnsClauseAST Returncall():
@@ -654,7 +705,7 @@ HCISRCatchClauseAST Catchcall():
 	{
 		errorType = headreturn[0];
 		errorVariable = headreturn[1];
-		return new HCISRCatchClauseAST(errorType, errorVariable, commandList.toArray(), toRet);
+		return new HCISRCatchClauseAST(errorType, errorVariable, commandList.toArray(new HCISRStatementAST[commandList.size()]), toRet);
 	}
 }
 //codeblock -> statement -> catchcall -> catchhead returns {errortype[], errorvariable} - done?
