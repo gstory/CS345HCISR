@@ -1,19 +1,19 @@
-this file describes a class
+this file describes a program
 	this file uses hcisr.lib.HCISRIterable.hcisr
 .
-external type Function is a subtype of Object
-	and an instance F understands the following commands
-		F call with L ( Iterable of Object )
-			returns Object
-		.
-		F initialize function
-			returns Nothing
-		.
-	.
-	and an instance F is created with the commands
-		make a new Function
-			F initialize function
-			return F as Function
-		.
-	.
+define a Integer named CurVal which initially equals Integer: 0
+define a Integer named MaxVal which initially equals Integer: 10
+define a Integer named One which initially equals Integer: 1
+define a LinkedList of Integer named ToSort
+set ToSort to make a new LinkedList of Integer
+define a Boolean named NotDone which initially equals Boolean: true
+while NotDone do
+	ToSort add CurVal
+	set CurVal to CurVal plus One
+	set NotDone to CurVal = MaxVal
+	set NotDone to NotDone ~
 .
+for all Integer named I in ToSort do
+	print I
+.
+

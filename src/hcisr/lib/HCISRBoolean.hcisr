@@ -8,6 +8,9 @@ external type Boolean is a subtype of Object
 		B | A ( Boolean )
 			returns Boolean
 		.
+		B ~
+			returns Boolean
+		.
 		B * A ( Boolean )
 			define a Boolean named C
 			set C to B & A
@@ -27,6 +30,9 @@ external type Boolean is a subtype of Object
 			define a Boolean named C
 			set C to B | A
 			return C as Boolean
+		.
+		B not
+			returns Boolean
 		.
 		B initialize boolean
 			returns Nothing

@@ -17,20 +17,17 @@ external type Integer is a subtype of Object
 		I % B ( Integer )
 			returns Integer
 		.
-		I plus B ( Integer )
-			returns Integer
+		I = B ( Integer )
+			returns Boolean
 		.
-		I minus B ( Integer )
-			returns Integer
+		I < B ( Integer )
+			returns Boolean
 		.
-		I times B ( Integer )
-			returns Integer
+		I > B ( Integer )
+			returns Boolean
 		.
-		I divided by B ( Integer )
-			returns Integer
-		.
-		I modulo B ( Integer )
-			returns Integer
+		I as string
+			returns String
 		.
 		I initialize integer
 			returns Nothing

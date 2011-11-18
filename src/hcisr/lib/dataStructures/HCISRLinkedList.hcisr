@@ -1,0 +1,60 @@
+this file describes a class
+	this file uses hcisr.lib.HCISRIterator.hcisr
+.
+type LinkedList of E is a subtype of Iterable of E
+	and has
+		a LinkedListNode of E named First
+	.
+	and an instance L understands the following commands
+		L add Ob ( E )
+			define a LinkedListNode of E named NewLast
+			set NewFirst to make a new LinkedListNode of E with Ob and First
+			note : run through all of the nodes until the end is hit, then add Ob to the end
+			define a LinkedListNode of E named End
+			define a LinkedListNode of E named SecondEnd
+			define a LinkedListNode of E named Null
+			set Null to nothing
+			set End to First
+			set SecondEnd to First
+			define a Boolean named HitEnd
+			set HitEnd to are SecondEnd and Null the same
+			if HitEnd then
+				set First to NewLast
+			.
+			otherwise
+				define a Boolean named MissedEnd
+				set MissedEnd to HitEnd ~
+				while MissedEnd do
+					set End to identity of SecondEnd
+					set SecondEnd to SecondEnd get next
+					set HitEnd to are SecondEnd and Null the same
+					set MissedEnd to HitEnd ~
+				.
+				End set next to NewLast
+			.
+			return Nothing as Nothing
+		.
+		L get iterator
+			define a LinkedListIterator of E named LLI
+			set LLI to make a new LinkedListIterator of E with L
+			return LLI as LinkedListIterator of E
+		.
+		L get first
+			return First as LinkedListNode of E
+		.
+		L length
+			define a Integer named Len which initially equals Integer: 1
+			define a Integer named One which initially equals Integer: 1
+			for all E named C in L do
+				set Len to Len + One
+			.
+			return Len as Integer
+		.
+	.
+	and an instance L is created with the commands
+		make a new LinkedList of E
+			note that First is initially null
+			note so nothing needs to be done to initialize
+		.
+	.
+.

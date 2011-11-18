@@ -2,8 +2,5 @@ this file describes a class
 .
 type Object is a subtype of Nothing
 	and an instance Ob understands the following commands
-		Ob
-			return Ob as Object
-		.
 	.
 .

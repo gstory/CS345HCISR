@@ -1,0 +1,136 @@
+this file describes functions
+.
+the following functions make use of
+.
+mergesort L ( LinkedList of Integer )
+	note : find the length of the incoming list
+	
+	define a Integer named One which initially equals Integer: 1
+	define a Integer named Length
+	set Length to L length
+	define a Boolean named IsLen1
+	set IsLen1 to Length = One
+	define a LinkedList of Integer named ToRet
+	if IsLen1 then
+		note : if the linked list is of length one, do nothing
+		
+		set ToRet to identity of L
+	.
+	otherwise
+		note : split up the two lists
+		
+		define a LinkedList of Integer named ListA
+		set ListA to make a new LinkedList of Integer
+		define a LinkedList of Integer named ListB
+		set ListB to make a new LinkedList of Integer
+		define a Boolean named OnA which initially equals Boolean: true
+		for all Integer named I in L do
+			if OnA then
+				set OnA to OnA ~
+				ListA add I
+			.
+			otherwise
+				set OnA to OnA ~
+				ListB add I
+			.
+		.
+		note : and recursively sort
+		
+		set ListA to mergesort ListA
+		set ListB to mergesort ListB
+		
+		note : and then build a new list, in decreasing order
+		
+		define a Object named Null
+		set Null to nothing
+		set ToRet to make a new LinkedList of Integer
+		define a Iterator of Integer named AIterator
+		set AIterator to ListA get iterator
+		define a Boolean named AHasMore
+		set AHasMore to AIterator has next
+		define a Iterator of Integer named BIterator
+		set BIterator to ListB get iterator
+		define a Boolean named BHasMore
+		set BHasMore to BIterator has next
+		define a Integer named ACur
+		define a Boolean named ACurValid
+		if AHasMore then
+			set ACur to AIterator get next
+			set AHasMore to AIterator has next
+		.
+		define a Integer named BCur
+		define a Boolean named BCurValid
+		if BHasMore then
+			set BCur to BIterator get next
+			set BHasMore to BIterator has next
+		.
+		define a Boolean named IsMore
+		set ACurValid to are ACur and Null the same
+		set BCurValid to are BCur and Null the same
+		set IsMore to ACurValid or BCurValid
+		while IsMore do
+			if ACurValid then
+				if BCurValid then
+					note : both are valid, compare
+					note : for this example, do ascending order
+					
+					define a Boolean named ToAddA
+					set ToAddA to ACur < BCur
+					if ToAddA then
+						ToRet add ACur
+						if AHasMore then
+							set ACur to AIterator get next
+						.
+						otherwise
+							set ACur to Null
+						.
+						set AHasMore to AIterator has next
+					.
+					otherwise
+						ToRet add BCur
+						if BHasMore then
+							set BCur to BIterator get next
+						.
+						otherwise
+							set BCur to Null
+						.
+						set BHasMore to BIterator has next
+					.
+				.
+				otherwise
+					note : only A list has anything, take from it
+					
+					ToRet add ACur
+					if AHasMore then
+						set ACur to AIterator get next
+					.
+					otherwise
+						set ACur to Null
+					.
+					set AHasMore to AIterator has next
+				.
+			.
+			otherwise
+				if BCurValid then
+					note : only B list has anything, take from it
+
+					ToRet add BCur
+					if BHasMore then
+						set BCur to BIterator get next
+					.
+					otherwise
+						set BCur to Null
+					.
+					set BHasMore to BIterator has next
+				.
+				otherwise
+					note : nothing valid, should never come here
+				.
+			.
+			set ACurValid to are ACur and Null the same
+			set BCurValid to are BCur and Null the same
+			set IsMore to BCurValid or ACurValid
+		.
+	.
+	return toRet as LinkedList of Integer
+.

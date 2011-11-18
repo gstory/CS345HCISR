@@ -1,0 +1,39 @@
+this file describes a class
+	this file uses hcisr.lib.HCISRBoolean.hcisr
+.
+type LinkedListIterator of E ( Object ) is a subtype of Iterator of E
+	and has
+		a LinkedList of E named MyList
+		a LinkedListNode of E named CurNode
+		a Boolean named True which initially equals Boolean: true
+		a Boolean named False which initially equals Boolean: false
+	.
+	and an instance L understands the following commands
+		I get next
+			define a Object named NT
+			set NT to CurNode get target
+			set CurNode to CurNode get next
+			return NT as E
+		.
+		I has next
+			define a Boolean named B
+			define a Object named Null
+			define a Boolean named toRet
+			set Null to nothing
+			set B to are Next and Null the same
+			if B then
+				set toRet to identity of True
+			.
+			otherwise
+				set toRet to identity of False
+			.
+			return toRet as Boolean
+		.
+	.
+	and an instance L is created with the commands
+		make a new LinkedListIterator of E with LL ( LinkedList of E )
+			set MyList to identity of LL
+			set CurNode to LL get first
+		.
+	.
+.

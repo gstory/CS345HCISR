@@ -1,0 +1,14 @@
+this file describes functions
+.
+the following functions make use of
+	a Object named Null
+.
+identity of B ( Object )
+	return B as Object
+.
+nothing
+	return Null as Object
+.
+are A ( Object ) and B ( Object ) the same
+	returns Boolean
+.
