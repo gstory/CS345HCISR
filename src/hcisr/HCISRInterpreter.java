@@ -89,6 +89,10 @@ public class HCISRInterpreter{
 		signature = new String[]{"I","<","B"};
 		HCISRDeclaredMethodAST ltMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		ltMeth.setInstructions(intMeths.ltMeth);
+		//the method for is equal
+		signature = new String[]{"I","=","B"};
+		HCISRDeclaredMethodAST eqMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		eqMeth.setInstructions(intMeths.eqlMeth);
 		//the method for as string
 		signature = new String[]{"I","as","string"};
 		argumentTypes = new VariableLocationDescription[]{null,null,null};

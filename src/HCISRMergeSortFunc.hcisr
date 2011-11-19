@@ -39,6 +39,11 @@ mergesort L ( LinkedList of Integer )
 				ListB add I
 			.
 		.
+		
+		define a String named PastSplit which initially equals String:Post Split
+		print PastSplit
+		println
+		
 		note : and recursively sort
 		
 		set ListA to mergesort ListA
@@ -72,7 +77,7 @@ mergesort L ( LinkedList of Integer )
 		define a Boolean named IsMore
 		set ACurValid to are ACur and Null the same
 		set BCurValid to are BCur and Null the same
-		set IsMore to ACurValid or BCurValid
+		set IsMore to ACurValid | BCurValid
 		while IsMore do
 			if ACurValid then
 				if BCurValid then
@@ -87,7 +92,7 @@ mergesort L ( LinkedList of Integer )
 							set ACur to AIterator get next
 						.
 						otherwise
-							set ACur to Null
+							set ACur to identity of Null
 						.
 						set AHasMore to AIterator has next
 					.
@@ -97,7 +102,7 @@ mergesort L ( LinkedList of Integer )
 							set BCur to BIterator get next
 						.
 						otherwise
-							set BCur to Null
+							set BCur to identity of Null
 						.
 						set BHasMore to BIterator has next
 					.
@@ -110,7 +115,7 @@ mergesort L ( LinkedList of Integer )
 						set ACur to AIterator get next
 					.
 					otherwise
-						set ACur to Null
+						set ACur to identity of Null
 					.
 					set AHasMore to AIterator has next
 				.
@@ -124,7 +129,7 @@ mergesort L ( LinkedList of Integer )
 						set BCur to BIterator get next
 					.
 					otherwise
-						set BCur to Null
+						set BCur to identity of Null
 					.
 					set BHasMore to BIterator has next
 				.
@@ -134,8 +139,12 @@ mergesort L ( LinkedList of Integer )
 			.
 			set ACurValid to are ACur and Null the same
 			set BCurValid to are BCur and Null the same
-			set IsMore to BCurValid or ACurValid
+			set IsMore to BCurValid | ACurValid
 		.
+		define a String named PostMerge which initially equals String:PostMerge
+		print PostMerge
+		println
+		complain about PostMerge
 	.
 	return ToRet as LinkedList of Integer
 .

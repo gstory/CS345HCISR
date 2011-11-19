@@ -23,12 +23,7 @@ type LinkedListIterator of E ( Object ) is a subtype of Iterator of E
 			define a Boolean named ToRet
 			set Null to nothing
 			set B to are CurNode and Null the same
-			if B then
-				set ToRet to identity of True
-			.
-			otherwise
-				set ToRet to identity of False
-			.
+			set ToRet to B ~
 			return ToRet as Boolean
 		.
 	.

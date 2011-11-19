@@ -3,19 +3,19 @@ this file describes a class
 	this file uses hcisr/lib/dataStructures/HCISRLinkedListIterator.hcisr
 	this file uses hcisr/lib/dataStructures/HCISRLinkedListNode.hcisr
 .
-type LinkedList of E is a subtype of Iterable of E
+type LinkedList of E ( Object ) is a subtype of Iterable of E
 	and has
 		a LinkedListNode of E named First
 	.
 	and an instance L understands the following commands
 		L add Ob ( E )
+			define a LinkedListNode of E named Null
+			set Null to nothing
 			define a LinkedListNode of E named NewLast
-			set NewLast to make a new LinkedListNode of E with Ob and First
+			set NewLast to make a new LinkedListNode of E with Ob and Null
 			note : run through all of the nodes until the end is hit, then add Ob to the end
 			define a LinkedListNode of E named End
 			define a LinkedListNode of E named SecondEnd
-			define a LinkedListNode of E named Null
-			set Null to nothing
 			set End to identity of First
 			set SecondEnd to identity of First
 			define a Boolean named HitEnd
@@ -45,7 +45,7 @@ type LinkedList of E is a subtype of Iterable of E
 			return First as LinkedListNode of E
 		.
 		L length
-			define a Integer named Len which initially equals Integer: 1
+			define a Integer named Len which initially equals Integer: 0
 			define a Integer named One which initially equals Integer: 1
 			for all E named C in L do
 				set Len to Len + One

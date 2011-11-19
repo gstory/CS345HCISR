@@ -19,6 +19,7 @@ class HCISRUsualMethodsIEquals extends HCISRExternalCodeBlock{
 		HCISRInstance i1 = sf.getLocation(0);
 		HCISRInstance i2 = sf.getLocation(1);
 		boolean areSame = i1 == i2;
+		System.out.println(areSame);
 		HCISRInstance ir = new HCISRInstance(boolClass);
 		ir.addExternalVariables(new HCISRInstanceBooleanVars(areSame));
 		return ir;

@@ -15,9 +15,20 @@ while NotDone do
 	ToSort add CurVal
 	set CurVal to CurVal + One
 	set NotDone to CurVal < MaxVal
-	set NotDone to NotDone ~
 .
-for all Integer named I in ToSort do
-	print I
+define a String named PostWhile which initially equals String:While Passed
+print PostWhile
+println
+for all Integer named CV in ToSort do
+	define a String named ToPrint
+	set ToPrint to CV as string
+	print ToPrint
+	println
 .
-
+set ToSort to mergesort ToSort
+for all Integer named CV in ToSort do
+	define a String named ToPrint
+	set ToPrint to CV as string
+	print ToPrint
+	println
+.

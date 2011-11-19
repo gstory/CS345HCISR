@@ -89,12 +89,13 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 		//first, make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
 		//and add values to it
+		//note that space is left for the new object
 		for(int i = 0;i<specialVar.length;i++){
 			if(specialVar[i]){
-				nsf.setLocation(hl.getLocation(arrayIndex[i]), i);
+				nsf.setLocation(hl.getLocation(arrayIndex[i]), i+1);
 			}
 			else{
-				nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
+				nsf.setLocation(sf.getLocation(arrayIndex[i]), i+1);
 			}
 		}
 		//now run the constructor and return
