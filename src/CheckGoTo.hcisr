@@ -1,0 +1,25 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+.
+define a Integer named I which initially equals Integer: 0
+define a Integer named One which initially equals Integer: 1
+define a Integer named Max which initially equals Integer: 10
+define a Boolean named ToBreak
+define a String named Mark
+label ToLoop
+set Mark to I as string
+print Mark
+println
+set I to I + One
+set ToBreak to Max < I
+set ToBreak to ToBreak ~
+if ToBreak then
+.
+otherwise
+	go to ToLoop
+.

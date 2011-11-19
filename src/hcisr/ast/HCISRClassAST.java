@@ -13,7 +13,7 @@ public class HCISRClassAST{
 	
 	//unfiltered information about the type
 	protected int classType;
-	protected String[] typeName;
+	protected String[] typeName; public String[] getFullName(){return typeName;}
 	protected String[][] typeRestrictions; //used for restrictions on parameterized types
 	protected String[] supertypeName;
 	protected HCISRVariableAST[] variableList;
@@ -58,17 +58,9 @@ public class HCISRClassAST{
 	//look for the best method
 	public HCISRMethodAST findMatchingMethod(HashMap<String,HCISRFileAST> imports,String[] signature,VariableLocationDescription[] argumentTypes){
 		ArrayList<HCISRMethodAST> possible = new ArrayList<HCISRMethodAST>();
-		System.out.println("+++++++++");
-		System.out.println(typeName[0]);
-		System.out.println(methodList.length);
 		for(HCISRMethodAST m : methodList){
 			possible.add(m);
-			for(String s : m.sig){
-				System.out.print(s + " ");
-			}
-			System.out.println();
 		}
-		System.out.println("---------");
 		//first, find all methods that could match (skip the first identifier, it is a guaranteed match
 		for(int i = 1;i < signature.length;i++){
 			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
@@ -328,19 +320,9 @@ public class HCISRClassAST{
 	//then add the class to the list of new classes
 	//check that the class doesn't already exist
 	public void parameterize(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses, String[] fullName){
-		System.out.println("Generating Generic Type");
-		for(String s : typeName){
-			System.out.print(s + " ");
-		}
-		System.out.println();
-		for(String s : fullName){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		String fullNewName = getFullName(fullName);
 		//if the class already exists, you're done
 		if(parameterized.containsKey(fullNewName)){
-			System.out.println("Already generated");
 			return;
 		}
 		//otherwise, create the type replacements and then make a clone
@@ -484,9 +466,6 @@ public class HCISRClassAST{
 		//now, super type must be compiled before following steps
 		stype.compileHierarchy(imports);
 		
-		System.out.println(typeName[0]);
-		System.out.println(methodList.length);
-		System.out.println(variableList.length);
 		//now, get a full list of variables and methods
 		//variables are easy, just tack on the new stuff at the end
 		HCISRVariableAST[] superVars = stype.variableList;
@@ -528,9 +507,6 @@ public class HCISRClassAST{
 			methodList[i] = newMethList.get(i);
 		}
 		
-		System.out.println(typeName[0]);
-		System.out.println(methodList.length);
-		System.out.println(variableList.length);
 		//done, don't need constructors (it wouldn't make sense)
 	}
 	
@@ -646,8 +622,6 @@ public class HCISRClassAST{
 		for(int i = 0;i<constructorList.length;i++){
 			constructorList[i].toConstruct = this;
 		}
-		System.out.println(typeName[0]);
-		System.out.println(methodList.length);
 	}
 	
 	//this version of the constructor is used to create a parameterized class

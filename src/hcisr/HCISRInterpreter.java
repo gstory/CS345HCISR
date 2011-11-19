@@ -9,7 +9,7 @@ public class HCISRInterpreter{
 	public static final String stringClassLoc = "hcisr/lib/HCISRString.hcisr";
 	public static final String intClassLoc = "hcisr/lib/HCISRInteger.hcisr";
 	public static final String floatClassLoc = "hcisr/lib/HCISRFloat.hcisr";
-	public static final String functionClassLoc = "hcisr/lib/HCISRFloat.hcisr";
+	public static final String functionClassLoc = "hcisr/lib/HCISRFunction.hcisr";
 	public static final String booleanClassLoc = "hcisr/lib/HCISRBoolean.hcisr";
 	public static final String iterableLoc = "hcisr/lib/HCISRIterable.hcisr";
 	public static final String iteratorLoc = "hcisr/lib/HCISRIterator.hcisr";
@@ -63,7 +63,6 @@ public class HCISRInterpreter{
 		signature = new String[]{"are","A","and","B","the","same"};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,null};
 		HCISRDeclaredFunctionAST iequalsMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
-		System.out.println(iequalsMeth);
 		iequalsMeth.setInstructions(usualMeths.identityEqualsMeth);
 		
 		//fill in standard output's blanks
@@ -85,7 +84,6 @@ public class HCISRInterpreter{
 		signature = new String[]{"I","+","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
-		System.out.println(addMeth);
 		addMeth.setInstructions(intMeths.addMeth);
 		//the method for less than
 		signature = new String[]{"I","<","B"};
@@ -117,7 +115,6 @@ public class HCISRInterpreter{
 	
 	protected HCISRFileAST parseFile(String resourceName) throws IOException, ParseException{
 		System.out.println(resourceName);
-		System.out.flush();
 		//first load in the main file (that will be returned)
 		URL floc = ctu.getResource(resourceName);
 		if(floc == null){

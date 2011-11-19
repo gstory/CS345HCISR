@@ -1,0 +1,44 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+.
+define a Integer named Zero which initially equals Integer: 0
+define a Integer named One which initially equals Integer: 1
+define a String named ToPrint
+set ToPrint to Zero as string
+print ToPrint
+println
+set ToPrint to One as string
+print ToPrint
+println
+define a Integer named Two
+set Two to One + One
+set ToPrint to Two as string
+print ToPrint
+println
+define a Boolean named ToLeave which initially equals Boolean: false
+define a Boolean named Result
+set Result to Two < One
+define a String named True which initially equals String:true
+define a String named False which initially equals String:false
+if Result then
+	print True
+.
+otherwise
+	print False
+.
+println
+set Result to One < Two
+define a Boolean named TrueB which initially equals Boolean: true
+set ToLeave to identity of TrueB
+if Result then
+	print True
+.
+otherwise
+	print False
+.
+println

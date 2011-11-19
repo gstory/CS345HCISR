@@ -10,6 +10,5 @@ public class RunHCISR{
 		HCISRInterpreter interpreter = new HCISRInterpreter(ctu);
 		HCISRFileAST toRun = interpreter.loadFile(loc);
 		interpreter.runProgram(toRun);
-		System.out.println("OK");
 	}
 }

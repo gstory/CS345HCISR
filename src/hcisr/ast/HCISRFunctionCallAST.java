@@ -40,20 +40,13 @@ public class HCISRFunctionCallAST extends HCISRStatementAST{
 		//construct argument types (should parallel argumentIDs
 		VariableLocationDescription[] argumentTypes = new VariableLocationDescription[argumentIDs.length];
 		int numArgs = 0;
-		System.out.println("Finding arguments for :");
-		for(String s : argumentIDs){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		for(int i = 0; i<argumentIDs.length;i++){
 			if(HCISRFileAST.isIdentifier(argumentIDs[i])){
 				numArgs++;
-				System.out.print(argumentIDs[i] + " ");
 				VariableLocationDescription curArg = currentScope.findVariable(argumentIDs[i]);
 				argumentTypes[i] = curArg;
 			}
 		}
-		System.out.println();
 		//find the function to call
 		toCall = HCISRFileAST.findFuntion(imports, argumentIDs, argumentTypes);
 		//now, find out where the arguments are

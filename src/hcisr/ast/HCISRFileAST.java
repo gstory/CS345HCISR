@@ -93,7 +93,6 @@ public class HCISRFileAST implements HCISRRunnable{
 	}
 	
 	public static HCISRFunctionAST findFuntion(HashMap<String,HCISRFileAST> imports, String[] signature,VariableLocationDescription[] argumentTypes){
-		System.out.println("********");
 		//collect all functions
 		ArrayList<HCISRFunctionAST> possible = new ArrayList<HCISRFunctionAST>();
 		for(HCISRFileAST file : imports.values()){
@@ -101,19 +100,9 @@ public class HCISRFileAST implements HCISRRunnable{
 				HCISRFunctionFileAST ffile = file.functionDef;
 				for(HCISRFunctionAST f : ffile.functions){
 					possible.add(f);
-					for(String s : f.sig){
-						System.out.print(s + " ");
-					}
-					System.out.println();
-					System.out.print("     ");
-					for(String[] s : f.typeRes){
-						System.out.print(s==null?"null ":(s[0]+" "));
-					}
-					System.out.println();
 				}
 			}
 		}
-		System.out.println("////////");
 		//first, find all functions that can match the signature
 		for(int i = 0;i < signature.length;i++){
 			ArrayList<HCISRFunctionAST> best = new ArrayList<HCISRFunctionAST>();
@@ -128,13 +117,6 @@ public class HCISRFileAST implements HCISRRunnable{
 						String[] callingType = argumentTypes[i].typeNm;
 						//get the types
 						HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
-						if(potentialMatchType == null){
-							System.out.println(potentialMatchRestrictions.length);
-							for(String s : potentialMatchRestrictions){
-								System.out.print(s + " ");
-							}
-							System.out.println();
-						}
 						if(potentialMatchType.isTemplate()){
 							potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
 						}
@@ -268,16 +250,19 @@ public class HCISRFileAST implements HCISRRunnable{
 		if(!isProgram()){
 			throw new UnsupportedOperationException("This file is not a program.");
 		}
-		//run through the code, running the statements
-		try{
-			for(HCISRStatementAST s : programDef){
-				//there are no special locations, so just run with stack frame
-				s.run(sf, null);
+		for(int i = 0; i<programDef.length; i++){
+			//run through the code, running the statements
+			try{
+				programDef[i].run(sf, null);
 			}
-		}
-		catch(HCISRGotoException e){
-			//there is a bad error
-			throw new UnsupportedOperationException("Malformed goto");
+			catch(HCISRGotoException e){
+				//try to go to the line
+				i = e.line;
+				if(i>=programDef.length || e.target != programDef[i]){
+					//there is a bad error
+					throw new UnsupportedOperationException("Malformed goto");
+				}
+			}
 		}
 		return null; //programs do not return anything
 	}

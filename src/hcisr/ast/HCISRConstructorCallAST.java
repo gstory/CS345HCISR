@@ -21,11 +21,6 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 	
 	//a constructor call may define a new type
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses) {
-		System.out.println("Compiling constructor templates.");
-		for(String s : typeID){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, typeID);
 	}
 	
@@ -85,6 +80,12 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
+		//print constructor name
+		System.out.print("Running Constructor ");
+		for(String s : argumentIDs){
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		//first, make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
 		//and add values to it
@@ -106,7 +107,7 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRConstructorCallAST(HCISRConstructorCallAST origin,HashMap<String,String[]> bindings){
-		argumentIDs = origin.argumentIDs;
 		typeID = HCISRClassAST.replaceTypeNames(origin.typeID, bindings);
+		argumentIDs = HCISRClassAST.replaceConstructorTypeNames(typeID, origin.argumentIDs);
 	}
 }

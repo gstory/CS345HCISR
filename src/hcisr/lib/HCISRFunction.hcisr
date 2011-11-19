@@ -1,5 +1,5 @@
 this file describes a class
-	this file uses hcisr.lib.HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
 .
 external type Function is a subtype of Object
 	and an instance F understands the following commands

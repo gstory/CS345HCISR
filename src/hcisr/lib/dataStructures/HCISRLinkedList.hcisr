@@ -16,12 +16,12 @@ type LinkedList of E is a subtype of Iterable of E
 			define a LinkedListNode of E named SecondEnd
 			define a LinkedListNode of E named Null
 			set Null to nothing
-			set End to First
-			set SecondEnd to First
+			set End to identity of First
+			set SecondEnd to identity of First
 			define a Boolean named HitEnd
 			set HitEnd to are SecondEnd and Null the same
 			if HitEnd then
-				set First to NewLast
+				set First to identity of NewLast
 			.
 			otherwise
 				define a Boolean named MissedEnd

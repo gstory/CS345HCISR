@@ -87,7 +87,7 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 				}
 				catch(HCISRGotoException e){
 					i = e.line;
-					if(trueComs[i]!=e.target){
+					if(i >= trueComs.length || trueComs[i]!=e.target){
 						throw e;
 					}
 				}
@@ -105,7 +105,7 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 				}
 				catch(HCISRGotoException e){
 					i = e.line;
-					if(falseComs[i]!=e.target){
+					if(i>=falseComs.length || falseComs[i]!=e.target){
 						throw e;
 					}
 				}

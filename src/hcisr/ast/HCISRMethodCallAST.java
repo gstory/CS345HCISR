@@ -38,11 +38,6 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	
 	//look for the method and collect argument locations
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
-		//print signature
-		for(String s: argumentIDs){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		//construct argument types (should parallel argumentIDs
 		VariableLocationDescription[] argumentTypes = new VariableLocationDescription[argumentIDs.length];
 		int numArgs = 0;
@@ -77,14 +72,22 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-		System.out.println("Running method");
-		System.out.print("     ");
+		System.out.print("Running ");
 		for(String s : argumentIDs){
 			System.out.print(s + " ");
 		}
 		System.out.println();
 		//first, find the method to run
-		HCISRInstance calling = sf.getLocation(0);
+		HCISRInstance calling;
+		if(specialVar[0]){
+			calling = hl.getLocation(arrayIndex[0]);
+		}
+		else{
+			calling = sf.getLocation(arrayIndex[0]);
+		}
+		if(calling==null){
+			throw new NullPointerException("Variable " + argumentIDs[0] + " is null/Nothing.");
+		}
 		HCISRMethodAST toCall = calling.getHCISRClass().methodList[methodIndex];
 		//make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());

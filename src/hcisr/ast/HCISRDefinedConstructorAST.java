@@ -37,16 +37,10 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 		curLoc++;
 		//and then add in arguments, skipping until you see "with" (get past the type name)
 		boolean skipped = false;
-		System.out.println("Finding arguments for constructor");
-		for(String s : sig){
-			System.out.print(s + "/");
-		}
-		System.out.println();
 		for(int i = 0;i<sig.length;i++){
 			if(skipped){
 				//run through the signature looking for arguments
 				if(HCISRFileAST.isIdentifier(sig[i])){
-					System.out.print(sig[i] + " ");
 					methodVars.put(sig[i], new VariableLocationDescription(false,curLoc,typeRes[i]));
 					curLoc += 1;
 				}
@@ -57,7 +51,6 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 				}
 			}
 		}
-		System.out.println();
 		
 		//now, with the new method vars, compile the code block
 		stackSize = code.compileReferences(imports, methodVars, curLoc);

@@ -1,0 +1,16 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+.
+define a Integer named I1 which initially equals Integer: 1
+define a Integer named I2 which initially equals Integer: 2
+define a Boolean named B1 which initially equals Boolean: true
+define a Boolean named B2 which initially equals Boolean: false
+set B1 to I1 < I2
+set B2 to I2 < I1
+define a Boolean named BR
+set BR to B1 | B2

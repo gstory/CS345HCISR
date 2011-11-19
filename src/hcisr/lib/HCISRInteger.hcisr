@@ -1,4 +1,5 @@
 this file describes a class
+	this file uses hcisr/lib/HCISRObject.hcisr
 .
 external type Integer is a subtype of Object
 	and an instance I understands the following commands
