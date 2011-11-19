@@ -21,6 +21,9 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 		for(int i = 0;i<trueComs.length;i++){
 			trueComs[i].compileTemplates(imports, newClasses);
 		}
+		if(falseComs==null){
+			return;
+		}
 		for(int i = 0;i<falseComs.length;i++){
 			falseComs[i].compileTemplates(imports, newClasses);
 		}
@@ -38,6 +41,9 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 		//run through the statements, looking for goto
 		HCISRFileAST.compileStatementGotoReferences(trueComs, trueScope, trueScope.subScopes.iterator());
 		
+		if(falseComs==null){
+			return;
+		}
 		//then get the false scope
 		Scope falseScope = subScopes.next();
 		HCISRFileAST.compileStatementGotoReferences(falseComs, falseScope, falseScope.subScopes.iterator());
@@ -56,6 +62,9 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 		//then run through the code
 		HCISRFileAST.compileStatementReferencesSansGoto(imports, trueComs, trueScope);
 		
+		if(falseComs==null){
+			return;
+		}
 		//then, make a new scope for the false stuff
 		Scope falseScope = new Scope(currentScope);
 		HCISRFileAST.compileStatementReferencesSansGoto(imports, falseComs, falseScope);
@@ -85,6 +94,9 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 			}
 		}
 		else{
+			if(falseComs==null){
+				return null;
+			}
 			int i = 0;
 			while(i<falseComs.length){
 				try{
