@@ -46,7 +46,11 @@ public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 		HCISRInstance calling = sf.getLocation(0);
 		//run the filled in stuff (or shit a brick if it's undefined)
 		if(theCode==null){
-			throw new UnsupportedOperationException("External or Abstract method not filled in");
+			String toAdd = sig[0];
+			for(int i = 1;i<sig.length;i++){
+				toAdd = toAdd + sig[i];
+			}
+			throw new UnsupportedOperationException("External or Abstract method not filled in: "+toAdd);
 		}
 		return theCode.run(sf, calling);
 	}

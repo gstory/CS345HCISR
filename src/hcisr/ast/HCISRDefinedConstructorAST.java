@@ -37,10 +37,16 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 		curLoc++;
 		//and then add in arguments, skipping until you see "with" (get past the type name)
 		boolean skipped = false;
+		System.out.println("Finding arguments for constructor");
+		for(String s : sig){
+			System.out.print(s + "/");
+		}
+		System.out.println();
 		for(int i = 0;i<sig.length;i++){
 			if(skipped){
 				//run through the signature looking for arguments
 				if(HCISRFileAST.isIdentifier(sig[i])){
+					System.out.print(sig[i] + " ");
 					methodVars.put(sig[i], new VariableLocationDescription(false,curLoc,typeRes[i]));
 					curLoc += 1;
 				}
@@ -51,6 +57,7 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 				}
 			}
 		}
+		System.out.println();
 		
 		//now, with the new method vars, compile the code block
 		stackSize = code.compileReferences(imports, methodVars, curLoc);
@@ -75,9 +82,10 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 	
 	public HCISRDefinedConstructorAST(HCISRDefinedConstructorAST origin, HashMap<String,String[]> bindings){
 		createdVariable = origin.createdVariable;
-		sig = origin.sig;
 		createdVariableType = HCISRClassAST.replaceTypeNames(origin.createdVariableType, bindings);
 		typeRes = HCISRClassAST.replaceTypeRestrictions(origin.typeRes, bindings);
+		sig = HCISRClassAST.replaceConstructorTypeNames(createdVariableType, origin.sig);
+		typeRes = HCISRClassAST.resizeTypeRestrictions(typeRes, origin.sig, sig);
 		code = origin.code.copyWithParameters(bindings);
 		isDefined = true;
 	}

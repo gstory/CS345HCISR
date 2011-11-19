@@ -1,8 +1,8 @@
 this file describes a program
-	this file uses hcisr.lib.dataStructures.HCISRLinkedList.hcisr
-	this file uses hcisr.lib.HCISRIterable.hcisr
-	this file uses hcisr.lib.HCISRInteger.hcisr
-	this file uses hcisr.lib.HCISRBoolean.hcisr
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
 	this file uses HCISRMergeSortFunc.hcisr
 .
 define a Integer named CurVal which initially equals Integer: 0
@@ -13,8 +13,8 @@ set ToSort to make a new LinkedList of Integer
 define a Boolean named NotDone which initially equals Boolean: true
 while NotDone do
 	ToSort add CurVal
-	set CurVal to CurVal plus One
-	set NotDone to CurVal = MaxVal
+	set CurVal to CurVal + One
+	set NotDone to CurVal < MaxVal
 	set NotDone to NotDone ~
 .
 for all Integer named I in ToSort do

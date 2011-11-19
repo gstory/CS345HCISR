@@ -1,5 +1,5 @@
 this file describes a class
-	this file uses hcisr.lib.HCISRIterator.hcisr
+	this file uses hcisr/lib/HCISRIterator.hcisr
 .
 type LinkedListNode of E ( Object ) is a subtype of Object
 	and has
@@ -12,6 +12,7 @@ type LinkedListNode of E ( Object ) is a subtype of Object
 		.
 		L set target to NewTarget ( E )
 			set Target to identity of NewTarget
+			return Nothing as Nothing
 		.
 		L get next
 			return Next as LinkedListNode of E

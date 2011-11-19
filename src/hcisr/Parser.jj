@@ -451,8 +451,8 @@ Object[] Constructorid():
 {Token e; String[] createdType; String[] methodSignature; String[][] typeRestrictions; String anytmp; ArrayList<String> msig1 = new ArrayList<String>(); ArrayList<String[]> tres1 = new ArrayList<String[]>(); String[] tidenttmp;}
 {
 	
-   <make_a_new> createdType = TIDENT() {for(String s: createdType){msig1.add(s); tres1.add(null);}} 
-	(<WITH> (anytmp = Any() {msig1.add(anytmp); tres1.add(null);}
+   e = <make_a_new> {msig1.add(e.image); tres1.add(null);} createdType = TIDENT() {for(String s: createdType){msig1.add(s); tres1.add(null);}} 
+	(e = <WITH> {msig1.add(e.image); tres1.add(null);} (anytmp = Any() {msig1.add(anytmp); tres1.add(null);}
 		| (e = <IDENT><LP> tidenttmp = TIDENT()<RP> {msig1.add(e.image); tres1.add(tidenttmp);}  ))*)? NL()
 	{
 		return new Object[]{createdType, msig1.toArray(new String[msig1.size()]), tres1.toArray(new String[tres1.size()][])};
@@ -557,12 +557,11 @@ HCISRMethodCallAST Methodcall():
 
 //codeblock -> statement -> constructorcall returns constructor call ast - done?
 HCISRConstructorCallAST Constructorcall():
-{String[] methodSignature; String[] typeIdentifier; ArrayList<String> typId1; String tmp; Token e;}
+{String[] methodSignature; String[] typeIdentifier; String tmp; Token e; ArrayList<String> sigbuilder = new ArrayList<String>();}
 {
-	{typId1 = new ArrayList<String>();}
-   <make_a_new> methodSignature = TIDENT() (<WITH> 
-	(tmp = Any() {typId1.add(tmp);} | e = <IDENT> {typId1.add(e.image);} )*)? NL()
-	{	typeIdentifier = typId1.toArray(new String[typId1.size()]);
+   e = <make_a_new> {sigbuilder.add(e.image);} typeIdentifier = TIDENT() {for(String s : typeIdentifier){sigbuilder.add(s);}} (e = <WITH> {sigbuilder.add(e.image);}
+	(tmp = Any() {sigbuilder.add(tmp);} | e = <IDENT> {sigbuilder.add(e.image);} )*)? NL()
+	{	methodSignature = sigbuilder.toArray(new String[sigbuilder.size()]);
 		return new HCISRConstructorCallAST(methodSignature, typeIdentifier);
 	}
 }

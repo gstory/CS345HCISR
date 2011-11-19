@@ -328,9 +328,19 @@ public class HCISRClassAST{
 	//then add the class to the list of new classes
 	//check that the class doesn't already exist
 	public void parameterize(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses, String[] fullName){
+		System.out.println("Generating Generic Type");
+		for(String s : typeName){
+			System.out.print(s + " ");
+		}
+		System.out.println();
+		for(String s : fullName){
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		String fullNewName = getFullName(fullName);
 		//if the class already exists, you're done
 		if(parameterized.containsKey(fullNewName)){
+			System.out.println("Already generated");
 			return;
 		}
 		//otherwise, create the type replacements and then make a clone
@@ -338,7 +348,10 @@ public class HCISRClassAST{
 		int curI = 2; //skip the first two strings in the thing, you already know your name
 		for(int i = 2;i<typeName.length;i++){
 			String typeVar = typeName[i];
-			ArrayList<String> replacement = exhaustTemplateParameter(imports, fullName, curI);
+			String replaceBase = fullName[curI];
+			//get the base class
+			HCISRClassAST toExhaust = HCISRFileAST.findBaseClass(imports, replaceBase);
+			ArrayList<String> replacement = toExhaust.exhaustTemplateParameter(imports, fullName, curI);
 			curI = curI + replacement.size();
 			String[] repArray = new String[replacement.size()];
 			for(int j = 0;j<repArray.length;j++){
@@ -682,6 +695,68 @@ public class HCISRClassAST{
 		filledIn = true;
 		typeReps = bindings;
 		templateType = origin;
+	}
+	
+	//resize a constructor type restriction to match the new signature
+	public static String[][] resizeTypeRestrictions(String[][] oldRestrictions,String[] oldSignature,String[] newSignature){
+		ArrayList<String[]> toBuild = new ArrayList<String[]>();
+		//first, add in nulls until with for the new signature
+		int curNIN = 0;
+		boolean skipped = false;
+		while(!skipped && curNIN<newSignature.length){
+			toBuild.add(null);
+			if(newSignature[curNIN].equals("with")){
+				skipped = true;
+			}
+			else{
+				curNIN = curNIN + 1;
+			}
+		}
+		//now, run through the old signature, adding everything after with
+		skipped = false;
+		for(int i = 0;i<oldSignature.length;i++){
+			if(skipped){
+				toBuild.add(oldRestrictions[i]);
+			}
+			else{
+				if(oldSignature[i].equals("with")){
+					skipped = true;
+				}
+			}
+		}
+		String[][] toRet = new String[toBuild.size()][];
+		for(int i = 0;i<toRet.length;i++){
+			toRet[i] = toBuild.get(i);
+		}
+		return toRet;
+	}
+	
+	//given the parameterization, replace variables in a constructor type name with the new deal
+	public static String[] replaceConstructorTypeNames(String[] newConstructorTypeName,String[] fullMethodSignature){
+		ArrayList<String> toBuild = new ArrayList<String>();
+		toBuild.add(fullMethodSignature[0]);//make a new
+		for(int i = 0;i<newConstructorTypeName.length;i++){
+			toBuild.add(newConstructorTypeName[i]); //the new type name
+		}
+		//now, skip to with and replace the rest as is
+		boolean skipped = false;
+		for(int i = 0;i<fullMethodSignature.length;i++){
+			if(!skipped){
+				if(fullMethodSignature[i].equals("with")){
+					toBuild.add(fullMethodSignature[i]);
+					skipped = true;
+				}
+			}
+			else{
+				toBuild.add(fullMethodSignature[i]);
+			}
+		}
+		//now, create the string []
+		String[] toRet = new String[toBuild.size()];
+		for(int i = 0;i<toRet.length;i++){
+			toRet[i] = toBuild.get(i);
+		}
+		return toRet;
 	}
 	
 	//given the parameterization, replace the variables in a type name with the full deal

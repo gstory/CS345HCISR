@@ -1115,12 +1115,14 @@ public class HCISR implements HCISRConstants {
 //constructor -> constructorbodies -> constructordec -> constructorid - returns object {createdType, methodsig, typeres} - done?
   final public Object[] Constructorid() throws ParseException {
  Token e; String[] createdType; String[] methodSignature; String[][] typeRestrictions; String anytmp; ArrayList<String> msig1 = new ArrayList<String>(); ArrayList<String[]> tres1 = new ArrayList<String[]>(); String[] tidenttmp;
-    jj_consume_token(make_a_new);
+    e = jj_consume_token(make_a_new);
+                     msig1.add(e.image); tres1.add(null);
     createdType = TIDENT();
-                                        for(String s: createdType){msig1.add(s); tres1.add(null);}
+                                                                                   for(String s: createdType){msig1.add(s); tres1.add(null);}
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case WITH:
-      jj_consume_token(WITH);
+      e = jj_consume_token(WITH);
+                     msig1.add(e.image); tres1.add(null);
       label_10:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1233,7 +1235,7 @@ public class HCISR implements HCISRConstants {
         case RP:
         case CHARS:
           anytmp = Any();
-                                 msig1.add(anytmp); tres1.add(null);
+                                                                            msig1.add(anytmp); tres1.add(null);
           break;
         case IDENT:
           e = jj_consume_token(IDENT);
@@ -1847,13 +1849,15 @@ public class HCISR implements HCISRConstants {
 
 //codeblock -> statement -> constructorcall returns constructor call ast - done?
   final public HCISRConstructorCallAST Constructorcall() throws ParseException {
- String[] methodSignature; String[] typeIdentifier; ArrayList<String> typId1; String tmp; Token e;
-         typId1 = new ArrayList<String>();
-    jj_consume_token(make_a_new);
-    methodSignature = TIDENT();
+ String[] methodSignature; String[] typeIdentifier; String tmp; Token e; ArrayList<String> sigbuilder = new ArrayList<String>();
+    e = jj_consume_token(make_a_new);
+                     sigbuilder.add(e.image);
+    typeIdentifier = TIDENT();
+                                                                          for(String s : typeIdentifier){sigbuilder.add(s);}
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case WITH:
-      jj_consume_token(WITH);
+      e = jj_consume_token(WITH);
+                                                                                                                                           sigbuilder.add(e.image);
       label_17:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1966,11 +1970,11 @@ public class HCISR implements HCISRConstants {
         case RP:
         case CHARS:
           tmp = Any();
-                      typId1.add(tmp);
+                      sigbuilder.add(tmp);
           break;
         case IDENT:
           e = jj_consume_token(IDENT);
-                                                       typId1.add(e.image);
+                                                           sigbuilder.add(e.image);
           break;
         default:
           jj_la1[38] = jj_gen;
@@ -1984,7 +1988,7 @@ public class HCISR implements HCISRConstants {
       ;
     }
     NL();
-                typeIdentifier = typId1.toArray(new String[typId1.size()]);
+                methodSignature = sigbuilder.toArray(new String[sigbuilder.size()]);
                 {if (true) return new HCISRConstructorCallAST(methodSignature, typeIdentifier);}
     throw new Error("Missing return statement in function");
   }

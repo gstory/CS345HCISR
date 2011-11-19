@@ -32,6 +32,7 @@ public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 	//this really only has the stack to worry about (and the class to create)
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST toCreate){
 		toConstruct = toCreate;
+		stackSize = stackSize + 1;
 		for(int i = 0;i<sig.length;i++){
 			if(HCISRFileAST.isIdentifier(sig[i])){
 				stackSize = stackSize + 1;
@@ -61,9 +62,10 @@ public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 	
 	public HCISRDeclaredConstructorAST(HCISRDeclaredConstructorAST origin, HashMap<String,String[]> bindings){
 		createdVariable = origin.createdVariable;
-		sig = origin.sig;
 		createdVariableType = HCISRClassAST.replaceTypeNames(origin.createdVariableType, bindings);
 		typeRes = HCISRClassAST.replaceTypeRestrictions(origin.typeRes, bindings);
+		sig = HCISRClassAST.replaceConstructorTypeNames(createdVariableType, origin.sig);
+		typeRes = HCISRClassAST.resizeTypeRestrictions(typeRes, origin.sig, sig);
 		decRetType = origin.decRetType.copyWithParameters(bindings);
 		isDefined = false;
 	}

@@ -24,6 +24,11 @@ public class HCISRVariableAST{
 	
 	//see if type is already parameterized
 	public void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses){
+		System.out.println("Compiling Variable for Templates");
+		for(String s : type){
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, type);
 	}
 	
@@ -38,7 +43,7 @@ public class HCISRVariableAST{
 			//get the string class
 			toUse = imports.get(stringClassLoc);
 			toRet = new HCISRInstance(toUse.classDef);
-			toRet.addExternalVariables(new HCISRInstanceStringVars(val));
+			toRet.addExternalVariables(new HCISRInstanceStringVars(val.substring(7)));
 			return toRet;
 		case INT: 
 			toUse = imports.get(intClassLoc);

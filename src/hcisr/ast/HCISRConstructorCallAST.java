@@ -21,6 +21,11 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 	
 	//a constructor call may define a new type
 	public void compileTemplates(HashMap<String, HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses) {
+		System.out.println("Compiling constructor templates.");
+		for(String s : typeID){
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		HCISRFileAST.checkForTemplateClass(imports, newClasses, typeID);
 	}
 	

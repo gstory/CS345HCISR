@@ -61,6 +61,7 @@ public class HCISRForCallAST extends HCISRStatementAST{
 		HCISRFileAST.compileStatementReferencesSansGoto(imports, loopComs, loopScope);
 		//now find variable locations
 		tmpArrayIndex = loopScope.findVariable(varID).location;
+		System.out.println(listID);
 		VariableLocationDescription listVarLoc = currentScope.findVariable(listID);
 		specialVar = listVarLoc.special;
 		arrayIndex = listVarLoc.location;
@@ -164,6 +165,7 @@ public class HCISRForCallAST extends HCISRStatementAST{
 	public HCISRForCallAST(HCISRForCallAST origin,HashMap<String,String[]> bindings){
 		varID = origin.varID;
 		typeID = HCISRClassAST.replaceTypeNames(origin.typeID, bindings);
+		listID = origin.listID;
 		
 		HCISRStatementAST[] origStat = origin.loopComs;
 		loopComs = new HCISRStatementAST[origStat.length];
