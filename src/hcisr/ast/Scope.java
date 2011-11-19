@@ -51,6 +51,9 @@ public class Scope{
 			return variableLocations.get(name);
 		}
 		else{
+			if(superScope == null){
+				throw new NullPointerException("Cannot find " + name);
+			}
 			return superScope.findVariable(name);
 		}
 	}

@@ -38,7 +38,6 @@ public class HCISRSetCallConstructorAST extends HCISRStatementAST{
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
 		//compile the function call, nothing more
 		funcID.compileReferences(imports, currentScope, line);
-		System.out.println(varID);
 		VariableLocationDescription toSet = currentScope.findVariable(varID);
 		specialVar = toSet.special;
 		arrayLocation = toSet.location;

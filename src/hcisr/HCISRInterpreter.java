@@ -118,7 +118,6 @@ public class HCISRInterpreter{
 	}
 	
 	protected HCISRFileAST parseFile(String resourceName) throws IOException, ParseException{
-		System.out.println(resourceName);
 		//first load in the main file (that will be returned)
 		URL floc = ctu.getResource(resourceName);
 		if(floc == null){

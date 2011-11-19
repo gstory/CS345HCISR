@@ -40,10 +40,6 @@ mergesort L ( LinkedList of Integer )
 			.
 		.
 		
-		define a String named PastSplit which initially equals String:Post Split
-		print PastSplit
-		println
-		
 		note : and recursively sort
 		
 		set ListA to mergesort ListA
@@ -51,100 +47,113 @@ mergesort L ( LinkedList of Integer )
 		
 		note : and then build a new list, in decreasing order
 		
-		define a Object named Null
+		define a Integer named Null
 		set Null to nothing
-		set ToRet to make a new LinkedList of Integer
-		define a Iterator of Integer named AIterator
-		set AIterator to ListA get iterator
-		define a Boolean named AHasMore
-		set AHasMore to AIterator has next
-		define a Iterator of Integer named BIterator
-		set BIterator to ListB get iterator
-		define a Boolean named BHasMore
-		set BHasMore to BIterator has next
+		
+		define a Iterator of Integer named ALI
+		define a Iterator of Integer named BLI
+		set ALI to ListA get iterator
+		set BLI to ListB get iterator
+		
+		define a Boolean named AHasNext
+		define a Boolean named BHasNext
+		
 		define a Integer named ACur
-		define a Boolean named ACurValid
-		if AHasMore then
-			set ACur to AIterator get next
-			set AHasMore to AIterator has next
-		.
 		define a Integer named BCur
-		define a Boolean named BCurValid
-		if BHasMore then
-			set BCur to BIterator get next
-			set BHasMore to BIterator has next
+		set AHasNext to ALI has next
+		if AHasNext then
+			set ACur to ALI get next
 		.
-		define a Boolean named IsMore
-		set ACurValid to are ACur and Null the same
-		set BCurValid to are BCur and Null the same
-		set IsMore to ACurValid | BCurValid
-		while IsMore do
-			if ACurValid then
-				if BCurValid then
-					note : both are valid, compare
-					note : for this example, do ascending order
-					
-					define a Boolean named ToAddA
-					set ToAddA to ACur < BCur
-					if ToAddA then
-						ToRet add ACur
-						if AHasMore then
-							set ACur to AIterator get next
-						.
-						otherwise
-							set ACur to identity of Null
-						.
-						set AHasMore to AIterator has next
-					.
-					otherwise
-						ToRet add BCur
-						if BHasMore then
-							set BCur to BIterator get next
-						.
-						otherwise
-							set BCur to identity of Null
-						.
-						set BHasMore to BIterator has next
-					.
+		set BHasNext to BLI has next
+		if BHasNext then
+			set BCur to BLI get next
+		.
+		
+		define a Boolean named AnyLeft
+		define a Boolean named AV
+		define a Boolean named BV
+		set AV to are ACur and Null the same
+		set BV to are BCur and Null the same
+		set AnyLeft to AV & BV
+		set AnyLeft to AnyLeft ~
+		
+		set ToRet to make a new LinkedList of Integer
+		
+		while AnyLeft do
+			set AV to are ACur and Null the same
+			set BV to are BCur and Null the same
+			
+			if AV then
+				note if A is null, look only at B
+				
+				if BV then
+					note A and B are null, do nothing
 				.
 				otherwise
-					note : only A list has anything, take from it
+					note add B
 					
-					ToRet add ACur
-					if AHasMore then
-						set ACur to AIterator get next
-					.
-					otherwise
-						set ACur to identity of Null
-					.
-					set AHasMore to AIterator has next
-				.
-			.
-			otherwise
-				if BCurValid then
-					note : only B list has anything, take from it
-
 					ToRet add BCur
-					if BHasMore then
-						set BCur to BIterator get next
+					set BHasNext to BLI has next
+					if BHasNext then
+						set BCur to BLI get next
 					.
 					otherwise
 						set BCur to identity of Null
 					.
-					set BHasMore to BIterator has next
-				.
-				otherwise
-					note : nothing valid, should never come here
 				.
 			.
-			set ACurValid to are ACur and Null the same
-			set BCurValid to are BCur and Null the same
-			set IsMore to BCurValid | ACurValid
+			otherwise
+				note A is not null, look at B and compare
+				
+				if BV then
+					note A is not null, but B is, so add a
+					
+					ToRet add ACur
+					set AHasNext to ALI has next
+					if AHasNext then
+						set ACur to ALI get next
+					.
+					otherwise
+						set ACur to identity of Null
+					.
+				.
+				otherwise
+					note both are not null, add whichever one is smaller
+					
+					define a Boolean named Comp
+					set Comp to BCur < ACur
+					if Comp then
+						note add A
+						
+						ToRet add ACur
+						set AHasNext to ALI has next
+						if AHasNext then
+							set ACur to ALI get next
+						.
+						otherwise
+							set ACur to identity of Null
+						.
+					.
+					otherwise
+						note add B
+						
+						ToRet add BCur
+						set BHasNext to BLI has next
+						if BHasNext then
+							set BCur to BLI get next
+						.
+						otherwise
+							set BCur to identity of Null
+						.
+					.
+				.
+			.
+			
+			set AV to are ACur and Null the same
+			set BV to are BCur and Null the same
+			set AnyLeft to AV & BV
+			set AnyLeft to AnyLeft ~
 		.
-		define a String named PostMerge which initially equals String:PostMerge
-		print PostMerge
-		println
-		complain about PostMerge
 	.
 	return ToRet as LinkedList of Integer
 .

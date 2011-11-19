@@ -72,11 +72,6 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-		System.out.print("Running ");
-		for(String s : argumentIDs){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		//first, find the method to run
 		HCISRInstance calling;
 		if(specialVar[0]){

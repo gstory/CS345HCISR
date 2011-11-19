@@ -57,7 +57,6 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf) throws HCISRException {
-		sf.print();
 		//make the new instance
 		HCISRInstance newInst = new HCISRInstance(toConstruct);
 		sf.setLocation(newInst, 0);

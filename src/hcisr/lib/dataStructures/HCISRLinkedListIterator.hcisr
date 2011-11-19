@@ -12,7 +12,7 @@ type LinkedListIterator of E ( Object ) is a subtype of Iterator of E
 	.
 	and an instance L understands the following commands
 		I get next
-			define a Object named NT
+			define a E named NT
 			set NT to CurNode get target
 			set CurNode to CurNode get next
 			return NT as E

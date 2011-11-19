@@ -80,12 +80,6 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-		//print constructor name
-		System.out.print("Running Constructor ");
-		for(String s : argumentIDs){
-			System.out.print(s + " ");
-		}
-		System.out.println();
 		//first, make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
 		//and add values to it
