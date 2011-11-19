@@ -93,6 +93,7 @@ public class HCISRFileAST implements HCISRRunnable{
 	}
 	
 	public static HCISRFunctionAST findFuntion(HashMap<String,HCISRFileAST> imports, String[] signature,VariableLocationDescription[] argumentTypes){
+		System.out.println("********");
 		//collect all functions
 		ArrayList<HCISRFunctionAST> possible = new ArrayList<HCISRFunctionAST>();
 		for(HCISRFileAST file : imports.values()){
@@ -100,9 +101,19 @@ public class HCISRFileAST implements HCISRRunnable{
 				HCISRFunctionFileAST ffile = file.functionDef;
 				for(HCISRFunctionAST f : ffile.functions){
 					possible.add(f);
+					for(String s : f.sig){
+						System.out.print(s + " ");
+					}
+					System.out.println();
+					System.out.print("     ");
+					for(String[] s : f.typeRes){
+						System.out.print(s==null?"null ":(s[0]+" "));
+					}
+					System.out.println();
 				}
 			}
 		}
+		System.out.println("////////");
 		//first, find all functions that can match the signature
 		for(int i = 0;i < signature.length;i++){
 			ArrayList<HCISRFunctionAST> best = new ArrayList<HCISRFunctionAST>();
@@ -117,6 +128,13 @@ public class HCISRFileAST implements HCISRRunnable{
 						String[] callingType = argumentTypes[i].typeNm;
 						//get the types
 						HCISRClassAST potentialMatchType = HCISRFileAST.findBaseClass(imports, potentialMatchRestrictions[0]);
+						if(potentialMatchType == null){
+							System.out.println(potentialMatchRestrictions.length);
+							for(String s : potentialMatchRestrictions){
+								System.out.print(s + " ");
+							}
+							System.out.println();
+						}
 						if(potentialMatchType.isTemplate()){
 							potentialMatchType = potentialMatchType.getParameterizedClass(potentialMatchRestrictions);
 						}

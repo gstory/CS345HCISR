@@ -155,7 +155,7 @@ public interface HCISRConstants {
     "\"complain about\"",
     "\"label\"",
     "\"go to\"",
-    "\"note\"",
+    "<NOTE>",
     "\"returns\"",
     "\"return\"",
     "\"then\"",

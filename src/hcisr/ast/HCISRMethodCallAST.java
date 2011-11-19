@@ -38,6 +38,11 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	
 	//look for the method and collect argument locations
 	public void compileReferences(HashMap<String,HCISRFileAST> imports,Scope currentScope, int line) {
+		//print signature
+		for(String s: argumentIDs){
+			System.out.print(s + " ");
+		}
+		System.out.println();
 		//construct argument types (should parallel argumentIDs
 		VariableLocationDescription[] argumentTypes = new VariableLocationDescription[argumentIDs.length];
 		int numArgs = 0;

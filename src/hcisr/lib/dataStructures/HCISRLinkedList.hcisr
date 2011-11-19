@@ -1,5 +1,5 @@
 this file describes a class
-	this file uses hcisr.lib.HCISRIterator.hcisr
+	this file uses hcisr/lib/HCISRIterator.hcisr
 .
 type LinkedList of E is a subtype of Iterable of E
 	and has
@@ -55,6 +55,7 @@ type LinkedList of E is a subtype of Iterable of E
 		make a new LinkedList of E
 			note that First is initially null
 			note so nothing needs to be done to initialize
+			return L as LinkedList of E
 		.
 	.
 .

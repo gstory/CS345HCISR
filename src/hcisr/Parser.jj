@@ -7,9 +7,9 @@ import hcisr.ast.*;
 public class HCISR {
 	public static String constructorvar;
 	
-   public static void main(String args[]) throws ParseException {
-      HCISR parser = new HCISR(System.in);
-      parser.FILE();
+   public static HCISRFileAST parseFile(InputStream ins) throws ParseException {
+      HCISR parser = new HCISR(ins);
+      return parser.FILE();
    }
 }
 
@@ -56,7 +56,7 @@ TOKEN:
    | < COMPLAIN_ABOUT : "complain about">
    | < LABEL: "label">
    | < GOTO : "go to">
-   | < NOTE : "note" >
+   | < NOTE : ("note")([" "-"~"]|"	")+ >
    | < RETURNS : "returns" >
    | < RETURN : "return" >
    | < THEN : "then" >
@@ -509,7 +509,7 @@ Object[] Functionid():
 {
 	{msig1 = new ArrayList<String>(); tres1 = new ArrayList<String[]>();}
    s = Anyfirst() {msig1.add(s); tres1.add(null);}
-	(anytmp = Any() {msig1.add(s); tres1.add(null);}
+	(anytmp = Any() {msig1.add(anytmp); tres1.add(null);}
 	| (e = <IDENT><LP>tidentreturn = TIDENT()<RP> {msig1.add(e.image); tres1.add(tidentreturn);}))* NL()
 	{return new Object[]{msig1.toArray(new String[msig1.size()]), tres1.toArray(new String[tres1.size()][])};}
 }
@@ -655,7 +655,7 @@ HCISRStatementAST Forcall():
 Object[] Fordec():
 {String[] typeIdentifier; Token variableIdentifier; Token listIdentifier;}
 {
-   <FOR_ALL> typeIdentifier = TIDENT() <NAMED> variableIdentifier = <IDENT> <IN> listIdentifier = <IDENT> <DO> <END> NL()
+   <FOR_ALL> typeIdentifier = TIDENT() <NAMED> variableIdentifier = <IDENT> <IN> listIdentifier = <IDENT> <DO> NL()
 	{return new Object[] {typeIdentifier, variableIdentifier.image, listIdentifier.image};}
 }
 
@@ -700,7 +700,7 @@ HCISRStatementAST Gotocall():
 HCISRStatementAST Notecall():
 {}
 {
-   <NOTE> (<CHARS>|<IDENT>)* NL() {return new HCISRNoteCallAST();}
+   <NOTE> NL() {return new HCISRNoteCallAST();}
 }
 //codeblock -> statement -> functioncall returns function call ast - done?
 HCISRFunctionCallAST Functioncall():

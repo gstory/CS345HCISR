@@ -6,17 +6,19 @@ import java.util.*;
 import java.io.*;
 
 public class HCISRInterpreter{
-	public static final String stringClassLoc = "hcisr.lib.HCISRString.hcisr";
-	public static final String intClassLoc = "hcisr.lib.HCISRString.hcisr";
-	public static final String floatClassLoc = "hcisr.lib.HCISRFloat.hcisr";
-	public static final String functionClassLoc = "hcisr.lib.HCISRFloat.hcisr";
-	public static final String booleanClassLoc = "hcisr.lib.HCISRBoolean.hcisr";
-	public static final String iterableLoc = "hcisr.lib.HCISRIterable.hcisr";
-	public static final String iteratorLoc = "hcisr.lib.HCISRIterator.hcisr";
-	public static final String stdioLoc = "hcisr.lib.HCISRStandardOutput.hcisr";
-	public static final String usualMethLoc = "hcisr.lib.HCISRUsualMethods.hcisr";
+	public static final String stringClassLoc = "hcisr/lib/HCISRString.hcisr";
+	public static final String intClassLoc = "hcisr/lib/HCISRInteger.hcisr";
+	public static final String floatClassLoc = "hcisr/lib/HCISRFloat.hcisr";
+	public static final String functionClassLoc = "hcisr/lib/HCISRFloat.hcisr";
+	public static final String booleanClassLoc = "hcisr/lib/HCISRBoolean.hcisr";
+	public static final String iterableLoc = "hcisr/lib/HCISRIterable.hcisr";
+	public static final String iteratorLoc = "hcisr/lib/HCISRIterator.hcisr";
+	public static final String stdioLoc = "hcisr/lib/HCISRStandardOutput.hcisr";
+	public static final String usualMethLoc = "hcisr/lib/HCISRUsualMethods.hcisr";
 	
 	HashMap<String,HCISRFileAST> loadedFiles = new HashMap<String,HCISRFileAST>();
+	Class ctu;
+	boolean externalsFilledIn = false;
 	
 	//run a program
 	public HCISRInstance runProgram(HCISRFileAST toRun) throws HCISRException{
@@ -31,22 +33,26 @@ public class HCISRInterpreter{
 		return toRun.run(sf);
 	}
 	
-	public void loadInitialFiles(Class ctu) throws IOException{
-		HCISRFileAST stringClassF = loadFile(ctu, stringClassLoc);
-		HCISRFileAST intClassF = loadFile(ctu, intClassLoc);
-		HCISRFileAST floatClassF = loadFile(ctu, floatClassLoc);
-		HCISRFileAST functionClassF = loadFile(ctu, functionClassLoc);
-		HCISRFileAST booleanClassF = loadFile(ctu, booleanClassLoc);
-		HCISRFileAST stdioFFF = loadFile(ctu, stdioLoc);
-		HCISRFileAST usualMethFFF = loadFile(ctu, usualMethLoc);
+	public void fillInInitialFiles() throws IOException,ParseException{
+		if(externalsFilledIn){
+			return;
+		}
+		
+		HCISRFileAST stringClassF = loadFile(stringClassLoc);
+		HCISRFileAST intClassF = loadFile(intClassLoc);
+		HCISRFileAST floatClassF = loadFile(floatClassLoc);
+		HCISRFileAST functionClassF = loadFile(functionClassLoc);
+		HCISRFileAST booleanClassF = loadFile(booleanClassLoc);
+		HCISRFileAST stdioFFF = loadFile(stdioLoc);
+		HCISRFileAST usualMethFFF = loadFile(usualMethLoc);
 		
 		HCISRClassAST booleanClass = booleanClassF.getDefinedClass();
 		HCISRClassAST intClass = intClassF.getDefinedClass();
 		HCISRClassAST stringClass = stringClassF.getDefinedClass();
 		
 		//also load in iterable and iterator, though they are not external
-		loadFile(ctu, iterableLoc);
-		loadFile(ctu, iteratorLoc);
+		loadFile(iterableLoc);
+		loadFile(iteratorLoc);
 		
 		String[] signature;
 		VariableLocationDescription[] argumentTypes;
@@ -57,6 +63,7 @@ public class HCISRInterpreter{
 		signature = new String[]{"are","A","and","B","the","same"};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,null};
 		HCISRDeclaredFunctionAST iequalsMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
+		System.out.println(iequalsMeth);
 		iequalsMeth.setInstructions(usualMeths.identityEqualsMeth);
 		
 		//fill in standard output's blanks
@@ -78,6 +85,7 @@ public class HCISRInterpreter{
 		signature = new String[]{"I","+","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		System.out.println(addMeth);
 		addMeth.setInstructions(intMeths.addMeth);
 		//the method for less than
 		signature = new String[]{"I","<","B"};
@@ -107,14 +115,9 @@ public class HCISRInterpreter{
 		notMeth.setInstructions(boolMeths.notMeth);
 	}
 	
-	public HCISRFileAST loadFile(Class ctu,String resourceName) throws IOException{
-		if(loadedFiles.containsKey(resourceName)){
-			return loadedFiles.get(resourceName);
-		}
-		
-		//a list of files to load
-		ArrayList<String> toLoad = new ArrayList<String>();
-		
+	protected HCISRFileAST parseFile(String resourceName) throws IOException, ParseException{
+		System.out.println(resourceName);
+		System.out.flush();
 		//first load in the main file (that will be returned)
 		URL floc = ctu.getResource(resourceName);
 		if(floc == null){
@@ -123,6 +126,30 @@ public class HCISRInterpreter{
 		InputStream fin = floc.openStream();
 		HCISRFileAST toRet = HCISRParser.readFile(fin);
 		loadedFiles.put(resourceName, toRet);
+		return toRet;
+	}
+	
+	public HCISRFileAST loadFile(String resourceName) throws IOException, ParseException{
+		if(loadedFiles.containsKey(resourceName)){
+			return loadedFiles.get(resourceName);
+		}
+		
+		//a list of files to load
+		ArrayList<String> toLoad = new ArrayList<String>();
+		
+		HCISRFileAST toRet = parseFile(resourceName);
+		
+		//load in some preliminary stuff
+		toLoad.add(HCISRInterpreter.stringClassLoc);
+		toLoad.add(HCISRInterpreter.intClassLoc);
+		toLoad.add(HCISRInterpreter.floatClassLoc);
+		toLoad.add(HCISRInterpreter.functionClassLoc);
+		toLoad.add(HCISRInterpreter.booleanClassLoc);
+		toLoad.add(HCISRInterpreter.iterableLoc);
+		toLoad.add(HCISRInterpreter.iteratorLoc);
+		toLoad.add(HCISRInterpreter.stdioLoc);
+		toLoad.add(HCISRInterpreter.usualMethLoc);
+		
 		//now load in linked files
 		for(String toImp : toRet.getImports()){
 			toLoad.add(toImp);
@@ -133,13 +160,7 @@ public class HCISRInterpreter{
 			if(loadedFiles.containsKey(toImp)){}
 			else{
 				//otherwise, load
-				floc = ctu.getResource(toImp);
-				if(floc == null){
-					throw new FileNotFoundException(toImp);
-				}
-				fin = floc.openStream();
-				HCISRFileAST toAdd = HCISRParser.readFile(fin);
-				loadedFiles.put(toImp, toAdd);
+				HCISRFileAST toAdd = parseFile(toImp);
 				for(String s:toAdd.getImports()){
 					toLoad.add(s);
 				}
@@ -171,6 +192,13 @@ public class HCISRInterpreter{
 			f.compileTypeChecking(loadedFiles);
 		}
 		
+		//now update the primitives, if necessary
+		fillInInitialFiles();
+		
 		return toRet;
+	}
+	
+	public HCISRInterpreter(Class classToUse){
+		ctu = classToUse;
 	}
 }

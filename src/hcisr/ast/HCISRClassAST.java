@@ -58,9 +58,17 @@ public class HCISRClassAST{
 	//look for the best method
 	public HCISRMethodAST findMatchingMethod(HashMap<String,HCISRFileAST> imports,String[] signature,VariableLocationDescription[] argumentTypes){
 		ArrayList<HCISRMethodAST> possible = new ArrayList<HCISRMethodAST>();
+		System.out.println("+++++++++");
+		System.out.println(typeName[0]);
+		System.out.println(methodList.length);
 		for(HCISRMethodAST m : methodList){
 			possible.add(m);
+			for(String s : m.sig){
+				System.out.print(s + " ");
+			}
+			System.out.println();
 		}
+		System.out.println("---------");
 		//first, find all methods that could match (skip the first identifier, it is a guaranteed match
 		for(int i = 1;i < signature.length;i++){
 			ArrayList<HCISRMethodAST> best = new ArrayList<HCISRMethodAST>();
@@ -463,6 +471,9 @@ public class HCISRClassAST{
 		//now, super type must be compiled before following steps
 		stype.compileHierarchy(imports);
 		
+		System.out.println(typeName[0]);
+		System.out.println(methodList.length);
+		System.out.println(variableList.length);
 		//now, get a full list of variables and methods
 		//variables are easy, just tack on the new stuff at the end
 		HCISRVariableAST[] superVars = stype.variableList;
@@ -493,9 +504,9 @@ public class HCISRClassAST{
 					break;
 				}
 				else{}
-				if(!matched){
-					newMethList.add(curM);
-				}
+			}
+			if(!matched){
+				newMethList.add(curM);
 			}
 		}
 		//now, turn array list to an array
@@ -504,6 +515,9 @@ public class HCISRClassAST{
 			methodList[i] = newMethList.get(i);
 		}
 		
+		System.out.println(typeName[0]);
+		System.out.println(methodList.length);
+		System.out.println(variableList.length);
 		//done, don't need constructors (it wouldn't make sense)
 	}
 	
@@ -516,7 +530,8 @@ public class HCISRClassAST{
 		if(m1sig.length != m2sig.length){
 			return false;
 		}
-		for(int i = 0;i<m1sig.length;i++){
+		//now, skip first identifier
+		for(int i = 1;i<m1sig.length;i++){
 			String m1v = m1sig[i];
 			String m2v = m2sig[i];
 			if(HCISRFileAST.isIdentifier(m1v)){
@@ -618,6 +633,8 @@ public class HCISRClassAST{
 		for(int i = 0;i<constructorList.length;i++){
 			constructorList[i].toConstruct = this;
 		}
+		System.out.println(typeName[0]);
+		System.out.println(methodList.length);
 	}
 	
 	//this version of the constructor is used to create a parameterized class

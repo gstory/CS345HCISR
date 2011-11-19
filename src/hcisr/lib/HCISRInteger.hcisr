@@ -35,7 +35,7 @@ external type Integer is a subtype of Object
 	.
 	and an instance I is created with the commands
 		make a new Integer
-			I initialize Integer
+			I initialize integer
 			return I as Integer
 		.
 	.

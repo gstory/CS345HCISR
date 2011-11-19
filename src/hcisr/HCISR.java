@@ -7,12 +7,12 @@ import hcisr.ast.*;
 public class HCISR implements HCISRConstants {
         public static String constructorvar;
 
-   public static void main(String args[]) throws ParseException {
-      HCISR parser = new HCISR(System.in);
-      parser.FILE();
+   public static HCISRFileAST parseFile(InputStream ins) throws ParseException {
+      HCISR parser = new HCISR(ins);
+      return parser.FILE();
    }
 
-  static final public String Any() throws ParseException {
+  final public String Any() throws ParseException {
  Token e;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CHARS:
@@ -174,7 +174,7 @@ public class HCISR implements HCISRConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public String Anyfirst() throws ParseException {
+  final public String Anyfirst() throws ParseException {
  Token e;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CHARS:
@@ -295,7 +295,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //NL does nothing - done
-  static final public void NL() throws ParseException {
+  final public void NL() throws ParseException {
     label_1:
     while (true) {
       jj_consume_token(EOL);
@@ -308,7 +308,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //string returns string - done?
-  static final public String String() throws ParseException {
+  final public String String() throws ParseException {
  Token e; String s;
     e = jj_consume_token(STRINGREF);
         s = e.image;
@@ -318,7 +318,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //int returns string num - done?
-  static final public String Int() throws ParseException {
+  final public String Int() throws ParseException {
  Token e;
     jj_consume_token(INTREF);
     e = jj_consume_token(NUMS);
@@ -327,7 +327,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //float returns string num.num - done?
-  static final public String Float() throws ParseException {
+  final public String Float() throws ParseException {
  Token e; Token f; String s; String t;
     jj_consume_token(FLOATREF);
     e = jj_consume_token(NUMS);
@@ -338,7 +338,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //functioninit returns a string - done?
-  static final public String Functioninit() throws ParseException {
+  final public String Functioninit() throws ParseException {
  Token e; ArrayList<String> s; String toRet = "";
          s = new ArrayList<String>();
     jj_consume_token(FUNCTIONREF);
@@ -377,7 +377,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //bool returns strings - done?
-  static final public String Bool() throws ParseException {
+  final public String Bool() throws ParseException {
     jj_consume_token(BOOLREF);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRUE:
@@ -397,7 +397,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //ftident returns object array with lots of stuff - done?
-  static final public Object[] FTIDENT() throws ParseException {
+  final public Object[] FTIDENT() throws ParseException {
  String[] fullTypeName; String[] tmpres; String[][] parameterLimiters; ArrayList<String> tmpname; ArrayList<String[]> tmprestrictions; boolean seenres; Token e; Object[] returnarray;
     tmpname = new ArrayList<String>(); tmprestrictions = new ArrayList<String[]>();
     e = jj_consume_token(IDENT);
@@ -452,7 +452,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //tident returns string[] type ident - done? 
-  static final public String[] TIDENT() throws ParseException {
+  final public String[] TIDENT() throws ParseException {
  String[] fullTypeName; Token e; ArrayList<String> tmpname;
     tmpname = new ArrayList<String>();
     e = jj_consume_token(IDENT);
@@ -502,7 +502,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //file - done?
-  static final public HCISRFileAST FILE() throws ParseException {
+  final public HCISRFileAST FILE() throws ParseException {
  HCISRFileAST f;
     jj_consume_token(this_file_describes);
     f = Fileh();
@@ -511,7 +511,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //fileh - done?
-  static final public HCISRFileAST Fileh() throws ParseException {
+  final public HCISRFileAST Fileh() throws ParseException {
  HCISRFileAST f; String[] filestoimport; HCISRClassAST c; HCISRFunctionFileAST fun; HCISRStatementAST[] s;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case a_Class:
@@ -550,7 +550,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //fileh -> importbody - gets imports and put into string[] - done?
-  static final public String[] Importbody() throws ParseException {
+  final public String[] Importbody() throws ParseException {
  String[] imports; String tmp; ArrayList<String> tobuild;
     tobuild = new ArrayList<String>();
     label_5:
@@ -576,7 +576,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //fileh -> importbody -> import - get import one at a time - done?
-  static final public String Import() throws ParseException {
+  final public String Import() throws ParseException {
  Token e;
     jj_consume_token(this_file_uses);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -597,7 +597,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //class - done?
-  static final public HCISRClassAST Class() throws ParseException {
+  final public HCISRClassAST Class() throws ParseException {
  int classClassification; String[] fullTypeName; String[][] parameterLimiters; String[] fullSuperTypeName; HCISRVariableAST[] instanceVariableList;HCISRMethodAST[] instanceMethodList;HCISRConstructorAST[] fullConstructorList;String methodSelfReference = "";String constructorSelfReference = ""; /*starting tmps*/ Object[] headerReturn; Object[] methodReturn = null; Object[] constructorReturn = null;
          instanceVariableList = null; instanceMethodList = null; fullConstructorList = null;
     headerReturn = Header();
@@ -644,7 +644,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //class -> header - done?
-  static final public Object[] Header() throws ParseException {
+  final public Object[] Header() throws ParseException {
  String[] fullTypeName; String[] fullSuperTypeName; Object[] filetypeident; String[][] parameterLimiters; int classtype; Object[] returnarray;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TYPE:
@@ -680,7 +680,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //class -> data - done?
-  static final public HCISRVariableAST[] Data() throws ParseException {
+  final public HCISRVariableAST[] Data() throws ParseException {
  HCISRVariableAST[] databodyreturn;
     Dataheader();
     databodyreturn = Databody();
@@ -691,13 +691,13 @@ public class HCISR implements HCISRConstants {
   }
 
 //data -> data header - does nothing - done
-  static final public void Dataheader() throws ParseException {
+  final public void Dataheader() throws ParseException {
     jj_consume_token(and_has);
     NL();
   }
 
 //data -> Databody - done?
-  static final public HCISRVariableAST[] Databody() throws ParseException {
+  final public HCISRVariableAST[] Databody() throws ParseException {
  String[] typeDeclaration; /*String variableName;*/ int initializedType; String initializedValue; Token e; ArrayList<HCISRVariableAST> returnarray;
          returnarray = new ArrayList<HCISRVariableAST>();
     label_6:
@@ -761,7 +761,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //class -> methods - done?
-  static final public Object[] Methods() throws ParseException {
+  final public Object[] Methods() throws ParseException {
  Object[] returnarray; String methodselfreference; HCISRMethodAST[] instanceMethodList;
     methodselfreference = Methodhead();
     instanceMethodList = Methodbodies();
@@ -775,7 +775,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //Methods -> methodhead - done?
-  static final public String Methodhead() throws ParseException {
+  final public String Methodhead() throws ParseException {
  String methodselfreference; Token e;
     jj_consume_token(and_an_instance);
     e = jj_consume_token(IDENT);
@@ -787,7 +787,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //Methods -> Methodbodies - returns array of HCISRMethodAST - done?
-  static final public HCISRMethodAST[] Methodbodies() throws ParseException {
+  final public HCISRMethodAST[] Methodbodies() throws ParseException {
  HCISRMethodAST m; ArrayList<HCISRMethodAST> marray;
          marray = new ArrayList<HCISRMethodAST>();
     label_7:
@@ -808,7 +808,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //Methods -> Methodbodies -> Methoddec - returns a defined or declared method ast - done?
-  static final public HCISRMethodAST Methoddec() throws ParseException {
+  final public HCISRMethodAST Methoddec() throws ParseException {
  Object[] Methodidreturn; Object[] Codebodyreturn; String instanceName; String[] methodSignature; String[][] parameterRestrictions;
     //if codebody is returnsdec then it is declared if its codeblock it is defined - HCISRDefinedMethod and HCISRDeclaredMethod
        Methodidreturn = Methodid();
@@ -826,7 +826,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //methoddec -> methodid - done?
-  static final public Object[] Methodid() throws ParseException {
+  final public Object[] Methodid() throws ParseException {
  Token e; Token f; String instName; String[] sig; String[][] typeRestrictions; ArrayList<String> sig1; ArrayList<String[]> typeRes2; String anytmp; String[] tidenttmp;
         sig1 = new ArrayList<String>();
         typeRes2 = new ArrayList<String[]>();
@@ -969,7 +969,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //methods -> codebody - returns {isdefined, returnsdec/codeblock} - done?
-  static final public Object[] Codebody() throws ParseException {
+  final public Object[] Codebody() throws ParseException {
  HCISRReturnsDeclarationAST tidentreturn; HCISRCodeBlockAST codeblockreturn; Object[] returnarray;
          returnarray = new Object[2];
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1038,7 +1038,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //methods -> codebody -> returnsdec - returns returns dec ast - done?
-  static final public HCISRReturnsDeclarationAST Returnsdec() throws ParseException {
+  final public HCISRReturnsDeclarationAST Returnsdec() throws ParseException {
  String[] tidentreturn;
     jj_consume_token(RETURNS);
     tidentreturn = TIDENT();
@@ -1048,7 +1048,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //constructor - done?
-  static final public Object[] Constructor() throws ParseException {
+  final public Object[] Constructor() throws ParseException {
  Object[] returnarray; String constructorselfreference; HCISRConstructorAST[] constructorbodiesreturn;
     constructorselfreference = Constructorhead();
     constructorbodiesreturn = Constructorbodies();
@@ -1062,7 +1062,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //constructor -> constructorhead returns string constructorselfreference - done?
-  static final public String Constructorhead() throws ParseException {
+  final public String Constructorhead() throws ParseException {
  String constructorselfreference; Token e;
     jj_consume_token(and_an_instance);
     e = jj_consume_token(IDENT);
@@ -1075,7 +1075,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //constructor -> constructorbodies returns array of constructor ast's - done?
-  static final public HCISRConstructorAST[] Constructorbodies() throws ParseException {
+  final public HCISRConstructorAST[] Constructorbodies() throws ParseException {
  HCISRConstructorAST c; ArrayList<HCISRConstructorAST> returnarray;
          returnarray = new ArrayList<HCISRConstructorAST>();
     label_9:
@@ -1096,7 +1096,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //constructor -> constructorbodies -> constructordec returns a new constructor AST - done?
-  static final public HCISRConstructorAST Constructordec() throws ParseException {
+  final public HCISRConstructorAST Constructordec() throws ParseException {
  Object[] constructoridreturn; Object[] codebodyreturn; String[] createdType; String[] methodSignature; String[][] typeRestrictions;
     constructoridreturn = Constructorid();
     codebodyreturn = Codebody();
@@ -1113,7 +1113,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //constructor -> constructorbodies -> constructordec -> constructorid - returns object {createdType, methodsig, typeres} - done?
-  static final public Object[] Constructorid() throws ParseException {
+  final public Object[] Constructorid() throws ParseException {
  Token e; String[] createdType; String[] methodSignature; String[][] typeRestrictions; String anytmp; ArrayList<String> msig1 = new ArrayList<String>(); ArrayList<String[]> tres1 = new ArrayList<String[]>(); String[] tidenttmp;
     jj_consume_token(make_a_new);
     createdType = TIDENT();
@@ -1259,7 +1259,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //file -> function returns a function ast - done?
-  static final public HCISRFunctionFileAST Function() throws ParseException {
+  final public HCISRFunctionFileAST Function() throws ParseException {
  HCISRVariableAST[] globalDataDeclaration; HCISRFunctionAST[] functionDeclarations;
     globalDataDeclaration = Fdata();
     functionDeclarations = Funcs();
@@ -1268,7 +1268,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //function -> fdata returns variable ast - done?
-  static final public HCISRVariableAST[] Fdata() throws ParseException {
+  final public HCISRVariableAST[] Fdata() throws ParseException {
  HCISRVariableAST[] databodyreturn;
     Fdatahead();
     databodyreturn = Databody();
@@ -1279,13 +1279,13 @@ public class HCISR implements HCISRConstants {
   }
 
 //function -> fdata -> fdatahead does nothing - done?
-  static final public void Fdatahead() throws ParseException {
+  final public void Fdatahead() throws ParseException {
     jj_consume_token(the_following_functions_make_use_of);
     NL();
   }
 
 //function -> fdata -> funcs returns an array of function ast - done?
-  static final public HCISRFunctionAST[] Funcs() throws ParseException {
+  final public HCISRFunctionAST[] Funcs() throws ParseException {
  HCISRFunctionAST f; ArrayList<HCISRFunctionAST> returnarray;
          returnarray = new ArrayList<HCISRFunctionAST>();
     label_11:
@@ -1341,7 +1341,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //function -> fdata -> functiondec returns new function ast - done?
-  static final public HCISRFunctionAST Functiondec() throws ParseException {
+  final public HCISRFunctionAST Functiondec() throws ParseException {
  Object[] codebodyreturn; Object[] functionidreturn; String[] methodSignature; String[][] typeRestrictions;
     functionidreturn = Functionid();
     codebodyreturn = Codebody();
@@ -1356,7 +1356,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //function -> fdata -> functiondec -> function id returns object array - done?
-  static final public Object[] Functionid() throws ParseException {
+  final public Object[] Functionid() throws ParseException {
  String[] methodSignature; String[][] typeRestrictions; String s; Token e; String[] tidentreturn; String anytmp; ArrayList<String> msig1; ArrayList<String[]> tres1;
          msig1 = new ArrayList<String>(); tres1 = new ArrayList<String[]>();
     s = Anyfirst();
@@ -1473,7 +1473,7 @@ public class HCISR implements HCISRConstants {
       case RP:
       case CHARS:
         anytmp = Any();
-                         msig1.add(s); tres1.add(null);
+                         msig1.add(anytmp); tres1.add(null);
         break;
       case IDENT:
         e = jj_consume_token(IDENT);
@@ -1494,7 +1494,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //file -> program - done?
-  static final public HCISRStatementAST[] Program() throws ParseException {
+  final public HCISRStatementAST[] Program() throws ParseException {
  HCISRStatementAST s; ArrayList<HCISRStatementAST> returnarray1; HCISRStatementAST[] returnarray;
                   returnarray1 = new ArrayList<HCISRStatementAST>();
     label_13:
@@ -1561,7 +1561,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //* -> codeblock returns HCISRCodeblock - done?
-  static final public HCISRCodeBlockAST Codeblock() throws ParseException {
+  final public HCISRCodeBlockAST Codeblock() throws ParseException {
  HCISRStatementAST[] codeConts; HCISRReturnsClauseAST toRet; HCISRCatchClauseAST[] errCor; ArrayList<HCISRStatementAST> cc1; HCISRStatementAST s; HCISRCatchClauseAST c; ArrayList<HCISRCatchClauseAST> erc1;
          cc1 = new ArrayList<HCISRStatementAST>(); erc1 = new ArrayList<HCISRCatchClauseAST>();
     label_14:
@@ -1642,7 +1642,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement - returns statement ast - done?
-  static final public HCISRStatementAST Statement() throws ParseException {
+  final public HCISRStatementAST Statement() throws ParseException {
  HCISRStatementAST callreturn;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IDENT:
@@ -1710,7 +1710,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock ->  statement -> methodcall returns methodcallast(string[]) - done?
-  static final public HCISRMethodCallAST Methodcall() throws ParseException {
+  final public HCISRMethodCallAST Methodcall() throws ParseException {
  String[] methodSignature; Token e; ArrayList<String> sig; String tmp;
          sig = new ArrayList<String>();
     e = jj_consume_token(IDENT);
@@ -1846,7 +1846,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> constructorcall returns constructor call ast - done?
-  static final public HCISRConstructorCallAST Constructorcall() throws ParseException {
+  final public HCISRConstructorCallAST Constructorcall() throws ParseException {
  String[] methodSignature; String[] typeIdentifier; ArrayList<String> typId1; String tmp; Token e;
          typId1 = new ArrayList<String>();
     jj_consume_token(make_a_new);
@@ -1990,7 +1990,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> structurecall returns statement ast - done?
-  static final public HCISRStatementAST Structurecall() throws ParseException {
+  final public HCISRStatementAST Structurecall() throws ParseException {
  HCISRStatementAST callreturn;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case define_a:
@@ -2030,7 +2030,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> definecall returns statement ast - done?
-  static final public HCISRStatementAST Definecall() throws ParseException {
+  final public HCISRStatementAST Definecall() throws ParseException {
  String[] typeIdentifier; String variableName; String initialValue = ""; int initialType = -1; Token e;
     jj_consume_token(define_a);
     typeIdentifier = TIDENT();
@@ -2077,7 +2077,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> setcall returns statement ast - done?
-  static final public HCISRStatementAST Setcall() throws ParseException {
+  final public HCISRStatementAST Setcall() throws ParseException {
  HCISRMethodCallAST methodcallreturn = null; HCISRFunctionCallAST functioncallreturn = null; HCISRConstructorCallAST constructorcallreturn = null; Token e;
     jj_consume_token(SET);
     e = jj_consume_token(IDENT);
@@ -2140,7 +2140,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> ifcall returns statementast - done?
-  static final public HCISRStatementAST Ifcall() throws ParseException {
+  final public HCISRStatementAST Ifcall() throws ParseException {
  String booleanID; HCISRStatementAST[] trueCommands; HCISRStatementAST[] falseCommands = null;
     booleanID = Conditional();
     trueCommands = Ifclause();
@@ -2158,7 +2158,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> ifcall -> conditional returns string booleanID - done?
-  static final public String Conditional() throws ParseException {
+  final public String Conditional() throws ParseException {
  Token e;
     jj_consume_token(IF);
     e = jj_consume_token(IDENT);
@@ -2169,7 +2169,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> ifcall -> Ifclause returns statement ast array - done?
-  static final public HCISRStatementAST[] Ifclause() throws ParseException {
+  final public HCISRStatementAST[] Ifclause() throws ParseException {
  HCISRStatementAST s; ArrayList<HCISRStatementAST> statementarray;
          statementarray = new ArrayList<HCISRStatementAST>();
     label_18:
@@ -2238,7 +2238,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> ifcall -> elseclause returns statement ast array - done?
-  static final public HCISRStatementAST[] Elseclause() throws ParseException {
+  final public HCISRStatementAST[] Elseclause() throws ParseException {
  HCISRStatementAST s; ArrayList<HCISRStatementAST> statementarray;
          statementarray = new ArrayList<HCISRStatementAST>();
     jj_consume_token(otherwise);
@@ -2309,7 +2309,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> forcall returns for call ast - done?
-  static final public HCISRStatementAST Forcall() throws ParseException {
+  final public HCISRStatementAST Forcall() throws ParseException {
  String[] typeIdentifier; String variableIdentifier; String listIdentifier; Object[] fordecreturn; ArrayList<HCISRStatementAST> loopCommands; HCISRStatementAST s;
          loopCommands = new ArrayList<HCISRStatementAST>();
     fordecreturn = Fordec();
@@ -2382,7 +2382,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> forcall -> fordec returns {typeident[], variableident, listident} - done?
-  static final public Object[] Fordec() throws ParseException {
+  final public Object[] Fordec() throws ParseException {
  String[] typeIdentifier; Token variableIdentifier; Token listIdentifier;
     jj_consume_token(FOR_ALL);
     typeIdentifier = TIDENT();
@@ -2391,14 +2391,13 @@ public class HCISR implements HCISRConstants {
     jj_consume_token(IN);
     listIdentifier = jj_consume_token(IDENT);
     jj_consume_token(DO);
-    jj_consume_token(END);
     NL();
          {if (true) return new Object[] {typeIdentifier, variableIdentifier.image, listIdentifier.image};}
     throw new Error("Missing return statement in function");
   }
 
 //codeblock -> statement -> whilecall - done?
-  static final public HCISRStatementAST Whilecall() throws ParseException {
+  final public HCISRStatementAST Whilecall() throws ParseException {
  String booleanID; ArrayList<HCISRStatementAST> loopCommands; HCISRStatementAST s;
          loopCommands = new ArrayList<HCISRStatementAST>();
     booleanID = Whiledec();
@@ -2468,7 +2467,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> whilecall -> whiledec returns booleanID string - done?
-  static final public String Whiledec() throws ParseException {
+  final public String Whiledec() throws ParseException {
  Token e;
     jj_consume_token(WHILE);
     e = jj_consume_token(IDENT);
@@ -2479,7 +2478,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> complaincall returns complain call ast - done?
-  static final public HCISRStatementAST Complaincall() throws ParseException {
+  final public HCISRStatementAST Complaincall() throws ParseException {
  Token errorIdentifier;
     jj_consume_token(COMPLAIN_ABOUT);
     errorIdentifier = jj_consume_token(IDENT);
@@ -2489,7 +2488,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> labelcall returns label call ast - done?
-  static final public HCISRStatementAST Labelcall() throws ParseException {
+  final public HCISRStatementAST Labelcall() throws ParseException {
  Token labelName;
     jj_consume_token(LABEL);
     labelName = jj_consume_token(IDENT);
@@ -2499,7 +2498,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> gotocall returns goto call ast - done?
-  static final public HCISRStatementAST Gotocall() throws ParseException {
+  final public HCISRStatementAST Gotocall() throws ParseException {
  Token locationIdentifier;
     jj_consume_token(GOTO);
     locationIdentifier = jj_consume_token(IDENT);
@@ -2508,44 +2507,20 @@ public class HCISR implements HCISRConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public HCISRStatementAST Notecall() throws ParseException {
+  final public HCISRStatementAST Notecall() throws ParseException {
     jj_consume_token(NOTE);
-    label_22:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case IDENT:
-      case CHARS:
-        ;
-        break;
-      default:
-        jj_la1[49] = jj_gen;
-        break label_22;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case CHARS:
-        jj_consume_token(CHARS);
-        break;
-      case IDENT:
-        jj_consume_token(IDENT);
-        break;
-      default:
-        jj_la1[50] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    }
     NL();
-                                   {if (true) return new HCISRNoteCallAST();}
+                {if (true) return new HCISRNoteCallAST();}
     throw new Error("Missing return statement in function");
   }
 
 //codeblock -> statement -> functioncall returns function call ast - done?
-  static final public HCISRFunctionCallAST Functioncall() throws ParseException {
+  final public HCISRFunctionCallAST Functioncall() throws ParseException {
  ArrayList<String> methodSignature; String s; Token e;
          methodSignature = new ArrayList<String>();
     s = Anyfirst();
                    methodSignature.add(s);
-    label_23:
+    label_22:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case END:
@@ -2602,8 +2577,8 @@ public class HCISR implements HCISRConstants {
         ;
         break;
       default:
-        jj_la1[51] = jj_gen;
-        break label_23;
+        jj_la1[49] = jj_gen;
+        break label_22;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case END:
@@ -2664,7 +2639,7 @@ public class HCISR implements HCISRConstants {
                       methodSignature.add(e.image);
         break;
       default:
-        jj_la1[52] = jj_gen;
+        jj_la1[50] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -2675,7 +2650,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> returncall returns return clause ast - done?
-  static final public HCISRReturnsClauseAST Returncall() throws ParseException {
+  final public HCISRReturnsClauseAST Returncall() throws ParseException {
  Token returnVariable; String[] returnType;
     jj_consume_token(RETURN);
     returnVariable = jj_consume_token(IDENT);
@@ -2687,11 +2662,11 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> catchcall returns catch clause ast - done?
-  static final public HCISRCatchClauseAST Catchcall() throws ParseException {
+  final public HCISRCatchClauseAST Catchcall() throws ParseException {
  String[] errorType; String errorVariable; ArrayList<HCISRStatementAST> commandList; HCISRReturnsClauseAST toRet; Object[] headreturn; HCISRStatementAST s;
          commandList = new ArrayList<HCISRStatementAST>();
     headreturn = Catchhead();
-    label_24:
+    label_23:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case OF:
@@ -2744,8 +2719,8 @@ public class HCISR implements HCISRConstants {
         ;
         break;
       default:
-        jj_la1[53] = jj_gen;
-        break label_24;
+        jj_la1[51] = jj_gen;
+        break label_23;
       }
       s = Statement();
                                              commandList.add(s);
@@ -2760,7 +2735,7 @@ public class HCISR implements HCISRConstants {
   }
 
 //codeblock -> statement -> catchcall -> catchhead returns {errortype[], errorvariable} - done?
-  static final public Object[] Catchhead() throws ParseException {
+  final public Object[] Catchhead() throws ParseException {
  String[] errorType; Token errorVariable; Object[] returnarray;
          returnarray = new Object[2];
     jj_consume_token(and_in_the_event_of_a);
@@ -2773,127 +2748,126 @@ public class HCISR implements HCISRConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static private boolean jj_2_1(int xla) {
+  private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_1(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(0, xla); }
   }
 
-  static private boolean jj_2_2(int xla) {
+  private boolean jj_2_2(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_2(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(1, xla); }
   }
 
-  static private boolean jj_2_3(int xla) {
+  private boolean jj_2_3(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_3(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(2, xla); }
   }
 
-  static private boolean jj_2_4(int xla) {
+  private boolean jj_2_4(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_4(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(3, xla); }
   }
 
-  static private boolean jj_2_5(int xla) {
+  private boolean jj_2_5(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_5(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_2_6(int xla) {
+  private boolean jj_2_6(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_6(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(5, xla); }
   }
 
-  static private boolean jj_3R_25() {
+  private boolean jj_3R_24() {
+    if (jj_3R_28()) return true;
+    return false;
+  }
+
+  private boolean jj_3_4() {
+    if (jj_3R_25()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_25() {
     if (jj_3R_29()) return true;
     return false;
   }
 
-  static private boolean jj_3_4() {
-    if (jj_3R_26()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_26() {
-    if (jj_3R_30()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_28() {
+  private boolean jj_3R_27() {
     if (jj_scan_token(FLOATREF)) return true;
     if (jj_scan_token(NUMS)) return true;
     return false;
   }
 
-  static private boolean jj_3R_29() {
+  private boolean jj_3R_28() {
     if (jj_scan_token(and_an_instance)) return true;
     if (jj_scan_token(IDENT)) return true;
     if (jj_scan_token(understands_the_following_commands)) return true;
     return false;
   }
 
-  static private boolean jj_3_1() {
+  private boolean jj_3_1() {
     if (jj_scan_token(EOL)) return true;
     return false;
   }
 
-  static private boolean jj_3R_30() {
+  private boolean jj_3R_29() {
     if (jj_scan_token(and_an_instance)) return true;
     if (jj_scan_token(IDENT)) return true;
     if (jj_scan_token(is_created_with_the_commands)) return true;
     return false;
   }
 
-  static private boolean jj_3_2() {
+  private boolean jj_3_2() {
     if (jj_scan_token(IDENT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_27() {
+  private boolean jj_3R_26() {
     if (jj_scan_token(INTREF)) return true;
     if (jj_scan_token(NUMS)) return true;
     return false;
   }
 
-  static private boolean jj_3_6() {
-    if (jj_3R_28()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_3() {
-    if (jj_3R_25()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5() {
+  private boolean jj_3_6() {
     if (jj_3R_27()) return true;
     return false;
   }
 
-  static private boolean jj_initialized_once = false;
+  private boolean jj_3_3() {
+    if (jj_3R_24()) return true;
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
   /** Generated Token Manager. */
-  static public HCISRTokenManager token_source;
-  static SimpleCharStream jj_input_stream;
+  public HCISRTokenManager token_source;
+  SimpleCharStream jj_input_stream;
   /** Current token. */
-  static public Token token;
+  public Token token;
   /** Next token. */
-  static public Token jj_nt;
-  static private int jj_ntk;
-  static private Token jj_scanpos, jj_lastpos;
-  static private int jj_la;
-  static private int jj_gen;
-  static final private int[] jj_la1 = new int[54];
+  public Token jj_nt;
+  private int jj_ntk;
+  private Token jj_scanpos, jj_lastpos;
+  private int jj_la;
+  private int jj_gen;
+  final private int[] jj_la1 = new int[52];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -2901,14 +2875,14 @@ public class HCISR implements HCISRConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xfffffff0,0x4d3fffe0,0x0,0x0,0xc000000,0x0,0x0,0x20,0x0,0x0,0x20,0x380000,0x20000,0x0,0x1000,0x700,0x40,0x0,0x0,0x8000,0x0,0xfffffff0,0xfffffff0,0xefffffe0,0x0,0xfffffff0,0xfffffff0,0x0,0x4d3fffe0,0xfffffff0,0xfffffff0,0xefffffe0,0xefffffe0,0x0,0xefffffe0,0xfffffff0,0xfffffff0,0xfffffff0,0xfffffff0,0x0,0xa2c00000,0x0,0x8000,0x4d3fffe0,0x10000000,0xefffffe0,0xefffffe0,0xefffffe0,0xefffffe0,0x0,0x0,0xfffffff0,0xfffffff0,0xefffffe0,};
+      jj_la1_0 = new int[] {0xfffffff0,0x4d3fffe0,0x0,0x0,0xc000000,0x0,0x0,0x20,0x0,0x0,0x20,0x380000,0x20000,0x0,0x1000,0x700,0x40,0x0,0x0,0x8000,0x0,0xfffffff0,0xfffffff0,0xefffffe0,0x0,0xfffffff0,0xfffffff0,0x0,0x4d3fffe0,0xfffffff0,0xfffffff0,0xefffffe0,0xefffffe0,0x0,0xefffffe0,0xfffffff0,0xfffffff0,0xfffffff0,0xfffffff0,0x0,0xa2c00000,0x0,0x8000,0x4d3fffe0,0x10000000,0xefffffe0,0xefffffe0,0xefffffe0,0xefffffe0,0xfffffff0,0xfffffff0,0xefffffe0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x7bffff,0x7b7fc0,0x440000,0x440000,0x0,0x100000,0x40000,0x0,0x40000,0x40000,0x0,0x0,0x0,0x440000,0x0,0x0,0x0,0x400,0x6000,0x0,0x40000,0x7fffff,0x7fffff,0x7fffff,0x8000,0x7fffff,0x7fffff,0x200,0x7b7fc0,0x7fffff,0x7fffff,0x7fffcf,0x7fffcf,0x10000,0x7fffcf,0x7fffff,0x7fffff,0x7fffff,0x7fffff,0x200,0xf,0x7c00,0x0,0x7fffc0,0x0,0x7fffcf,0x7fffcf,0x7fffcf,0x7fffcf,0x440000,0x440000,0x7fffff,0x7fffff,0x7fffcf,};
+      jj_la1_1 = new int[] {0x7bffff,0x7b7fc0,0x440000,0x440000,0x0,0x100000,0x40000,0x0,0x40000,0x40000,0x0,0x0,0x0,0x440000,0x0,0x0,0x0,0x400,0x6000,0x0,0x40000,0x7fffff,0x7fffff,0x7fffff,0x8000,0x7fffff,0x7fffff,0x200,0x7b7fc0,0x7fffff,0x7fffff,0x7fffcf,0x7fffcf,0x10000,0x7fffcf,0x7fffff,0x7fffff,0x7fffff,0x7fffff,0x200,0xf,0x7c00,0x0,0x7fffc0,0x0,0x7fffcf,0x7fffcf,0x7fffcf,0x7fffcf,0x7fffff,0x7fffff,0x7fffcf,};
    }
-  static final private JJCalls[] jj_2_rtns = new JJCalls[6];
-  static private boolean jj_rescan = false;
-  static private int jj_gc = 0;
+  final private JJCalls[] jj_2_rtns = new JJCalls[6];
+  private boolean jj_rescan = false;
+  private int jj_gc = 0;
 
   /** Constructor with InputStream. */
   public HCISR(java.io.InputStream stream) {
@@ -2916,80 +2890,59 @@ public class HCISR implements HCISRConstants {
   }
   /** Constructor with InputStream and supplied encoding */
   public HCISR(java.io.InputStream stream, String encoding) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new HCISRTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
-  static public void ReInit(java.io.InputStream stream) {
+  public void ReInit(java.io.InputStream stream) {
      ReInit(stream, null);
   }
   /** Reinitialise. */
-  static public void ReInit(java.io.InputStream stream, String encoding) {
+  public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor. */
   public HCISR(java.io.Reader stream) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new HCISRTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
-  static public void ReInit(java.io.Reader stream) {
+  public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Constructor with generated Token Manager. */
   public HCISR(HCISRTokenManager tm) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -2999,11 +2952,11 @@ public class HCISR implements HCISRConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  static private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -3028,8 +2981,8 @@ public class HCISR implements HCISRConstants {
   }
 
   static private final class LookaheadSuccess extends java.lang.Error { }
-  static final private LookaheadSuccess jj_ls = new LookaheadSuccess();
-  static private boolean jj_scan_token(int kind) {
+  final private LookaheadSuccess jj_ls = new LookaheadSuccess();
+  private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
       if (jj_scanpos.next == null) {
@@ -3052,7 +3005,7 @@ public class HCISR implements HCISRConstants {
 
 
 /** Get the next Token. */
-  static final public Token getNextToken() {
+  final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -3061,7 +3014,7 @@ public class HCISR implements HCISRConstants {
   }
 
 /** Get the specific Token. */
-  static final public Token getToken(int index) {
+  final public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -3070,20 +3023,20 @@ public class HCISR implements HCISRConstants {
     return t;
   }
 
-  static private int jj_ntk() {
+  private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-  static private int[] jj_expentry;
-  static private int jj_kind = -1;
-  static private int[] jj_lasttokens = new int[100];
-  static private int jj_endpos;
+  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+  private int[] jj_expentry;
+  private int jj_kind = -1;
+  private int[] jj_lasttokens = new int[100];
+  private int jj_endpos;
 
-  static private void jj_add_error_token(int kind, int pos) {
+  private void jj_add_error_token(int kind, int pos) {
     if (pos >= 100) return;
     if (pos == jj_endpos + 1) {
       jj_lasttokens[jj_endpos++] = kind;
@@ -3109,14 +3062,14 @@ public class HCISR implements HCISRConstants {
   }
 
   /** Generate ParseException. */
-  static public ParseException generateParseException() {
+  public ParseException generateParseException() {
     jj_expentries.clear();
     boolean[] la1tokens = new boolean[55];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 54; i++) {
+    for (int i = 0; i < 52; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -3146,14 +3099,14 @@ public class HCISR implements HCISRConstants {
   }
 
   /** Enable tracing. */
-  static final public void enable_tracing() {
+  final public void enable_tracing() {
   }
 
   /** Disable tracing. */
-  static final public void disable_tracing() {
+  final public void disable_tracing() {
   }
 
-  static private void jj_rescan_token() {
+  private void jj_rescan_token() {
     jj_rescan = true;
     for (int i = 0; i < 6; i++) {
     try {
@@ -3177,7 +3130,7 @@ public class HCISR implements HCISRConstants {
     jj_rescan = false;
   }
 
-  static private void jj_save(int index, int xla) {
+  private void jj_save(int index, int xla) {
     JJCalls p = jj_2_rtns[index];
     while (p.gen > jj_gen) {
       if (p.next == null) { p = p.next = new JJCalls(); break; }

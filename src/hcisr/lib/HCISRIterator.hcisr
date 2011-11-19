@@ -1,5 +1,5 @@
 this file describes a class
-	this file uses hcisr.lib.HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
 .
 archtype Iterator of E is a subtype of Object
 	and an instance I understands the following commands

@@ -1,4 +1,5 @@
 this file describes a class
+	this file uses hcisr/lib/HCISRObject.hcisr
 .
 external type Boolean is a subtype of Object
 	and an instance B understands the following commands

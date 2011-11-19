@@ -3,7 +3,7 @@ import hcisr.ast.*;
 import java.io.*;
 
 public class HCISRParser{
-	public static HCISRFileAST readFile(InputStream in){
-		return null;
+	public static HCISRFileAST readFile(InputStream in) throws ParseException{
+		return HCISR.parseFile(in);
 	}
 }

@@ -1,35 +1,36 @@
-this file describes a Class
+this file describes a class
+	this file uses hcisr/lib/HCISRObject.hcisr
 .
 external type Float is a subtype of Object
 	and an instance F understands the following commands
-		F + B (Float)
+		F + B ( Float )
 			returns Float
 		.
-		F - B (Float)
+		F - B ( Float )
 			returns Float
 		.
-		F * B (Float)
+		F * B ( Float )
 			returns Float
 		.
-		F / B (Float)
+		F / B ( Float )
 			returns Float
 		.
-		F % B (Float)
+		F % B ( Float )
 			returns Float
 		.
-		F plus B (Float)
+		F plus B ( Float )
 			returns Float
 		.
-		F minus B (Float)
+		F minus B ( Float )
 			returns Float
 		.
-		F times B (Float)
+		F times B ( Float )
 			returns Float
 		.
-		F divided by B (Float)
+		F divided by B ( Float )
 			returns Float
 		.
-		F modulo B (Float)
+		F modulo B ( Float )
 			returns Float
 		.
 		F initialize float
@@ -37,7 +38,7 @@ external type Float is a subtype of Object
 		.
 	.
 	and an instance F is created with the commands
-		make a new float
+		make a new Float
 			F initialize float
 			return F as Float
 		.
