@@ -16,7 +16,7 @@ set Mark to I as string
 print Mark
 println
 set I to I + One
-set ToBreak to Max < I
+set ToBreak to I < Max
 set ToBreak to ToBreak ~
 if ToBreak then
 .
