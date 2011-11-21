@@ -6,7 +6,7 @@ this file describes a program
 	this file uses HCISRMergeSortFunc.hcisr
 .
 define a Integer named CurVal which initially equals Integer: 0
-define a Integer named MaxVal which initially equals Integer: 10000
+define a Integer named MaxVal which initially equals Integer: 10
 define a Integer named One which initially equals Integer: 1
 define a LinkedList of Integer named ToSort
 set ToSort to make a new LinkedList of Integer
