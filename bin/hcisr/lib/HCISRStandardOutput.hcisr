@@ -1,0 +1,10 @@
+this file describes functions
+.
+the following functions make use of
+.
+print S ( String )
+	returns Nothing
+.
+println
+	returns Nothing
+.

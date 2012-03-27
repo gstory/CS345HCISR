@@ -1,0 +1,43 @@
+this file describes a class
+	this file uses hcisr/lib/HCISRObject.hcisr
+.
+external type Integer is a subtype of Object
+	and an instance I understands the following commands
+		I + B (  Integer  )
+			returns Integer
+		.
+		I - B (  Integer )
+			returns Integer
+		.
+		I * B ( Integer )
+			returns Integer
+		.
+		I / B ( Integer )
+			returns Integer
+		.
+		I % B ( Integer )
+			returns Integer
+		.
+		I = B ( Integer )
+			returns Boolean
+		.
+		I < B ( Integer )
+			returns Boolean
+		.
+		I > B ( Integer )
+			returns Boolean
+		.
+		I as string
+			returns String
+		.
+		I initialize integer
+			returns Nothing
+		.
+	.
+	and an instance I is created with the commands
+		make a new Integer
+			I initialize integer
+			return I as Integer
+		.
+	.
+.

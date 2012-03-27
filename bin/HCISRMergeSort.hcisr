@@ -1,0 +1,33 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses HCISRMergeSortFunc.hcisr
+.
+define a Integer named CurVal which initially equals Integer: 0
+define a Integer named MaxVal which initially equals Integer: 10
+define a Integer named One which initially equals Integer: 1
+define a LinkedList of Integer named ToSort
+set ToSort to make a new LinkedList of Integer
+define a Boolean named NotDone which initially equals Boolean: true
+while NotDone do
+	ToSort add CurVal
+	set CurVal to CurVal + One
+	set NotDone to CurVal < MaxVal
+.
+for all Integer named CV in ToSort do
+	define a String named ToPrint
+	set ToPrint to CV as string
+	print ToPrint
+	println
+.
+set ToSort to mergesort ToSort
+println
+println
+for all Integer named CV in ToSort do
+	define a String named ToPrint
+	set ToPrint to CV as string
+	print ToPrint
+	println
+.

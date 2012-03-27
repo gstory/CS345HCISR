@@ -1,0 +1,32 @@
+this file describes a class
+	this file uses hcisr/lib/HCISRIterator.hcisr
+.
+type LinkedListNode of E ( Object ) is a subtype of Object
+	and has
+		a E named Target
+		a LinkedListNode of E named Next
+	.
+	and an instance L understands the following commands
+		L get target
+			return Target as E
+		.
+		L set target to NewTarget ( E )
+			set Target to identity of NewTarget
+			return Nothing as Nothing
+		.
+		L get next
+			return Next as LinkedListNode of E
+		.
+		L set next to NextNode ( LinkedListNode of E )
+			set Next to identity of NextNode
+			return Nothing as Nothing
+		.
+	.
+	and an instance L is created with the commands
+		make a new LinkedListNode of E with TargetObject ( Object ) and NextNode ( LinkedListNode of E )
+			set Target to identity of TargetObject
+			set Next to identity of NextNode
+			return L as LinkedListNode of E
+		.
+	.
+.

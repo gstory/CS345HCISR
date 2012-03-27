@@ -1,0 +1,13 @@
+this file describes a class
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+.
+archtype Iterator of E is a subtype of Object
+	and an instance I understands the following commands
+		I get next
+			returns E
+		.
+		I has next
+			returns Boolean
+		.
+	.
+.

@@ -1,0 +1,25 @@
+this file describes a class
+	this file uses hcisr/lib/HCISRObject.hcisr
+.
+external type Boolean is a subtype of Object
+	and an instance B understands the following commands
+		B & A ( Boolean )
+			returns Boolean
+		.
+		B | A ( Boolean )
+			returns Boolean
+		.
+		B ~
+			returns Boolean
+		.
+		B initialize boolean
+			returns Nothing
+		.
+	.
+	and an instance B is created with the commands
+		make a new Boolean
+			B initialize boolean
+			return B as Boolean
+		.
+	.
+.

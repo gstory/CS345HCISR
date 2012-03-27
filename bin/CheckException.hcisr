@@ -1,0 +1,20 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+	this file uses CheckExceptionFunctions.hcisr
+.
+define a Boolean named Result
+set Result to catchErr
+define a String named True which initially equals String:True
+define a String named False which initially equals String:False
+if Result then
+	print True
+.
+otherwise
+	print False
+.
+println

@@ -1,0 +1,55 @@
+HCSIR Grammar
+
+
+FTIDENT -> <IDENT> (<of> (<IDENT> (<LP> <TIDENT> <RP>)?)+)?
+Tident -> <IDENT> (<of> (<IDENT>|<IDENT> <of>)+)?
+
+File -> <this file describes> <a Class> NL Importbody <END> NL Class
+       |<this file describes> <Functions> NL Importbody <END> NL Functions
+       |<this file describes> <a Program> NL Importbody <END> NL Program
+NL -> (<SPACE>*<EOL>)+
+Importbody -> Import*
+ Import -> <this file uses> (<Chars>|<Ident>) NL
+Class ->  Header (Data)? (Methods)? (Constructor)? <END> NL
+ Header -> (<type>||<archtype>||<externaltype>) <TIDENT> <is a subtype of> <TIDENT> NL
+ Data ->  Dataheader Databody <END>
+  Dataheader -> <and has> NL
+  Databody -> (<a> <TIDENT> <named> <IDENT> (<which initially equals> (<STRING>||<INT>||<FLOAT>||<FUNCTION>||<BOOL>))? NL)* 
+ Methods -> Methodhead Methodbodies <END> NL
+  Methodhead -> <and an instance> IDENT> <understands the following commands> NL
+  Methodbodies -> Methoddec*
+   Methoddec -> Methodid CodeBody <END> NL
+    Methodid -> <IDENT> (<Chars>||<s>||(<IDENT> <LP> <TIDENT> <RP>))+ NL
+    Codebody -> Returnsdec|Codeblock
+     Returnsdec -> <returns> <TIDENT>
+Constructor -> Constructorhead Constructorbodies NL
+ Constructorhead -> <and an instance> <IDENT> <is created with the commands> NL
+ Constructorbodies -> Functiondec*
+  Functiondec -> Functionid Codebody <END> NL
+   Functionid -> <CHARS> (<CHARS||<s>||(<IDENT><LP><TIDENT><RP>))* NL
+Functions -> Fdata Funcs
+ Fdata -> Fdatahead Databody <END> NL
+ Funcs -> Functiondec*
+Program -> Codeblock
+Codeblock -> Statement* Returncall Catchcall*
+ Statement -> Methodcall || Structurecall || Functioncall
+  Methodcall -> <IDENT> (<CHARS> || <s> || <IDENT>)* NL
+  Structurecall -> Definecall || Setcall || Ifcall || Forcall || Whilecall || Complaincall || Labelcall || Gotocall || Notecall
+   Definecall -> <define a> <TIDENT> <called> <IDENT> (<which initially equals> (<STRING>||<INT>||<FLOAT>||<FUNCTION>||<BOOL>))? NL
+   Setcall -> <set> <IDENT> <to> (Methodcall || Functioncall)
+   Ifcall -> Conditional Ifclause Elseclause?
+    Conditional -> <if> <IDENT> <then> NL
+    Ifclause -> (Statement)* <END> NL
+    Elseclause -> <otherwise> NL (statement)* <END> NL
+   Forcall -> Fordec (Statement)* <END> NL
+    Fordec -> <for all> <TIDENT> <called> <IDENT> <in> <IDENT> <do> <END> NL
+   Whilecall -> Whiledec (Statement)* <END> NL
+    Whiledec -> <while> <IDENT> <do> NL
+   Complaincall -> <complain about> <IDENT> NL
+   Labelcall -> <label> <IDENT> NL
+   Gotocall -> <goto> <IDENT> NL
+   Notecall -> <note> (<CHARS>||<IDENT>)* NL
+  Functioncall -> <CHARS> (<CHARS> || <S> || <IDENT>)* NL
+ Returncall -> <return> <IDENT> <as> <TIDENT> NL
+ Catchcall -> catchhead (Statement)* <END> NL
+  Catchhead -> <and in the event of a> <TIDENT> <called> <IDENT> NL
