@@ -254,7 +254,7 @@ public class HCISRFileAST implements HCISRRunnable{
 		for(int i = 0; i<programDef.length; i++){
 			//run through the code, running the statements
 			try{  
-//System.out.println();System.out.println("---");System.out.println("asdf sf");sf.print();
+System.out.println();System.out.println("---");System.out.println("asdf sf");sf.print();
 				programDef[i].run(sf, null);
 			}
 			catch(HCISRGotoException e){

@@ -75,7 +75,7 @@ public class HCISRInterpreter{
 		HCISRDeclaredFunctionAST printMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
 		printMeth.setInstructions(stdioFuncs.printMeth);
 
-		signature = new String[]{"print","I"};
+		signature = new String[]{"print","S"};
 		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String"}), new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String", "Integer"})};

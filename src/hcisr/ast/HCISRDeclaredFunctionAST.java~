@@ -39,7 +39,7 @@ public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
 	public HCISRInstance run(HCISRStackFrame sf){
 		//use the global data
 		//run the filled in stuff (or shit a brick if it's undefined)
-//System.out.println("---");System.out.println(theCode == null);
+System.out.println("---");System.out.println(theCode == null);
 		//if(theCode==null){
 		if( sf == null ){
 			throw new UnsupportedOperationException("External or Abstract method not filled in");

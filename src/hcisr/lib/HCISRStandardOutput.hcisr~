@@ -5,9 +5,6 @@ the following functions make use of
 print S ( String )
 	returns Nothing
 .
-print I ( Integer )
-	returns Nothing
-.
 println
 	returns Nothing
 .

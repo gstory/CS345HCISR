@@ -1,0 +1,49 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+	this file uses hcisr/lib/HCISRInt.hcisr
+.
+define a Integer named A which initially equals Integer: 1
+define a Integer named B which initially equals Integer: 2
+define a Integer named C which initially equals Integer: 3
+define a String named S1 which initially equals String:Nothing
+define a String named S2 which initially equals String:Nothing
+define a Integer named D which initially equals Integer: 0
+set S1 to A as string
+set D to A + C
+set S2 to D as string
+print S1
+println
+print S2
+println
+
+
+define a Int named Z which initially equals Integer: 1
+define a Int named Y which initially equals Integer: 2
+define a Int named X which initially equals Integer: 0
+
+set X to Z + Y
+set S2 to X as string
+print S2
+println
+
+set X to X + Y
+set S2 to X as string
+print S2
+println
+
+println
+print A
+println
+print B
+println
+print C
+println
+print S1
+println
+print S2
+println

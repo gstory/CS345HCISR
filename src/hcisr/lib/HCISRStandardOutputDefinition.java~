@@ -21,10 +21,10 @@ class HCISRStandardOutputPrint extends HCISRExternalCodeBlock{
 		//System.out.print(i1.getExternalVariables());
 		System.out.print(i1.getExternalVariables());
 
-		/*System.out.print("   // ");
+		System.out.print("   // ");
 		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 		System.out.print(stackTraceElements[1].getClassName() + " | " + stackTraceElements[1].getFileName() + " | " + stackTraceElements[1].getMethodName() );
-		System.out.println();*/
+		System.out.println();
  
 		return null;
 	}
