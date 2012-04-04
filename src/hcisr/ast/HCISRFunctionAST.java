@@ -11,6 +11,12 @@ public abstract class HCISRFunctionAST implements HCISRRunnable{
 		return stackSize;
 	}
 	
+//GS TEST
+	public void print(){
+		for( String s : sig )  System.out.print(" " + s);
+		System.out.println();
+	}
+
 	//global data location
 	protected HCISRFunctionFileAST globalDataLoc;
 	

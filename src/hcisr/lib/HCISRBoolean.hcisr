@@ -12,6 +12,9 @@ external type Boolean is a subtype of Object
 		B ~
 			returns Boolean
 		.
+		B as string
+			returns String
+		.
 		B initialize boolean
 			returns Nothing
 		.

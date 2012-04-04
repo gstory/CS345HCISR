@@ -38,9 +38,12 @@ println
 
 println
 print A
+println
 print B
+println
 print C
-print Z
-print Y
-print X
+println
+print S1
+println
+print S2
 println

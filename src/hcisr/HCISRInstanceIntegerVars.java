@@ -1,5 +1,4 @@
 package hcisr;
-import java.lang.Integer;
 
 public class HCISRInstanceIntegerVars implements HCISRInstanceMoreVars{
 	public int value;

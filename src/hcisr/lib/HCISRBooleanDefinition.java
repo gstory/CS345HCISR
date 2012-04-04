@@ -4,14 +4,30 @@ import hcisr.ast.*;
 
 //a collection of external methods for booleans
 public class HCISRBooleanDefinition{
+	public HCISRExternalCodeBlock asStrMeth;
 	public HCISRExternalCodeBlock andMeth;
 	public HCISRExternalCodeBlock orMeth;
 	public HCISRExternalCodeBlock notMeth;
 	
-	public HCISRBooleanDefinition(HCISRClassAST booleanClass){
+	public HCISRBooleanDefinition(HCISRClassAST booleanClass, HCISRClassAST stringClass){
+		asStrMeth = new HCISRBooleanAsString(stringClass);
 		andMeth = new HCISRBooleanAnd(booleanClass);
 		orMeth = new HCISRBooleanOr(booleanClass);
 		notMeth = new HCISRBooleanNot(booleanClass);
+	}
+}
+
+class HCISRBooleanAsString extends HCISRExternalCodeBlock{
+	HCISRClassAST strClass;
+	public HCISRBooleanAsString(HCISRClassAST stringClass){
+		strClass = stringClass;
+	}
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl){
+		HCISRInstance i1 = sf.getLocation(0);
+		boolean i1v = ((HCISRInstanceBooleanVars)(i1.getExternalVariables())).value;
+		HCISRInstance sr = new HCISRInstance(strClass);
+		sr.addExternalVariables(new HCISRInstanceStringVars(Boolean.toString(i1v)));
+		return sr;
 	}
 }
 

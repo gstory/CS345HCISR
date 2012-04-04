@@ -48,7 +48,7 @@ public class HCISRFunctionCallAST extends HCISRStatementAST{
 			}
 		}
 		//find the function to call
-		toCall = HCISRFileAST.findFuntion(imports, argumentIDs, argumentTypes);
+		toCall = HCISRFileAST.findFunction(imports, argumentIDs, argumentTypes);
 		//now, find out where the arguments are
 		specialVar = new boolean[numArgs];
 		arrayIndex = new int[numArgs];

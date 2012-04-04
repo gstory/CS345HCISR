@@ -51,7 +51,7 @@ public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
 	public HCISRInstance run(HCISRStackFrame sf, HCISRHeapLocation hl) throws HCISRException{
 		//use the global data
 		//run the filled in stuff (or shit a brick if it's undefined)
-		System.out.println("---");System.out.println(theCode == null);
+//		System.out.println("---");System.out.println(theCode == null);
 		//if(theCode==null){
 		if( sf == null || hl == null ){
 			throw new UnsupportedOperationException("StackFrame or HeapLocation null");

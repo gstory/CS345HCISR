@@ -47,3 +47,7 @@ print S1
 println
 print S2
 println
+
+define a Boolean named B1 which initially equals Boolean: true
+print B1
+println
