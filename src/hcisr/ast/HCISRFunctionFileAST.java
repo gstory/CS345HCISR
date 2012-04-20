@@ -60,4 +60,18 @@ public class HCISRFunctionFileAST implements HCISRHeapLocation{
 		functionGlobalData = globalDataDeclaration;
 		functions = functionDeclarations;
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting FunctionFileAST\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending FunctionFileAST\n";
+		return result;
+	}
 }

@@ -92,4 +92,18 @@ public class HCISRCatchClauseAST{
 		}
 		toReturn = origin.toReturn.copyWithParameters(bindings);
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting CatchClauseAST\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending CatchClauseAST\n";
+		return result;
+	}
 }

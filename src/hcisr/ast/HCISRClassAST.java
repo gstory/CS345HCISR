@@ -766,4 +766,29 @@ public class HCISRClassAST{
 		}
 		return typeRes;
 	}
+	
+	//function added to help print out AST TC
+	public String toString(int tabCount)
+	{
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+="Starting ClassAST: name is "+getFullName() +" and type: ";
+		if(classType==0){
+			result+="normal class\n";
+		}
+		if(classType==1){
+			result+="archtype class\n";
+		}
+		if(classType==2){
+			result+="external class\n";
+		}
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending ClassAST\n";
+		return result;
+	}
 }

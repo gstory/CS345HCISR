@@ -6,7 +6,9 @@ import hcisr.HCISRHeapLocation;
 import hcisr.HCISRException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+
 
 //this class represents a declared function
 public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
@@ -39,7 +41,7 @@ public class HCISRDeclaredFunctionAST extends HCISRFunctionAST{
 	public HCISRInstance run(HCISRStackFrame sf){
 		//use the global data
 		//run the filled in stuff (or shit a brick if it's undefined)
-System.out.println("---");System.out.println(theCode == null);
+//System.out.println("---");System.out.println(theCode == null);
 		//if(theCode==null){
 		if( sf == null ){
 			throw new UnsupportedOperationException("External or Abstract method not filled in");
@@ -64,5 +66,30 @@ System.out.println("---");System.out.println(theCode == null);
 		emptyMeth = retType;
 		typeRes = typeRestrictions;
 		isDefined = false;
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting DeclaredFunctionAST\n";
+		tabCount++;
+			if(sig!=null){
+				for(int i =0; i<tabCount;i++)
+					result+="\t";
+				result+="Method signature of: "+Arrays.toString(sig)+"\n";
+			}
+			if(typeRes!=null){
+				for(int i =0; i<tabCount;i++)
+					result+="\t";
+				result+="Type Restriction of: "+Arrays.deepToString(typeRes)+"\n";
+			}
+			result+=emptyMeth.toString(tabCount);
+			
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending declaredFunctionAST\n";
+		return result;
 	}
 }

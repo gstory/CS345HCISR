@@ -1,9 +1,5 @@
 this file describes functions
 	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
-	this file uses hcisr/lib/HCISRIterable.hcisr
-	this file uses hcisr/lib/HCISRInteger.hcisr
-	this file uses hcisr/lib/HCISRBoolean.hcisr
-	this file uses hcisr/lib/HCISRObject.hcisr
 .
 the following functions make use of
 .

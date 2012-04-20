@@ -82,4 +82,18 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 		code = origin.code.copyWithParameters(bindings);
 		isDefined = true;
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting DefinedConstructorAST\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending DefinedConstructorAST\n";
+		return result;
+	}
 }

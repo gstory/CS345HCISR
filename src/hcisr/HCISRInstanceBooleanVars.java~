@@ -12,8 +12,8 @@ public class HCISRInstanceBooleanVars implements HCISRInstanceMoreVars{
 
 	public String toString(){
 		if( value )
-			return true;
+			return "True";
 		else
-			return false;
+			return "False";
 	}
 }

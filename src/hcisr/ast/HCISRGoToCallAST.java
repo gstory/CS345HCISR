@@ -44,4 +44,18 @@ public class HCISRGoToCallAST extends HCISRStatementAST{
 	public HCISRGoToCallAST(String locationIdentifier){
 		locationID = locationIdentifier;
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting GoToCallAST which goes to: "+toGoTo+"\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending GoToCallAST\n";
+		return result;
+	}
 }

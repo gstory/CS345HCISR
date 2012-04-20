@@ -96,6 +96,11 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		addMeth.setInstructions(intMeths.addMeth);
+		//the method for subtract
+		signature = new String[]{"I","-","B"};
+		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
+		HCISRDeclaredMethodAST subMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		subMeth.setInstructions(intMeths.subMeth);
 		//the method for less than
 		signature = new String[]{"I","<","B"};
 		HCISRDeclaredMethodAST ltMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
@@ -206,6 +211,9 @@ public class HCISRInterpreter{
 		//now update the primitives, if necessary
 		fillInInitialFiles();
 		
+		System.out.println("<===============>Printing Out AST<===============>\n");
+		System.out.println(toRet.toString(0));
+		System.out.println("\n<===============>End of AST<===============>");
 		return toRet;
 	}
 	

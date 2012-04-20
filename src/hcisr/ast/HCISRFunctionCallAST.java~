@@ -67,8 +67,8 @@ public class HCISRFunctionCallAST extends HCISRStatementAST{
 		//first, make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
 		//and add values to it
-if( specialVar.length > 0 )
-System.out.println(" stacksize = " + toCall.getStackSize() + ", specialVar = " + specialVar[0] + ", arrayIndex[i] = " + arrayIndex[0] + ", sf.getLocation(arrayIndex[i]) = " + sf.getLocation(arrayIndex[0]));
+//if( specialVar.length > 0 )
+//System.out.println(" stacksize = " + toCall.getStackSize() + ", specialVar = " + specialVar[0] + ", arrayIndex[i] = " + arrayIndex[0] + ", sf.getLocation(arrayIndex[i]) = " + sf.getLocation(arrayIndex[0]));
 
 		for(int i = 0;i<specialVar.length;i++){
 			if(specialVar[i]){
@@ -86,5 +86,19 @@ System.out.println(" stacksize = " + toCall.getStackSize() + ", specialVar = " +
 	
 	public HCISRFunctionCallAST(String[] methodSignature){
 		argumentIDs = methodSignature;
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting FunctionCallAST\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending FunctionCallAST\n";
+		return result;
 	}
 }

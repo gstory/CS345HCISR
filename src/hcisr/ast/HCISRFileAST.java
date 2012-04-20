@@ -295,4 +295,33 @@ public class HCISRFileAST implements HCISRRunnable{
 		programDef = programDefinition;
 		isP = true;
 	}
+
+	//Added to print out AST TC
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+="Starting FileAST: ";
+		tabCount++;
+		if(isC){
+			result+="it is a class\n";
+			result+=classDef.toString(tabCount);
+		}
+		if(isF){
+			result+="it is a function\n";
+			result+=functionDef.toString(tabCount);
+		}
+		if(isP){
+			result+="it is a program with a list of statements\n";
+			for(int i=0; i<programDef.length;i++)
+			{
+				result+=programDef[i].toString(tabCount);
+			}
+		}
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending FileAST\n";
+		return result;
+	}
 }

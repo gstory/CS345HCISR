@@ -5,12 +5,14 @@ import hcisr.ast.*;
 //a collection of external methods for booleans
 public class HCISRIntegerDefinition{
 	public HCISRExternalCodeBlock addMeth;
+	public HCISRExternalCodeBlock subMeth;
 	public HCISRExternalCodeBlock ltMeth;
 	public HCISRExternalCodeBlock asStrMeth;
 	public HCISRExternalCodeBlock eqlMeth;
 	
 	public HCISRIntegerDefinition(HCISRClassAST integerClass,HCISRClassAST booleanClass,HCISRClassAST stringClass){
 		addMeth = new HCISRIntegerAdd(integerClass);
+		subMeth = new HCISRIntegerSub(integerClass);
 		ltMeth = new HCISRIntegerLessThan(booleanClass);
 		asStrMeth = new HCISRIntegerAsString(stringClass);
 		eqlMeth = new HCISRIntegerEquals(booleanClass);
@@ -49,6 +51,26 @@ class HCISRIntegerAdd extends HCISRExternalCodeBlock{
 		return ir;
 	}
 }
+
+class HCISRIntegerSub extends HCISRExternalCodeBlock{
+	HCISRClassAST intClass;
+	public HCISRIntegerSub(HCISRClassAST integerClass){
+		intClass = integerClass;
+	}
+	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl){
+		//and has two things on the stack frame
+		HCISRInstance i1 = sf.getLocation(0);
+		HCISRInstance i2 = sf.getLocation(1);
+		//get the values
+		int i1v = ((HCISRInstanceIntegerVars)(i1.getExternalVariables())).value;
+		int i2v = ((HCISRInstanceIntegerVars)(i2.getExternalVariables())).value;
+		int irv = i1v - i2v;
+		HCISRInstance ir = new HCISRInstance(i1.getHCISRClass());
+		ir.addExternalVariables(new HCISRInstanceIntegerVars(irv));
+		return ir;
+	}
+}
+
 
 class HCISRIntegerEquals extends HCISRExternalCodeBlock{
 	HCISRClassAST boolClass;

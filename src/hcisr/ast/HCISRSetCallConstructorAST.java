@@ -63,4 +63,18 @@ public class HCISRSetCallConstructorAST extends HCISRStatementAST{
 		varID = origin.varID;
 		funcID = (HCISRConstructorCallAST)(origin.funcID.copyWithParameters(bindings));
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting SetCallConstructorAST\n";
+		tabCount++;
+		//Add sub information here
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending SetCallConstructorAST\n";
+		return result;
+	}
 }

@@ -1,0 +1,22 @@
+Files edited to show AST:
+FileAST
+ClassAST kinda
+StatementAST no need to do statement, its just an abstraction
+NoteCallAST
+FunctionAST no need to do function, its just an abstraction
+methodCallAST think I finished it? don't know what it connects to
+GoToCallAST
+ForCallAST
+
+Stuff to add to Flow chart:
+	Under statement AST add:
+		SetCallConstructorAST
+		WhileCallAST
+		ComplainCallAST
+		ConstructorCallAST
+		FunctionCallAST
+		SetCallMethodAST
+		DefineCallAST Tried quickly but didnt finish
+		SetCallFunctionAST
+		IfCallAST
+		LabelCallAST

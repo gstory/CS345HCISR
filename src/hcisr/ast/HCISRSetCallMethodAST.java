@@ -64,4 +64,26 @@ public class HCISRSetCallMethodAST extends HCISRStatementAST{
 		varID = origin.varID;
 		funcID = (HCISRMethodCallAST)(origin.funcID.copyWithParameters(bindings));
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting SetCallMethodAST\n";
+		tabCount++;
+			for(int i=0; i< tabCount;i++)
+				result+="\t";
+			result+="Recieving variable: "+varID+"\n";
+			for(int i=0; i< tabCount;i++)
+				result+="\t";
+			result+="Set recieving variable to:\n";
+			tabCount++;
+				result+=funcID.toString(tabCount);
+			tabCount--;
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending SetCallMethodAST\n";
+		return result;
+	}
 }

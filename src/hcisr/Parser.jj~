@@ -191,7 +191,7 @@ String[] TIDENT() :
 HCISRFileAST FILE() :
 {HCISRFileAST f;}
 {
-    <this_file_describes> f = Fileh() {return f;}
+    (<this_file_describes> f = Fileh())* {return f;}
   
 
 }
@@ -461,7 +461,7 @@ Object[] Constructorid():
 
 //file -> function returns a function ast - done?
 HCISRFunctionFileAST Function():
-{HCISRVariableAST[] globalDataDeclaration; HCISRFunctionAST[] functionDeclarations;}
+{HCISRVariableAST[] globalDataDeclaration; HCISRFunctionAST[] functionDeclarations; }
 {
     globalDataDeclaration = Fdata()  functionDeclarations = Funcs()
 	{return new HCISRFunctionFileAST(globalDataDeclaration, functionDeclarations);}
