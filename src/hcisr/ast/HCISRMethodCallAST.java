@@ -72,31 +72,40 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-		//first, find the method to run
-		HCISRInstance calling;
-		if(specialVar[0]){
-			calling = hl.getLocation(arrayIndex[0]);
+		if(methodIndex==-1)
+		{
+			System.out.println("Undefined Method Call" );
+			System.exit(-1);
+			return(null);
 		}
-		else{
-			calling = sf.getLocation(arrayIndex[0]);
-		}
-		if(calling==null){
-			throw new NullPointerException("Variable " + argumentIDs[0] + " is null/Nothing.");
-		}
-		HCISRMethodAST toCall = calling.getHCISRClass().methodList[methodIndex];
-		//make a stack frame
-		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
-		//and add values to it
-		for(int i = 0;i<specialVar.length;i++){
-			if(specialVar[i]){
-				nsf.setLocation(hl.getLocation(arrayIndex[i]), i);
+		else
+		{	
+			//first, find the method to run
+			HCISRInstance calling;
+			if(specialVar[0]){
+				calling = hl.getLocation(arrayIndex[0]);
 			}
 			else{
-				nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
+				calling = sf.getLocation(arrayIndex[0]);
 			}
+			if(calling==null){
+				throw new NullPointerException("Variable " + argumentIDs[0] + " is null/Nothing.");
+			}
+			HCISRMethodAST toCall = calling.getHCISRClass().methodList[methodIndex];
+			//make a stack frame
+			HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
+			//and add values to it
+			for(int i = 0;i<specialVar.length;i++){
+				if(specialVar[i]){
+					nsf.setLocation(hl.getLocation(arrayIndex[i]), i);
+				}
+				else{
+					nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
+				}
+			}
+			//now run the function and return
+			return toCall.run(nsf);
 		}
-		//now run the function and return
-		return toCall.run(nsf);
 	}
 	
 	public HCISRMethodCallAST(String[] methodSignature){

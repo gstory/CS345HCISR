@@ -15,6 +15,7 @@ public class HCISRInterpreter{
 	public static final String iteratorLoc = "hcisr/lib/HCISRIterator.hcisr";
 	public static final String stdioLoc = "hcisr/lib/HCISRStandardOutput.hcisr";
 	public static final String usualMethLoc = "hcisr/lib/HCISRUsualMethods.hcisr";
+	public static Boolean verbose;
 	
 	HashMap<String,HCISRFileAST> loadedFiles = new HashMap<String,HCISRFileAST>();
 	Class ctu;
@@ -228,14 +229,16 @@ public class HCISRInterpreter{
 		
 		//now update the primitives, if necessary
 		fillInInitialFiles();
-		
-		System.out.println("<===============>Printing Out AST<===============>\n");
-		System.out.println(toRet.toString(0));
-		System.out.println("\n<===============>End of AST<===============>");
+		if(verbose){
+			System.out.println("<===============>Printing Out AST<===============>\n");
+			System.out.println(toRet.toString(0));
+			System.out.println("\n<===============>End of AST<===============>");
+		}
 		return toRet;
 	}
 	
-	public HCISRInterpreter(Class classToUse){
+	public HCISRInterpreter(Class classToUse, Boolean verbose1){
 		ctu = classToUse;
+		verbose = verbose1;
 	}
 }
