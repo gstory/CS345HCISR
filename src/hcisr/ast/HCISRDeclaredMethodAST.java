@@ -1,5 +1,7 @@
 package hcisr.ast;
 import hcisr.*;
+
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -89,6 +91,9 @@ public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 			for(int i=0; i < tabCount; i++)
 				result+="\t";
 			result+="Signature: "+Arrays.toString(sig)+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Type Restriction: "+Arrays.deepToString(typeRestrictions)+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

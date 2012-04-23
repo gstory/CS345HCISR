@@ -101,6 +101,22 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null};
 		HCISRDeclaredFunctionAST printlnMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		printlnMeth.setInstructions(stdioFuncs.printlnMeth);
+
+		//fill in String's blanks
+		HCISRStringDefinition stringMeths = new HCISRStringDefinition(intClass,booleanClass,stringClass);
+		//the method for charAt
+		signature = new String[]{"S","charAt","B"};
+		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
+		HCISRDeclaredMethodAST charAtMeth = (HCISRDeclaredMethodAST)(stringClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		charAtMeth.setInstructions(stringMeths.charAtMeth);
+
+		//the method for charAt
+		signature = new String[]{"S","concatenates","R"};
+		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"String"})};
+		HCISRDeclaredMethodAST concatenatesMeth = (HCISRDeclaredMethodAST)(stringClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		concatenatesMeth.setInstructions(stringMeths.concatenatesMeth);
+
+		
 		
 		//fill in integer's blanks
 		HCISRIntegerDefinition intMeths = new HCISRIntegerDefinition(intClass,booleanClass,stringClass);
@@ -128,6 +144,8 @@ public class HCISRInterpreter{
 		HCISRDeclaredMethodAST asStringMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		asStringMeth.setInstructions(intMeths.asStrMeth);
 		
+		
+		
 		//fill in boolean's blanks
 		HCISRBooleanDefinition boolMeths = new HCISRBooleanDefinition(booleanClass, stringClass);
 		//the method for as string
@@ -149,6 +167,7 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Boolean"})};
 		HCISRDeclaredMethodAST notMeth = (HCISRDeclaredMethodAST)(booleanClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		notMeth.setInstructions(boolMeths.notMeth);
+
 	}
 	
 	protected HCISRFileAST parseFile(String resourceName) throws IOException, ParseException{

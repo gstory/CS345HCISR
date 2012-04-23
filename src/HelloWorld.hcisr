@@ -9,7 +9,7 @@ this file describes a program
 define a String named HW which initially equals String:Hello World!
 define a Integer named Two which initially equals Integer: 2
 define a String named Three which initially equals String: Two
-set Two to Two + Two
+set Three to Three charAt Two
 println
 define a String named HWW which initially equals String:HOLY CRAP IT SHOOTS ROCKETS!
 print HWW
