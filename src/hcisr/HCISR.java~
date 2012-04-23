@@ -1826,6 +1826,7 @@ public class HCISR implements HCISRConstants {
       case and_in_the_event_of_a:
       case the_following_functions_make_use_of:
       case NUMS:
+
       case LP:
       case RP:
       case CHARS:
@@ -1844,6 +1845,8 @@ public class HCISR implements HCISRConstants {
     }
     NL();
                 methodSignature = sig.toArray(new String[sig.size()]);
+//for( int i = 0; i < sig.size(); i++ ) System.out.print(methodSignature[i] + " ");
+//System.out.println();
                 {if (true) return new HCISRMethodCallAST(methodSignature);}
     throw new Error("Missing return statement in function");
   }
@@ -2111,13 +2114,22 @@ public class HCISR implements HCISRConstants {
     case a_Program:
     case TO:
     case TRUE:
+	f = jj_consume_token(TRUE);
+	definecallreturn = new HCISRDefineCallAST(new String[]{"Boolean"}, e.image, f.image, 4);
+	break;
     case FALSE:
+	f = jj_consume_token(FALSE);
+	definecallreturn = new HCISRDefineCallAST(new String[]{"Boolean"}, e.image, f.image, 4);
+	break;
     case DO:
     case THEN:
     case IN:
     case AS:
     case WITH:
     case STRINGREF:
+	s = String();
+	definecallreturn = new HCISRDefineCallAST(new String[]{"String"}, e.image, s, 0);
+	break;
    //GS
     case INTREF:
 	s = Int();
@@ -2125,8 +2137,17 @@ public class HCISR implements HCISRConstants {
 	definecallreturn = new HCISRDefineCallAST(new String[]{"Integer"}, e.image, s, 1);
 	break;
     case FLOATREF:
+	s = Float();
+	definecallreturn = new HCISRDefineCallAST(new String[]{"Float"}, e.image, s, 2);
+	break;
     case FUNCTIONREF:
+	s = Functioninit();
+	definecallreturn = new HCISRDefineCallAST(new String[]{"Function"}, e.image, s, 3);
+	break;
     case BOOLREF:
+	s = Bool();
+	definecallreturn = new HCISRDefineCallAST(new String[]{"Boolean"}, e.image, s, 4);
+	break;
     case and_in_the_event_of_a:
     case the_following_functions_make_use_of:
 //GS
@@ -2135,6 +2156,8 @@ public class HCISR implements HCISRConstants {
 	definecallreturn = new HCISRDefineCallAST(new String[]{"Integer"}, e.image, f.image, 1);
 	break;
     case LP:
+      functioncallreturn = Functioncall();
+      break;
     case RP:
     case CHARS:
       functioncallreturn = Functioncall();
@@ -2149,7 +2172,7 @@ public class HCISR implements HCISRConstants {
     } 
                 if (methodcallreturn != null) {if (true) return new HCISRSetCallMethodAST(e.image, methodcallreturn);}
            else if (functioncallreturn != null) {if (true) return new HCISRSetCallFunctionAST(e.image, functioncallreturn);}
-           else if (constructorcallreturn != null) { NL(); if (true) return new HCISRSetCallConstructorAST(e.image, constructorcallreturn);}
+           else if (constructorcallreturn != null) {if (true) return new HCISRSetCallConstructorAST(e.image, constructorcallreturn);}
 	   else if (definecallreturn != null) { NL(); if (true) return definecallreturn;}
     throw new Error("Missing return statement in function");
   }
@@ -2534,6 +2557,7 @@ public class HCISR implements HCISRConstants {
  ArrayList<String> methodSignature; String s; Token e;
          methodSignature = new ArrayList<String>();
     s = Anyfirst();
+System.out.println(s);
                    methodSignature.add(s);
     label_22:
     while (true) {

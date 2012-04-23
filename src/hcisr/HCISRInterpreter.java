@@ -89,7 +89,7 @@ public class HCISRInterpreter{
 		signature = new String[]{"println"};
 		argumentTypes = new VariableLocationDescription[]{null};
 		HCISRDeclaredFunctionAST printlnMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
-		printlnMeth.setInstructions(stdioFuncs.printlnMeth);
+		printlnMeth.setInstructions(stdioFuncs.printlnMeth);	
 
 		//fill in String's blanks
 		HCISRStringDefinition stringMeths = new HCISRStringDefinition(intClass,booleanClass,stringClass);
@@ -116,6 +116,7 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		addMeth.setInstructions(intMeths.addMeth);
+
 
 		//the method for subtract
 
@@ -149,7 +150,7 @@ public class HCISRInterpreter{
 		HCISRDeclaredMethodAST gtMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		gtMeth.setInstructions(intMeths.gtMeth);
 		//the method for is equal
-		signature = new String[]{"I","=","B"};
+		signature = new String[]{"I","==","B"};
 		HCISRDeclaredMethodAST eqMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		eqMeth.setInstructions(intMeths.eqlMeth);
 		//the method for as string

@@ -5,6 +5,7 @@ import hcisr.HCISRHeapLocation;
 import hcisr.HCISRInstance;
 import hcisr.HCISRStackFrame;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,10 +14,7 @@ import java.util.Iterator;
 public class HCISRMethodCallAST extends HCISRStatementAST{
 	//the method signature
 	protected String[] argumentIDs;
-<<<<<<< HEAD
-=======
 	HCISRClassAST callingClass;
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
 	
 	//where inside the class for the calling object is the definition of the method
 	protected int methodIndex;
@@ -54,11 +52,7 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 		}
 		//first, find the type of the calling variable
 		String[] callingType = argumentTypes[0].typeNm;
-<<<<<<< HEAD
-		HCISRClassAST callingClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
-=======
 		callingClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
 		if(callingClass.isTemplate()){
 			callingClass = callingClass.getParameterizedClass(callingType);
 		}
@@ -80,19 +74,23 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 	}
 	
 	public HCISRInstance run(HCISRStackFrame sf,HCISRHeapLocation hl) throws HCISRException{
-<<<<<<< HEAD
-		//first, find the method to run
-		HCISRInstance calling;
-		if(specialVar[0]){
-			calling = hl.getLocation(arrayIndex[0]);
+		//HCISRClassAST calling = callingClass;
+		if(methodIndex==-1)
+		{
+			System.out.println("Undefined Method Call" );
+			System.exit(-1);
+			return(null);
 		}
+/*
 		else{
 			calling = sf.getLocation(arrayIndex[0]);
 		}
+
 		if(calling==null){
 			throw new NullPointerException("Variable " + argumentIDs[0] + " is null/Nothing.");
 		}
-System.out.println(" " + calling.getHCISRClass());
+//System.out.println(" " + calling.getHCISRClass());
+*/
 		HCISRMethodAST toCall = calling.getHCISRClass().methodList[methodIndex];
 		//make a stack frame
 		HCISRStackFrame nsf = new HCISRStackFrame(toCall.getStackSize());
@@ -100,19 +98,6 @@ System.out.println(" " + calling.getHCISRClass());
 		for(int i = 0;i<specialVar.length;i++){
 			if(specialVar[i]){
 				nsf.setLocation(hl.getLocation(arrayIndex[i]), i);
-			}
-			else{
-				nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
-			}
-		}
-		//now run the function and return
-		return toCall.run(nsf);
-=======
-		if(methodIndex==-1)
-		{
-			System.out.println("Undefined Method Call" );
-			System.exit(-1);
-			return(null);
 		}
 		else
 		{	
@@ -120,6 +105,7 @@ System.out.println(" " + calling.getHCISRClass());
 			HCISRInstance calling;
 			if(specialVar[0]){
 				calling = hl.getLocation(arrayIndex[0]);
+
 			}
 			else{
 				calling = sf.getLocation(arrayIndex[0]);
@@ -138,18 +124,16 @@ System.out.println(" " + calling.getHCISRClass());
 				else{
 					nsf.setLocation(sf.getLocation(arrayIndex[i]), i);
 				}
-			}
+			}}
 			//now run the function and return
 			return toCall.run(nsf);
-		}
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
+		
 	}
 	
 	public HCISRMethodCallAST(String[] methodSignature){
 		argumentIDs = methodSignature;
 	}
-<<<<<<< HEAD
-=======
+
 	
 	public String toString(int tabCount){
 		String result="";
@@ -159,6 +143,15 @@ System.out.println(" " + calling.getHCISRClass());
 		tabCount++;
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
+			result+= "Method Index:"+methodIndex+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+<<<<<<< HEAD
+=======
+			result+= "Argument IDs:"+Arrays.toString(argumentID)+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+>>>>>>> 11e4a86c4e4c74c69fa9747a3417404c32ca274f
 			result+= "Class:\n";
 			tabCount++;
 				result+= callingClass.toString(tabCount);
@@ -169,5 +162,5 @@ System.out.println(" " + calling.getHCISRClass());
 		result += "Ending MethodCallAST\n";
 		return result;
 	}
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
+
 }

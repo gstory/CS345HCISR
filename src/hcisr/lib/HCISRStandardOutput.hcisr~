@@ -8,6 +8,18 @@ print S ( String )
 print I ( Integer )
 	returns Nothing
 .
+print B ( Boolean )
+	returns Nothing
+.
 println
+	returns Nothing
+.
+println S ( String )
+	returns Nothing
+.
+println I ( Integer )
+	returns Nothing
+.
+println B ( Boolean )
 	returns Nothing
 .

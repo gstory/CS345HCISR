@@ -90,12 +90,29 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null};
 		HCISRDeclaredFunctionAST printlnMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		printlnMeth.setInstructions(stdioFuncs.printlnMeth);
+/*
+		signature = new String[]{"println","S"};
+		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String"})};
+		HCISRDeclaredFunctionAST printMeth4 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
+		printMeth4.setInstructions(stdioFuncs.printLnMeth);
+
+		signature = new String[]{"println","I"};
+		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
+		HCISRDeclaredFunctionAST printMeth5 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
+		printMeth5.setInstructions(stdioFuncs.printLnMeth);
+
+		signature = new String[]{"println","B"};
+		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Boolean"})};
+		HCISRDeclaredFunctionAST printMeth6 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
+		printMeth6.setInstructions(stdioFuncs.printLnMeth);
+*/
+		
 
 		//fill in String's blanks
 		HCISRStringDefinition stringMeths = new HCISRStringDefinition(intClass,booleanClass,stringClass);
 		//the method for charAt
 		signature = new String[]{"S","charAt","B"};
-		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"String"})};
+		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST charAtMeth = (HCISRDeclaredMethodAST)(stringClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		charAtMeth.setInstructions(stringMeths.charAtMeth);
 
@@ -116,16 +133,15 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		addMeth.setInstructions(intMeths.addMeth);
-<<<<<<< HEAD
-		//the method for sub
-=======
+
+
 		//the method for subtract
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
+
 		signature = new String[]{"I","-","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST subMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		subMeth.setInstructions(intMeths.subMeth);
-<<<<<<< HEAD
+
 		//the method for mult
 		signature = new String[]{"I","*","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
@@ -141,8 +157,7 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST modMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		modMeth.setInstructions(intMeths.modMeth);
-=======
->>>>>>> 9afa472e9b7dca567fe06f1ec546f53ea77b3c49
+
 		//the method for less than
 		signature = new String[]{"I","<","B"};
 		HCISRDeclaredMethodAST ltMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
@@ -152,7 +167,7 @@ public class HCISRInterpreter{
 		HCISRDeclaredMethodAST gtMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		gtMeth.setInstructions(intMeths.gtMeth);
 		//the method for is equal
-		signature = new String[]{"I","=","B"};
+		signature = new String[]{"I","==","B"};
 		HCISRDeclaredMethodAST eqMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		eqMeth.setInstructions(intMeths.eqlMeth);
 		//the method for as string

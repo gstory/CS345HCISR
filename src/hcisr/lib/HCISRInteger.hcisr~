@@ -3,9 +3,6 @@ this file describes a class
 .
 external type Integer is a subtype of Object
 	and an instance I understands the following commands
-		I 
-			returns Integer
-		.
 		I as integer
 			returns Integer
 		.

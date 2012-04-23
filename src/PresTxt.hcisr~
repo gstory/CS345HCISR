@@ -1,0 +1,30 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+	this file uses hcisr/lib/HCISRInt.hcisr
+.
+
+define a Integer named TestOne which initially equals Integer: 1
+define a Integer named TestTwo which initially equals Integer: 2
+define a Integer named TestThree
+set TestThree to TestOne + TestTwo
+print TestThree
+println
+
+define a String named StringTestOne which initially equals String:Nothing
+define a String named StringTestTwo which initially equals String:Nothing
+define a Integer named TestFive which initially equals Integer: 5
+set StringTestOne to TestFive as string
+set StringTestTwo to StringTestOne concatenates StringTestOne
+print StringTestOne
+println
+print StringTestTwo
+println
+
+define a Integer named TestEight
+set TestEight to 8
+print TestEight

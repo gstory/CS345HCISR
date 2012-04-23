@@ -53,4 +53,11 @@ println
 define a Boolean named B1 which initially equals Boolean: true
 print B1
 println
+println
+println
+set S1 to String:asdf
+print S1
+println	.
 
+print B
+println

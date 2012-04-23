@@ -21,7 +21,7 @@ external type Integer is a subtype of Object
 		I % B ( Integer )
 			returns Integer
 		.
-		I = B ( Integer )
+		I == B ( Integer )
 			returns Boolean
 		.
 		I < B ( Integer )
