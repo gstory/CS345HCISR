@@ -89,7 +89,10 @@ public class HCISRDefinedMethodAST extends HCISRMethodAST{
 		tabCount++;
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
-			result+= "Method signature: "+sig+"\n";
+			result+= "Method signature: "+Arrays.toString(sig)+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Type Restrictions: "+Arrays.toString(typeRestrictions)+"\n";
 			if(!isDefined) result+=code.toString(tabCount);
 		tabCount--;
 		for(int i=0; i < tabCount; i++)

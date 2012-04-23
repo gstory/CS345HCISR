@@ -5,6 +5,7 @@ import hcisr.HCISRHeapLocation;
 import hcisr.HCISRInstance;
 import hcisr.HCISRStackFrame;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -122,6 +123,9 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
 			result+= "Method Index:"+methodIndex+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Argument IDs:"+Arrays.toString(argumentIDs)+"\n";
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
 			result+= "Class:\n";
