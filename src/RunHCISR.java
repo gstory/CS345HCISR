@@ -24,6 +24,7 @@ public class RunHCISR{
 			System.out.println("Usage is java RunHCISR <file.name.hcisr> <options>");
 			System.out.println("Current options are:");
 			System.out.println("\t-v for verbose (prints out AST)");
+			System.out.println("\t-vv for very verbose (prints out AST and all linked classes)");
 			System.out.println("\t-q for quiet (opposite of verbose: default)");
 		}
 		else{
