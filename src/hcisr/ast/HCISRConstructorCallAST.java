@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-//this class represents a function call
+//this class represents a Constructor call
 public class HCISRConstructorCallAST extends HCISRStatementAST{
 	//the function signature
 	public String[] argumentIDs; //includes typeID
@@ -112,7 +112,7 @@ public class HCISRConstructorCallAST extends HCISRStatementAST{
 			result +="\t";
 		result+= "Starting ConstructorCallAST\n";
 		tabCount++;
-		//Add sub information here
+			result+=toCall.toString(tabCount);
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

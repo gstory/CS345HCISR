@@ -18,5 +18,4 @@ public abstract class HCISRMethodAST implements HCISRRunnable{
 	public abstract HCISRMethodAST copyWithParameters(HashMap<String,String[]> bindings);
 	public abstract void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST callingClass);
 	public abstract String[] getReturnType();
-	public abstract String toString();
 }

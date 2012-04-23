@@ -13,6 +13,7 @@ import java.util.Iterator;
 public class HCISRMethodCallAST extends HCISRStatementAST{
 	//the method signature
 	protected String[] argumentIDs;
+	HCISRClassAST callingClass;
 	
 	//where inside the class for the calling object is the definition of the method
 	protected int methodIndex;
@@ -50,7 +51,7 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 		}
 		//first, find the type of the calling variable
 		String[] callingType = argumentTypes[0].typeNm;
-		HCISRClassAST callingClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
+		callingClass = HCISRFileAST.findBaseClass(imports, callingType[0]);
 		if(callingClass.isTemplate()){
 			callingClass = callingClass.getParameterizedClass(callingType);
 		}
@@ -116,9 +117,17 @@ public class HCISRMethodCallAST extends HCISRStatementAST{
 		String result="";
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result+= "Starting MethodCallAST with method index: "+methodIndex+"\n";
+		result+= "Starting MethodCallAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Method Index:"+methodIndex+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Class:\n";
+			tabCount++;
+				result+= callingClass.toString(tabCount);
+			tabCount--;		
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

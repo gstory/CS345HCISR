@@ -6,15 +6,19 @@ import java.lang.*;
 public class RunHCISR{
 	public static void main(String[] args) throws ParseException,IOException,HCISRException{		
 		String loc=null;
-		Boolean verbose = false;		
+		int verbose = 0;		
 		for(int i=0; i<args.length;i++)
 		{
 			if(args[i].contains(".hcisr")) loc = args[i];
+			if(args[i].compareTo("-vv")==0) {
+				System.out.println("Very Verbose Output On");
+				verbose = 2;
+			}
 			if(args[i].compareTo("-v")==0) {
 				System.out.println("Verbose Output On");
-				verbose = true;
+				verbose = 1;
 			}
-			if(args[i].compareTo("-q")==0) verbose = false;
+			if(args[i].compareTo("-q")==0) verbose = 0;
 		}
 		if(loc==null){
 			System.out.println("Usage is java RunHCISR <file.name.hcisr> <options>");

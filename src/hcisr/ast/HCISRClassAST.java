@@ -773,7 +773,7 @@ public class HCISRClassAST{
 		String result="";
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result+="Starting ClassAST: name is "+getFullName() +" and type: ";
+		result+="Starting ClassAST: type: ";
 		if(classType==0){
 			result+="normal class\n";
 		}
@@ -784,7 +784,30 @@ public class HCISRClassAST{
 			result+="external class\n";
 		}
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i<tabCount; i++)
+				result+="\t";
+			result+="Type name: "+Arrays.toString(typeName)+"\n";
+			for(int i=0; i<tabCount; i++)
+				result+="\t";
+			result+="Variable List:\n";
+			tabCount++;
+				for(int i=0; i<variableList.length;i++)
+					result+= variableList[i].toString(tabCount);
+			tabCount--;
+			for(int i=0; i<tabCount; i++)
+				result+="\t";
+			result+="Method List:\n";
+			tabCount++;
+				for(int i=0; i<methodList.length;i++)
+					result+=methodList[i].toString(tabCount);
+			tabCount--;
+			for(int i=0; i<tabCount; i++)
+				result+="\t";
+			result+="Constructor List:\n";
+			tabCount++;
+				for(int i=0; i<constructorList.length;i++)
+					result+= constructorList[i].toString(tabCount);
+			tabCount--;
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

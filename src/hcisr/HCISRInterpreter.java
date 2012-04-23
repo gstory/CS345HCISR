@@ -15,7 +15,7 @@ public class HCISRInterpreter{
 	public static final String iteratorLoc = "hcisr/lib/HCISRIterator.hcisr";
 	public static final String stdioLoc = "hcisr/lib/HCISRStandardOutput.hcisr";
 	public static final String usualMethLoc = "hcisr/lib/HCISRUsualMethods.hcisr";
-	public static Boolean verbose;
+	public static int verbose;
 	
 	HashMap<String,HCISRFileAST> loadedFiles = new HashMap<String,HCISRFileAST>();
 	Class ctu;
@@ -229,15 +229,25 @@ public class HCISRInterpreter{
 		
 		//now update the primitives, if necessary
 		fillInInitialFiles();
-		if(verbose){
+		if(verbose>0){
 			System.out.println("<===============>Printing Out AST<===============>\n");
 			System.out.println(toRet.toString(0));
 			System.out.println("\n<===============>End of AST<===============>");
+			if(verbose>1){
+				System.out.println("\n<===============>Linked Methods<===============>");
+				int index=0;
+				for(HCISRFileAST f:loadedFiles.values()){
+					System.out.println("Linked File with index of: "+index);
+					index++;
+					System.out.println(f.toString(0));
+				}
+				System.out.println("\n<===============>End of Methods<===============>");
+			}
 		}
 		return toRet;
 	}
 	
-	public HCISRInterpreter(Class classToUse, Boolean verbose1){
+	public HCISRInterpreter(Class classToUse, int verbose1){
 		ctu = classToUse;
 		verbose = verbose1;
 	}

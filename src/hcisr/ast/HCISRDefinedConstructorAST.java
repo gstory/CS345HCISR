@@ -6,6 +6,7 @@ import hcisr.HCISRStackFrame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Arrays;
 
 //this class represents a defined constructor
 public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
@@ -89,7 +90,9 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 			result +="\t";
 		result+= "Starting DefinedConstructorAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0;i <tabCount;i++)
+				result+="\t";
+			result+="Signature for construct: "+Arrays.toString(sig)+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

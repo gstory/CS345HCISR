@@ -89,11 +89,13 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 			result +="\t";
 		result+= "Starting DefinedConstructorAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0;i <tabCount;i++)
+				result+="\t";
+			result+="Signature for construct: "+Arrays.toString(sig)+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending DefinedConstructorAST\n"
+		result += "Ending DefinedConstructorAST\n";
 		return result;
 	}
 }

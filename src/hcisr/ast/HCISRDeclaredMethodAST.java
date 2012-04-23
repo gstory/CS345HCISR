@@ -1,6 +1,7 @@
 package hcisr.ast;
 import hcisr.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 //this class represents a declared method (abstract or external)
@@ -85,7 +86,9 @@ public class HCISRDeclaredMethodAST extends HCISRMethodAST{
 			result +="\t";
 		result+= "Starting DeclaredMethodAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result+="\t";
+			result+="Signature: "+Arrays.toString(sig)+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

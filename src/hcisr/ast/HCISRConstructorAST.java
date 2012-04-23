@@ -19,4 +19,5 @@ public abstract class HCISRConstructorAST implements HCISRRunnable{
 	public abstract void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses);
 	public abstract HCISRConstructorAST copyWithParameters(HashMap<String,String[]> bindings);
 	public abstract void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> classVars,HCISRClassAST toCreate);
+	public abstract String toString(int tabCount);
 }

@@ -233,12 +233,20 @@ public class HCISRInterpreter{
 			System.out.println("<===============>Printing Out AST<===============>\n");
 			System.out.println(toRet.toString(0));
 			System.out.println("\n<===============>End of AST<===============>");
+			System.out.println("\n<===============>Linked Methods<===============>");
+			int index=0;
+			for(HCISRFileAST f:loadedFiles.values()){
+				System.out.println("Linked File with index of: "+index);
+				index++;
+				System.out.println(f.toString(0));
+			}
+			System.out.println("\n<===============>End of Methods<===============>");
 		}
 		return toRet;
 	}
 	
-	public HCISRInterpreter(Class classToUse, Boolean verbose1){
+	public HCISRInterpreter(Class classToUse, int verbose1){
 		ctu = classToUse;
-		verbose = verbose1
+		verbose = verbose1;
 	}
 }
