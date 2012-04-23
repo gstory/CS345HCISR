@@ -70,7 +70,15 @@ public class HCISRSetCallConstructorAST extends HCISRStatementAST{
 			result +="\t";
 		result+= "Starting SetCallConstructorAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Variable being set: "+varID+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Value its being set to:\n";
+			tabCount++;
+				result+=funcID.toString(tabCount);
+			tabCount--;
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

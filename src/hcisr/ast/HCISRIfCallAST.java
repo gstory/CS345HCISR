@@ -148,7 +148,7 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
 			result+= "Starting True Clause Statements\n";
-			/*tabCount++;
+			tabCount++;
 				for(int i =0; i< trueComs.length;i++)
 					result+=trueComs[i].toString(tabCount);
 			tabCount--;
@@ -165,7 +165,6 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 			for(int i=0; i < tabCount; i++)
 				result +="\t";
 			result+= "Ending False Clause Statements\n";
-			*/
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

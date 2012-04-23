@@ -60,7 +60,9 @@ public class HCISRComplainCallAST extends HCISRStatementAST{
 			result +="\t";
 		result+= "Starting ComplainCallAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Error ID: "+errorID+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

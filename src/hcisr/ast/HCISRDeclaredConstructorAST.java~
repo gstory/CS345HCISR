@@ -76,11 +76,13 @@ public class HCISRDeclaredConstructorAST extends HCISRConstructorAST{
 			result +="\t";
 		result+= "Starting DeclaredConstructorAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Signature: "+Arrays.toString(sig)+"\n";	
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending DeclaredConstructorAST\n"
+		result += "Ending DeclaredConstructorAST\n";
 		return result;
 	}
 }

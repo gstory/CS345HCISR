@@ -49,9 +49,17 @@ public class HCISRGoToCallAST extends HCISRStatementAST{
 		String result="";
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result+= "Starting GoToCallAST which goes to: "+toGoTo+"\n";
+		result+= "Starting GoToCallAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "The line to go to is: "+statementIndex+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "The Statement to go to:\n";
+			tabCount++;
+				result+=toGoTo.toString(tabCount);
+			tabCount--;
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

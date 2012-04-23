@@ -64,7 +64,7 @@ public class HCISRComplainCallAST extends HCISRStatementAST{
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending ComplainCallAST\n"
+		result += "Ending ComplainCallAST\n";
 		return result;
 	}
 }

@@ -94,7 +94,7 @@ public class HCISRVariableAST{
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending VariableAST\n"
+		result += "Ending VariableAST\n";
 		return result;
 	}
 }

@@ -74,11 +74,17 @@ public class HCISRReturnsClauseAST{
 			result +="\t";
 		result+= "Starting ReturnsClauseAST\n";
 		tabCount++;
-		//Add sub information here
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Return Variable: "+retVar+"\n";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Return Type: "+Arrays.toString(retType)+"\n";
+		
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending ReturnsClauseAST\n"
+		result += "Ending ReturnsClauseAST\n";
 		return result;
 	}
 }

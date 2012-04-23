@@ -55,7 +55,7 @@ public class HCISRGoToCallAST extends HCISRStatementAST{
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending GoToCallAST\n"
+		result += "Ending GoToCallAST\n";
 		return result;
 	}
 }

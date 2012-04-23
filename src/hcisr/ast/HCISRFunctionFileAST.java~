@@ -67,11 +67,24 @@ public class HCISRFunctionFileAST implements HCISRHeapLocation{
 			result +="\t";
 		result+= "Starting FunctionFileAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Functions Variables:\n";
+			tabCount++;
+				for(int i=0; i < functionGlobalData.length; i++)
+					result+=functionGlobalData[i].toString(tabCount);
+			tabCount--;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Functions:\n";
+			tabCount++;
+				for(int i=0; i < functions.length; i++)
+					result+=functions[i].toString(tabCount);
+			tabCount--;
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result += "Ending FunctionFileAST\n"
+		result += "Ending FunctionFileAST\n";
 		return result;
 	}
 }

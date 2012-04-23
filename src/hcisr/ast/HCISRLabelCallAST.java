@@ -43,9 +43,11 @@ public class HCISRLabelCallAST extends HCISRStatementAST{
 		String result="";
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
-		result+= "Starting LabelCallAST with label name: "+name+"\n";
+		result+= "Starting LabelCallAST:\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Label Name: "+name+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

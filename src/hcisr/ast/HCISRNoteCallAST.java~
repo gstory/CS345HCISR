@@ -30,7 +30,9 @@ public class HCISRNoteCallAST extends HCISRStatementAST{
 			result +="\t";
 		result+= "Starting NoteCallAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "A comment which does not get put on the AST\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";

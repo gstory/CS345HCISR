@@ -90,7 +90,12 @@ public class HCISRVariableAST{
 			result +="\t";
 		result+= "Starting VariableAST\n";
 		tabCount++;
-		//Add sub information here
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Name: "+name+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Type: "+Arrays.toString(type)+"\n";
 		tabCount--;
 		for(int i=0; i < tabCount; i++)
 			result +="\t";
