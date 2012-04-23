@@ -4,13 +4,13 @@ import hcisr.ast.*;
 
 //a collection of external methods for booleans
 public class HCISRBooleanDefinition{
-	public HCISRExternalCodeBlock asStrMeth;
+	public HCISRExternalCodeBlock boolAsString;
 	public HCISRExternalCodeBlock andMeth;
 	public HCISRExternalCodeBlock orMeth;
 	public HCISRExternalCodeBlock notMeth;
 	
 	public HCISRBooleanDefinition(HCISRClassAST booleanClass, HCISRClassAST stringClass){
-		asStrMeth = new HCISRBooleanAsString(stringClass);
+		boolAsString = new HCISRBooleanAsString(stringClass);
 		andMeth = new HCISRBooleanAnd(booleanClass);
 		orMeth = new HCISRBooleanOr(booleanClass);
 		notMeth = new HCISRBooleanNot(booleanClass);

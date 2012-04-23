@@ -93,7 +93,7 @@ public class HCISRFileAST implements HCISRRunnable{
 		return callingClass.findMatchingMethodLocation(imports, signature, argumentTypes);
 	}
 	
-	public static HCISRFunctionAST findFuntion(HashMap<String,HCISRFileAST> imports, String[] signature,VariableLocationDescription[] argumentTypes){
+	public static HCISRFunctionAST findFunction(HashMap<String,HCISRFileAST> imports, String[] signature,VariableLocationDescription[] argumentTypes){
 		//collect all functions
 		ArrayList<HCISRFunctionAST> possible = new ArrayList<HCISRFunctionAST>();
 		for(HCISRFileAST file : imports.values()){
@@ -192,9 +192,11 @@ public class HCISRFileAST implements HCISRRunnable{
 		}
 		//there is only one match
 		if(possible.size() == 1){
+//System.out.println("+"+possible.get(0));(possible.get(0)).print();
 			return possible.get(0);
 		}
-		else{
+		else{  
+//System.out.println("-"+possible.size());
 			return null;
 			//there is an error, throw exception
 		}

@@ -12,6 +12,6 @@ public class HCISRInstanceIntegerVars implements HCISRInstanceMoreVars{
 	}
 
 	public String toString(){
-		return ""+Integer.parseInt(value);
+		return ""+value;
 	}
 }

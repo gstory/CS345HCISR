@@ -15,6 +15,9 @@ external type Boolean is a subtype of Object
 		B as string
 			returns String
 		.
+		print B
+			returns Nothing
+		.
 		B initialize boolean
 			returns Nothing
 		.

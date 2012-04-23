@@ -62,7 +62,7 @@ public class HCISRInterpreter{
 		//the function to compare identity
 		signature = new String[]{"are","A","and","B","the","same"};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,new VariableLocationDescription(false,0,new String[]{"Object"}),null,null};
-		HCISRDeclaredFunctionAST iequalsMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
+		HCISRDeclaredFunctionAST iequalsMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		iequalsMeth.setInstructions(usualMeths.identityEqualsMeth);
 		
 		//fill in standard output's blanks
@@ -72,21 +72,33 @@ public class HCISRInterpreter{
 //SO CONFUSED
 		signature = new String[]{"print","S"};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String"})};
-		HCISRDeclaredFunctionAST printMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
+//System.out.print("+");
+		HCISRDeclaredFunctionAST printMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		printMeth.setInstructions(stdioFuncs.printMeth);
 
 		signature = new String[]{"print","I"};
 		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String"}), new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
+//System.out.print("+");
 		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String", "Integer"})};
-		HCISRDeclaredFunctionAST printMeth2 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
+		HCISRDeclaredFunctionAST printMeth2 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		printMeth2.setInstructions(stdioFuncs.printMeth);
+
+		signature = new String[]{"print","B"};
+		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String"}), new VariableLocationDescription(false,0,new String[]{"Integer"})};
+		argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"Boolean"})};
+		//argumentTypes = new VariableLocationDescription[]{null,new VariableLocationDescription(false,0,new String[]{"String", "Integer"})};
+		HCISRDeclaredFunctionAST printMeth3 = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
+//System.out.println(printMeth2);
+//System.out.println(loadedFiles.size());
+//for( HCISRFileAST a : loadedFiles.values() ) System.out.println(a.getParameterizedClass(a.getDefinedClass()));
+		printMeth3.setInstructions(stdioFuncs.printMeth);
 
 
 		//the function to println
 		signature = new String[]{"println"};
 		argumentTypes = new VariableLocationDescription[]{null};
-		HCISRDeclaredFunctionAST printlnMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFuntion(loadedFiles, signature, argumentTypes));
+		HCISRDeclaredFunctionAST printlnMeth = (HCISRDeclaredFunctionAST)(HCISRFileAST.findFunction(loadedFiles, signature, argumentTypes));
 		printlnMeth.setInstructions(stdioFuncs.printlnMeth);
 		
 		//fill in integer's blanks
@@ -116,7 +128,12 @@ public class HCISRInterpreter{
 		asStringMeth.setInstructions(intMeths.asStrMeth);
 		
 		//fill in boolean's blanks
-		HCISRBooleanDefinition boolMeths = new HCISRBooleanDefinition(booleanClass);
+		HCISRBooleanDefinition boolMeths = new HCISRBooleanDefinition(booleanClass, stringClass);
+		//the method for as string
+		signature = new String[]{"B","as","string"};
+		argumentTypes = new VariableLocationDescription[]{null,null,null};
+		HCISRDeclaredMethodAST boolAsStringMeth = (HCISRDeclaredMethodAST)(booleanClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
+		boolAsStringMeth.setInstructions(boolMeths.asStrMeth);
 		//the method for and
 		signature = new String[]{"B","&","A"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Boolean"})};
@@ -134,6 +151,7 @@ public class HCISRInterpreter{
 	}
 	
 	protected HCISRFileAST parseFile(String resourceName) throws IOException, ParseException{
+//System.out.println(resourceName);
 		//first load in the main file (that will be returned)
 		URL floc = ctu.getResource(resourceName);
 		if(floc == null){
@@ -182,7 +200,7 @@ public class HCISRInterpreter{
 				}
 			}
 		}
-		
+//System.out.println(loadedFiles.size());
 		//now run through anything that's not a template and look for parameterized types
 		ArrayList<HCISRClassAST> toFurtParam = new ArrayList<HCISRClassAST>();
 		for(HCISRFileAST f:loadedFiles.values()){
