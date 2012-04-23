@@ -1,0 +1,19 @@
+this file describes a program
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRString.hcisr
+	this file uses hcisr/lib/HCISRStandardOutput.hcisr
+.
+define a String named HW which initially equals String:Hello World!
+define a Integer named Two which initially equals Integer: 2
+define a String named Three which initially equals String: Two
+set Two to Two + 5
+println
+define a String named HWW which initially equals String:HOLY CRAP IT SHOOTS ROCKETS!
+print HWW
+println
+define a String named HM which initially equals String:!CACA SANTA LANZA COHETES!
+print HM
+println

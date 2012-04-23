@@ -92,4 +92,31 @@ public class HCISRCatchClauseAST{
 		}
 		toReturn = origin.toReturn.copyWithParameters(bindings);
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting CatchClauseAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+="Error type: "+Arrays.toString(errType)+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+="Error Variable: "+errVar+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+="List of comands to do:\n";
+			tabCount++;
+				for(int i=0; i<toDo.length;i++)
+					result+=toDo[i].toString(tabCount);			
+			tabCount--;
+			result+=toReturn.toString(tabCount);
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending CatchClauseAST\n";
+		return result;
+	}
 }

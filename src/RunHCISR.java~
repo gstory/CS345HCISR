@@ -1,0 +1,38 @@
+import hcisr.*;
+import hcisr.ast.*;
+import java.io.*;
+import java.lang.*;
+
+public class RunHCISR{
+	public static void main(String[] args) throws ParseException,IOException,HCISRException{		
+		String loc=null;
+		int verbose = 0;		
+		for(int i=0; i<args.length;i++)
+		{
+			if(args[i].contains(".hcisr")) loc = args[i];
+			if(args[i].compareTo("-vv")==0) {
+				System.out.println("Very Verbose Output On");
+				verbose = 2;
+			}
+			if(args[i].compareTo("-v")==0) {
+				System.out.println("Verbose Output On");
+				verbose = 1;
+			}
+			if(args[i].compareTo("-q")==0) verbose = 0;
+		}
+		if(loc==null){
+			System.out.println("Usage is java RunHCISR <file.name.hcisr> <options>");
+			System.out.println("Current options are:");
+			System.out.println("\t-v for verbose (prints out AST)");
+			System.out.println("\t-vv for very verbose (prints out AST and all attached classes");
+			System.out.println("\t-q for quiet (opposite of verbose: default)");
+		}
+		else{
+			RunHCISR toGetClass = new RunHCISR();
+			Class ctu = toGetClass.getClass();
+			HCISRInterpreter interpreter = new HCISRInterpreter(ctu, verbose);
+			HCISRFileAST toRun = interpreter.loadFile(loc);
+			interpreter.runProgram(toRun);
+		}
+	}
+}

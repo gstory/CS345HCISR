@@ -22,4 +22,21 @@ public class HCISRNoteCallAST extends HCISRStatementAST{
 	public HCISRNoteCallAST(){
 		
 	}
+	
+	//function added to help print out AST TC
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting NoteCallAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "A comment which gets put on the AST for some reason, although it doesn't hold any data\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending NoteCallAST\n";
+		return result;
+	}
 }

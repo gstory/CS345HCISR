@@ -5,6 +5,7 @@ import hcisr.HCISRInstance;
 import hcisr.HCISRStackFrame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 //this class represents a filled in function
@@ -50,5 +51,21 @@ public class HCISRDefinedFunctionAST extends HCISRFunctionAST{
 		code = commands;
 		typeRes = typeRestrictions;
 		isDefined = true;
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting DefinedFunctionAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Calling external function: "+Arrays.toString(sig)+"\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending DefinedFunctionAST\n";
+		return result;
 	}
 }

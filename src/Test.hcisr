@@ -7,6 +7,7 @@ this file describes a program
 	this file uses hcisr/lib/HCISRStandardOutput.hcisr
 	this file uses hcisr/lib/HCISRInt.hcisr
 .
+set D to 4
 define a Integer named A which initially equals Integer: 1
 define a Integer named B which initially equals Integer: 2
 define a Integer named C which initially equals Integer: 3
@@ -26,7 +27,8 @@ println
 print A
 print B
 println
-set B to Integer: 3
+set B to Integer: 20
+print B
 define a String named Z which initially equals String:Nothing
 println
 print B

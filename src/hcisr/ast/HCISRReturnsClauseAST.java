@@ -6,6 +6,7 @@ import hcisr.HCISRStackFrame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Arrays;
 
 //this class represents a return clause
 public class HCISRReturnsClauseAST{
@@ -66,5 +67,24 @@ public class HCISRReturnsClauseAST{
 	public HCISRReturnsClauseAST(HCISRReturnsClauseAST origin, HashMap<String,String[]> bindings){
 		retVar = origin.retVar;
 		retType = HCISRClassAST.replaceTypeNames(origin.retType, bindings);
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting ReturnsClauseAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Return Variable: "+retVar+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Return Type: "+Arrays.toString(retType)+"\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending ReturnsClauseAST\n";
+		return result;
 	}
 }

@@ -15,6 +15,7 @@ public class HCISRInterpreter{
 	public static final String iteratorLoc = "hcisr/lib/HCISRIterator.hcisr";
 	public static final String stdioLoc = "hcisr/lib/HCISRStandardOutput.hcisr";
 	public static final String usualMethLoc = "hcisr/lib/HCISRUsualMethods.hcisr";
+	public static int verbose;
 	
 	HashMap<String,HCISRFileAST> loadedFiles = new HashMap<String,HCISRFileAST>();
 	Class ctu;
@@ -99,11 +100,14 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST addMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		addMeth.setInstructions(intMeths.addMeth);
-		//the method for sub
+
+		//the method for subtract
+
 		signature = new String[]{"I","-","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST subMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		subMeth.setInstructions(intMeths.subMeth);
+
 		//the method for mult
 		signature = new String[]{"I","*","B"};
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
@@ -119,6 +123,7 @@ public class HCISRInterpreter{
 		argumentTypes = new VariableLocationDescription[]{null,null,new VariableLocationDescription(false,0,new String[]{"Integer"})};
 		HCISRDeclaredMethodAST modMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
 		modMeth.setInstructions(intMeths.modMeth);
+
 		//the method for less than
 		signature = new String[]{"I","<","B"};
 		HCISRDeclaredMethodAST ltMeth = (HCISRDeclaredMethodAST)(intClass.findMatchingMethod(loadedFiles, signature, argumentTypes));
@@ -257,11 +262,26 @@ public class HCISRInterpreter{
 		
 		//now update the primitives, if necessary
 		fillInInitialFiles();
-		
+		if(verbose>0){
+			System.out.println("<===============>Printing Out AST<===============>\n");
+			System.out.println(toRet.toString(0));
+			System.out.println("\n<===============>End of AST<===============>");
+			if(verbose>1){
+				System.out.println("\n<===============>Linked Methods<===============>");
+				int index=0;
+				for(HCISRFileAST f:loadedFiles.values()){
+					System.out.println("Linked File with index of: "+index);
+					index++;
+					System.out.println(f.toString(0));
+				}
+				System.out.println("\n<===============>End of Methods<===============>");
+			}
+		}
 		return toRet;
 	}
 	
-	public HCISRInterpreter(Class classToUse){
+	public HCISRInterpreter(Class classToUse, int verbose1){
 		ctu = classToUse;
+		verbose = verbose1;
 	}
 }

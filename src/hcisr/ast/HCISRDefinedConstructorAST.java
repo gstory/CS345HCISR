@@ -6,6 +6,7 @@ import hcisr.HCISRStackFrame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Arrays;
 
 //this class represents a defined constructor
 public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
@@ -81,5 +82,21 @@ public class HCISRDefinedConstructorAST extends HCISRConstructorAST{
 		typeRes = HCISRClassAST.resizeTypeRestrictions(typeRes, origin.sig, sig);
 		code = origin.code.copyWithParameters(bindings);
 		isDefined = true;
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting DefinedConstructorAST\n";
+		tabCount++;
+			for(int i=0;i <tabCount;i++)
+				result+="\t";
+			result+="Signature for construct: "+Arrays.toString(sig)+"\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending DefinedConstructorAST\n";
+		return result;
 	}
 }

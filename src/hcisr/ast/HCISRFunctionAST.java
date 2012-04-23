@@ -22,4 +22,7 @@ public abstract class HCISRFunctionAST implements HCISRRunnable{
 	
 	public abstract void compileTemplates(HashMap<String,HCISRFileAST> imports,ArrayList<HCISRClassAST> newClasses);
 	public abstract void compileReferences(HashMap<String,HCISRFileAST> imports,HashMap<String,VariableLocationDescription> globalDataDescription, HCISRFunctionFileAST globalData);
+
+	public abstract String toString(int tabCount);
+
 }

@@ -83,4 +83,23 @@ public class HCISRVariableAST{
 		initType = origin.initType;
 		initVal = origin.initVal;
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting VariableAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Name: "+name+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Type: "+Arrays.toString(type)+"\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending VariableAST\n";
+		return result;
+	}
 }

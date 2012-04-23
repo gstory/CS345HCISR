@@ -883,11 +883,6 @@ public class HCISR implements HCISRConstants {
       case the_following_functions_make_use_of:
       case NUMS:
       case LP:
-//GS
-/*
-	jj_consume_token(RP);
-	break;
-*/
       case RP:
       case CHARS:
         anytmp = Any();
@@ -900,7 +895,6 @@ public class HCISR implements HCISRConstants {
         jj_consume_token(RP);
                                                       sig1.add(f.image); typeRes2.add(tidenttmp);
         break;
-
       default:
         jj_la1[21] = jj_gen;
         jj_consume_token(-1);
@@ -1574,7 +1568,7 @@ public class HCISR implements HCISRConstants {
          cc1 = new ArrayList<HCISRStatementAST>(); erc1 = new ArrayList<HCISRCatchClauseAST>();
     label_14:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) { 
       case OF:
       case A:
       case NAMED:
@@ -1627,6 +1621,7 @@ public class HCISR implements HCISRConstants {
       default:
         jj_la1[32] = jj_gen;
         break label_14;
+//	break;
       }
       s = Statement();
                      cc1.add(s);
@@ -1999,152 +1994,6 @@ public class HCISR implements HCISRConstants {
     throw new Error("Missing return statement in function");
   }
 
-//GS
-  final public HCISRConstructorCallAST GenConstructorcall(Token e1) throws ParseException {
- String[] methodSignature; String[] typeIdentifier; String tmp; Token e; ArrayList<String> sigbuilder = new ArrayList<String>();
-    e = jj_consume_token(make_a_new);
-                     sigbuilder.add(e.image);
-    typeIdentifier = TIDENT();
-                                                                          for(String s : typeIdentifier){sigbuilder.add(s);}
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case WITH:
-      e = jj_consume_token(WITH);
-                                                                                                                                           sigbuilder.add(e.image);
-      label_17:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case END:
-        case OF:
-        case A:
-        case NAMED:
-        case TYPE:
-        case ARCHTYPE:
-        case EXTERNALTYPE:
-        case is_a_subtype_of:
-        case and_has:
-        case and_an_instance:
-        case understands_the_following_commands:
-        case which_initially_equals:
-        case is_created_with_the_commands:
-        case this_file_uses:
-        case this_file_describes:
-        case a_Class:
-        case Functions:
-        case a_Program:
-        case define_a:
-        case SET:
-        case TO:
-        case IF:
-        case TRUE:
-        case FALSE:
-        case otherwise:
-        case FOR_ALL:
-        case DO:
-        case WHILE:
-        case COMPLAIN_ABOUT:
-        case LABEL:
-        case GOTO:
-        case NOTE:
-        case RETURNS:
-        case RETURN:
-        case THEN:
-        case IN:
-        case AS:
-        case WITH:
-        case STRINGREF:
-        case INTREF:
-        case FLOATREF:
-        case FUNCTIONREF:
-        case BOOLREF:
-        case make_a_new:
-        case and_in_the_event_of_a:
-        case the_following_functions_make_use_of:
-        case IDENT:
-        case NUMS:
-        case LP:
-        case RP:
-        case CHARS:
-          ;
-          break;
-        default:
-          jj_la1[37] = jj_gen;
-          break label_17;
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case END:
-        case OF:
-        case A:
-        case NAMED:
-        case TYPE:
-        case ARCHTYPE:
-        case EXTERNALTYPE:
-        case is_a_subtype_of:
-        case and_has:
-        case and_an_instance:
-        case understands_the_following_commands:
-        case which_initially_equals:
-        case is_created_with_the_commands:
-        case this_file_uses:
-        case this_file_describes:
-        case a_Class:
-        case Functions:
-        case a_Program:
-        case define_a:
-        case SET:
-        case TO:
-        case IF:
-        case TRUE:
-        case FALSE:
-        case otherwise:
-        case FOR_ALL:
-        case DO:
-        case WHILE:
-        case COMPLAIN_ABOUT:
-        case LABEL:
-        case GOTO:
-        case NOTE:
-        case RETURNS:
-        case RETURN:
-        case THEN:
-        case IN:
-        case AS:
-        case WITH:
-        case STRINGREF:
-        case INTREF:
-        case FLOATREF:
-        case FUNCTIONREF:
-        case BOOLREF:
-        case make_a_new:
-        case and_in_the_event_of_a:
-        case the_following_functions_make_use_of:
-        case NUMS:
-        case LP:
-        case RP:
-        case CHARS:
-          tmp = Any();
-                      sigbuilder.add(tmp);
-          break;
-        case IDENT:
-          e = jj_consume_token(IDENT);
-                                                           sigbuilder.add(e.image);
-          break;
-        default:
-          jj_la1[38] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-      }
-      break;
-    default:
-      jj_la1[39] = jj_gen;
-      ;
-    }
-    NL();
-                methodSignature = sigbuilder.toArray(new String[sigbuilder.size()]);
-                {if (true) return new HCISRConstructorCallAST(methodSignature, typeIdentifier);}
-    throw new Error("Missing return statement in function");
-  }
-
 //codeblock -> statement -> structurecall returns statement ast - done?
   final public HCISRStatementAST Structurecall() throws ParseException {
  HCISRStatementAST callreturn;
@@ -2227,7 +2076,6 @@ public class HCISR implements HCISRConstants {
       ;
     }
     NL();
-//System.out.println("asdf " + typeIdentifier[0]);
                 variableName = e.image;
                 {if (true) return new HCISRDefineCallAST(typeIdentifier, variableName, initialValue, initialType);}
     throw new Error("Missing return statement in function");
@@ -2235,8 +2083,8 @@ public class HCISR implements HCISRConstants {
 
 //codeblock -> statement -> setcall returns statement ast - done?
   final public HCISRStatementAST Setcall() throws ParseException {
- HCISRMethodCallAST methodcallreturn = null; HCISRFunctionCallAST functioncallreturn = null; HCISRConstructorCallAST constructorcallreturn = null; HCISRDefineCallAST definecallreturn = null; Token e; Token f; String s;
-    jj_consume_token(SET);
+ HCISRMethodCallAST methodcallreturn = null; HCISRFunctionCallAST functioncallreturn = null; HCISRConstructorCallAST constructorcallreturn = null; Token e; HCISRDefineCallAST definecallreturn = null; Token f; String s;
+    jj_consume_token(SET); 
     e = jj_consume_token(IDENT);
 
     jj_consume_token(TO);
@@ -2270,10 +2118,10 @@ public class HCISR implements HCISRConstants {
     case AS:
     case WITH:
     case STRINGREF:
+   //GS
     case INTREF:
-
 	s = Int();
-System.out.println("asdf "+s);
+//System.out.println("asdf "+s);
 	definecallreturn = new HCISRDefineCallAST(new String[]{"Integer"}, e.image, s, 1);
 	break;
     case FLOATREF:
@@ -2282,12 +2130,10 @@ System.out.println("asdf "+s);
     case and_in_the_event_of_a:
     case the_following_functions_make_use_of:
 //GS
-
     case NUMS:
-/*
 	f = jj_consume_token(NUMS);
 	definecallreturn = new HCISRDefineCallAST(new String[]{"Integer"}, e.image, f.image, 1);
-	break;*/
+	break;
     case LP:
     case RP:
     case CHARS:
@@ -2300,11 +2146,11 @@ System.out.println("asdf "+s);
       jj_la1[43] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
-    }
+    } 
                 if (methodcallreturn != null) {if (true) return new HCISRSetCallMethodAST(e.image, methodcallreturn);}
            else if (functioncallreturn != null) {if (true) return new HCISRSetCallFunctionAST(e.image, functioncallreturn);}
            else if (constructorcallreturn != null) {if (true) return new HCISRSetCallConstructorAST(e.image, constructorcallreturn);}
-	   else if (definecallreturn != null) {if (true) return definecallreturn;}
+	   else if (definecallreturn != null) { NL(); if (true) return definecallreturn;}
     throw new Error("Missing return statement in function");
   }
 

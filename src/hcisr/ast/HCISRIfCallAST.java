@@ -135,4 +135,40 @@ public class HCISRIfCallAST extends HCISRStatementAST{
 			falseComs[i] = origFalse[i].copyWithParameters(bindings);
 		}
 	}
+	
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting IfCallAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Dependent Variable: "+boolID+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Starting True Clause Statements\n";
+			tabCount++;
+				for(int i =0; i< trueComs.length;i++)
+					result+=trueComs[i].toString(tabCount);
+			tabCount--;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Ending True Clause Statements\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Starting False Clause Statements\n";
+			tabCount++;
+				for(int i =0; i< falseComs.length;i++)
+					result+=falseComs[i].toString(tabCount);
+			tabCount--;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Ending False Clause Statements\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending IfCallAST\n";
+		return result;
+	}
 }

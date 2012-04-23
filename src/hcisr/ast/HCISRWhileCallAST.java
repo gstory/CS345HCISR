@@ -98,4 +98,26 @@ public class HCISRWhileCallAST extends HCISRStatementAST{
 			loopComs[i] = origStat[i].copyWithParameters(bindings);
 		}
 	}
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting WhileCallAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Boolean ID: "+ boolID+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Starting Loop Statements\n";	
+			tabCount++;
+				for(int i=0; i< loopComs.length; i++)
+					result+=loopComs[i].toString(tabCount);
+			tabCount--;
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending WhileCallAST\n";
+		return result;
+	}
 }

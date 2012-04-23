@@ -3,7 +3,7 @@ this file describes a program
 	this file uses hcisr/lib/HCISRIterable.hcisr
 	this file uses hcisr/lib/HCISRInteger.hcisr
 	this file uses hcisr/lib/HCISRBoolean.hcisr
-	this file uses HCISRMergeSortFunc.hcisr
+	
 .
 define a Integer named CurVal which initially equals Integer: 0
 define a Integer named MaxVal which initially equals Integer: 10

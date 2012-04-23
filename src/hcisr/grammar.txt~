@@ -19,7 +19,7 @@ Class ->  Header (Data)? (Methods)? (Constructor)? <END> NL
   Methodhead -> <and an instance> IDENT> <understands the following commands> NL
   Methodbodies -> Methoddec*
    Methoddec -> Methodid CodeBody <END> NL
-    Methodid -> <IDENT> (<Chars>||<s>||(<IDENT> <LP> <TIDENT> <RP>))* NL
+    Methodid -> <IDENT> (<Chars>||<s>||(<IDENT> <LP> <TIDENT> <RP>))+ NL
     Codebody -> Returnsdec|Codeblock
      Returnsdec -> <returns> <TIDENT>
 Constructor -> Constructorhead Constructorbodies NL
@@ -36,7 +36,7 @@ Codeblock -> Statement* Returncall Catchcall*
   Methodcall -> <IDENT> (<CHARS> || <s> || <IDENT>)* NL
   Structurecall -> Definecall || Setcall || Ifcall || Forcall || Whilecall || Complaincall || Labelcall || Gotocall || Notecall
    Definecall -> <define a> <TIDENT> <called> <IDENT> (<which initially equals> (<STRING>||<INT>||<FLOAT>||<FUNCTION>||<BOOL>))? NL
-   Setcall -> <set> <IDENT> <to> (Methodcall || Functioncall)
+   Setcall -> <set> <IDENT> <to> (Methodcall || Functioncall) NL
    Ifcall -> Conditional Ifclause Elseclause?
     Conditional -> <if> <IDENT> <then> NL
     Ifclause -> (Statement)* <END> NL

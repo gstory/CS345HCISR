@@ -57,4 +57,26 @@ public class HCISRDefineCallAST extends HCISRStatementAST{
 		initVal = origin.initVal;
 		initType = origin.initType;
 	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting DefineCallAST:\n";
+		tabCount++;
+			for(int i=0; i< tabCount; i++)
+				result+="\t";
+			result+="it has an initial type of "+ initType+"\n";
+			for(int i=0; i< tabCount; i++)
+				result+="\t";
+			result+="it has an initial value of "+ initVal+"\n";
+			for(int i=0; i< tabCount; i++)
+				result+="\t";
+			result+="it has a variable name of "+ varName+"\n";
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending DefineCallAST\n";
+		return result;
+	}
 }

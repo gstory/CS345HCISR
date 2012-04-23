@@ -1,0 +1,159 @@
+this file describes functions
+	this file uses hcisr/lib/dataStructures/HCISRLinkedList.hcisr
+	this file uses hcisr/lib/HCISRIterable.hcisr
+	this file uses hcisr/lib/HCISRInteger.hcisr
+	this file uses hcisr/lib/HCISRBoolean.hcisr
+	this file uses hcisr/lib/HCISRObject.hcisr
+.
+the following functions make use of
+.
+mergesort L ( LinkedList of Integer )
+	note : find the length of the incoming list
+	
+	define a Integer named One which initially equals Integer: 1
+	define a Integer named Length
+	set Length to L length
+	define a Boolean named IsLen1
+	set IsLen1 to Length = One
+	define a LinkedList of Integer named ToRet
+	if IsLen1 then
+		note : if the linked list is of length one, do nothing
+		
+		set ToRet to identity of L
+	.
+	otherwise
+		note : split up the two lists
+		
+		define a LinkedList of Integer named ListA
+		set ListA to make a new LinkedList of Integer
+		define a LinkedList of Integer named ListB
+		set ListB to make a new LinkedList of Integer
+		define a Boolean named OnA which initially equals Boolean: true
+		for all Integer named I in L do
+			if OnA then
+				set OnA to OnA ~
+				ListA add I
+			.
+			otherwise
+				set OnA to OnA ~
+				ListB add I
+			.
+		.
+		
+		note : and recursively sort
+		
+		set ListA to mergesort ListA
+		set ListB to mergesort ListB
+		
+		note : and then build a new list, in decreasing order
+		
+		define a Integer named Null
+		set Null to nothing
+		
+		define a Iterator of Integer named ALI
+		define a Iterator of Integer named BLI
+		set ALI to ListA get iterator
+		set BLI to ListB get iterator
+		
+		define a Boolean named AHasNext
+		define a Boolean named BHasNext
+		
+		define a Integer named ACur
+		define a Integer named BCur
+		set AHasNext to ALI has next
+		if AHasNext then
+			set ACur to ALI get next
+		.
+		set BHasNext to BLI has next
+		if BHasNext then
+			set BCur to BLI get next
+		.
+		
+		define a Boolean named AnyLeft
+		define a Boolean named AV
+		define a Boolean named BV
+		set AV to are ACur and Null the same
+		set BV to are BCur and Null the same
+		set AnyLeft to AV & BV
+		set AnyLeft to AnyLeft ~
+		
+		set ToRet to make a new LinkedList of Integer
+		
+		while AnyLeft do
+			set AV to are ACur and Null the same
+			set BV to are BCur and Null the same
+			
+			if AV then
+				note if A is null, look only at B
+				
+				if BV then
+					note A and B are null, do nothing
+				.
+				otherwise
+					note add B
+					
+					ToRet add BCur
+					set BHasNext to BLI has next
+					if BHasNext then
+						set BCur to BLI get next
+					.
+					otherwise
+						set BCur to identity of Null
+					.
+				.
+			.
+			otherwise
+				note A is not null, look at B and compare
+				
+				if BV then
+					note A is not null, but B is, so add a
+					
+					ToRet add ACur
+					set AHasNext to ALI has next
+					if AHasNext then
+						set ACur to ALI get next
+					.
+					otherwise
+						set ACur to identity of Null
+					.
+				.
+				otherwise
+					note both are not null, add whichever one is smaller
+					
+					define a Boolean named Comp
+					set Comp to BCur < ACur
+					if Comp then
+						note add A
+						
+						ToRet add ACur
+						set AHasNext to ALI has next
+						if AHasNext then
+							set ACur to ALI get next
+						.
+						otherwise
+							set ACur to identity of Null
+						.
+					.
+					otherwise
+						note add B
+						
+						ToRet add BCur
+						set BHasNext to BLI has next
+						if BHasNext then
+							set BCur to BLI get next
+						.
+						otherwise
+							set BCur to identity of Null
+						.
+					.
+				.
+			.
+			
+			set AV to are ACur and Null the same
+			set BV to are BCur and Null the same
+			set AnyLeft to AV & BV
+			set AnyLeft to AnyLeft ~
+		.
+	.
+	return ToRet as LinkedList of Integer
+.

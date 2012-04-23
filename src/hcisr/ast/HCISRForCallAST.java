@@ -5,6 +5,7 @@ import hcisr.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Arrays;
 
 //this class represents a for loop
 public class HCISRForCallAST extends HCISRStatementAST{
@@ -171,5 +172,34 @@ public class HCISRForCallAST extends HCISRStatementAST{
 		for(int i = 0;i<origStat.length;i++){
 			loopComs[i] = origStat[i].copyWithParameters(bindings);
 		}
+	}
+
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting ForCallAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Variable ID: "+varID+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Type ID: "+Arrays.toString(typeID)+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "List ID: "+listID+"\n";
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Starting Loop Statements\n";	
+			tabCount++;
+				for(int i=0; i< loopComs.length; i++)
+					result+=loopComs[i].toString(tabCount);
+			tabCount--;
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending ForCallAST\n";
+		return result;
 	}
 }

@@ -49,7 +49,7 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 		if(specialVar){
 			hl.setLocation(newVal, arrayLocation);
 		}
-		else{1
+		else{
 			sf.setLocation(newVal, arrayLocation);
 		}
 		return null;
@@ -64,4 +64,22 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 		varID = origin.varID;
 		funcID = (HCISRFunctionCallAST)(origin.funcID.copyWithParameters(bindings));
 	}
+	
+	public String toString(int tabCount){
+		String result="";
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result+= "Starting SetCallFunctionAST\n";
+		tabCount++;
+			for(int i=0; i < tabCount; i++)
+				result +="\t";
+			result+= "Recieving Variable: "+varID+"\n";
+			result+=funcID.toString(tabCount);
+		tabCount--;
+		for(int i=0; i < tabCount; i++)
+			result +="\t";
+		result += "Ending SetCallFunctionAST\n";
+		return result;
+	}
+
 }
