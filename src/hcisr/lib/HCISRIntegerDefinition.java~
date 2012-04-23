@@ -152,7 +152,7 @@ class HCISRIntegerSet extends HCISRExternalCodeBlock{
 		//get the values
 		int i1v = ((HCISRInstanceIntegerVars)(i1.getExternalVariables())).value;
 		int i2v = ((HCISRInstanceIntegerVars)(i2.getExternalVariables())).value;
-//System.out.println("___"+i2v+"___");
+System.out.println("___"+i2v+"___");
 		int irv = i2v;
 		HCISRInstance ir = new HCISRInstance(i1.getHCISRClass());
 		ir.addExternalVariables(new HCISRInstanceIntegerVars(irv));

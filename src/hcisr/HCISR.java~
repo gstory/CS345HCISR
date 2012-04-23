@@ -2273,7 +2273,7 @@ public class HCISR implements HCISRConstants {
     case INTREF:
 
 	s = Int();
-System.out.println("asdf "+s);
+System.out.println("asdf "+e.image);
 	definecallreturn = new HCISRDefineCallAST(new String[]{"Integer"}, e.image, s, 1);
 	break;
     case FLOATREF:

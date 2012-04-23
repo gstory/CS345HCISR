@@ -3,6 +3,12 @@ this file describes a class
 .
 external type Integer is a subtype of Object
 	and an instance I understands the following commands
+		I 
+			returns Integer
+		.
+		I as integer
+			returns Integer
+		.
 		I + B (  Integer  )
 			returns Integer
 		.
@@ -30,12 +36,10 @@ external type Integer is a subtype of Object
 		I as string
 			returns String
 		.
-		I initialize integer
+		I setto B ( Integer )
 			returns Nothing
 		.
-		print I
-			set StringOne to I as string
-			print StringOne
+		I initialize integer
 			returns Nothing
 		.
 	.

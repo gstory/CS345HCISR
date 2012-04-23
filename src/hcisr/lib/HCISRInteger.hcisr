@@ -3,6 +3,9 @@ this file describes a class
 .
 external type Integer is a subtype of Object
 	and an instance I understands the following commands
+		I as integer
+			returns Integer
+		.
 		I + B (  Integer  )
 			returns Integer
 		.
@@ -29,6 +32,9 @@ external type Integer is a subtype of Object
 		.
 		I as string
 			returns String
+		.
+		I setto B ( Integer )
+			returns Nothing
 		.
 		I initialize integer
 			returns Nothing

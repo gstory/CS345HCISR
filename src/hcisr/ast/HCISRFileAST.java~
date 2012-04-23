@@ -192,11 +192,11 @@ public class HCISRFileAST implements HCISRRunnable{
 		}
 		//there is only one match
 		if(possible.size() == 1){
-System.out.println("+"+possible.get(0));(possible.get(0)).print();
+//System.out.println("+"+possible.get(0));(possible.get(0)).print();
 			return possible.get(0);
 		}
 		else{  
-System.out.println("-"+possible.size());
+//System.out.println("-"+possible.size());
 			return null;
 			//there is an error, throw exception
 		}

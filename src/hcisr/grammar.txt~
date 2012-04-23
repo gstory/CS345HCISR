@@ -36,7 +36,7 @@ Codeblock -> Statement* Returncall Catchcall*
   Methodcall -> <IDENT> (<CHARS> || <s> || <IDENT>)* NL
   Structurecall -> Definecall || Setcall || Ifcall || Forcall || Whilecall || Complaincall || Labelcall || Gotocall || Notecall
    Definecall -> <define a> <TIDENT> <called> <IDENT> (<which initially equals> (<STRING>||<INT>||<FLOAT>||<FUNCTION>||<BOOL>))? NL
-   Setcall -> <set> <IDENT> <to> (Methodcall || Functioncall || <STRING>||<INT>||<FLOAT>||<FUNCTION>||<BOOL>)
+   Setcall -> <set> <IDENT> <to> (Methodcall || Functioncall)
    Ifcall -> Conditional Ifclause Elseclause?
     Conditional -> <if> <IDENT> <then> NL
     Ifclause -> (Statement)* <END> NL

@@ -16,7 +16,6 @@ public abstract class HCISRMethodAST implements HCISRRunnable{
 	
 //GS TESTING
 	public void print(){
-		System.out.print("HCISRMethod : ");
 		for( String s : sig )
 			System.out.print(" "+s);
 	}

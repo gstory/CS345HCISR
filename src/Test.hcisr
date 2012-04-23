@@ -21,19 +21,19 @@ println
 print S2
 println
 
-
-define a Int named Z which initially equals Integer: 1
-define a Int named Y which initially equals Integer: 2
-define a Int named X which initially equals Integer: 0
-
-set X to Z + Y
-set S2 to X as string
-print S2
+A setto B
 println
-
-set X to X + Y
-set S2 to X as string
-print S2
+print A
+print B
+println
+set B to Integer: 3
+define a String named Z which initially equals String:Nothing
+println
+print B
+println
+println
+set C to A + C
+print C
 println
 
 println
@@ -51,3 +51,4 @@ println
 define a Boolean named B1 which initially equals Boolean: true
 print B1
 println
+

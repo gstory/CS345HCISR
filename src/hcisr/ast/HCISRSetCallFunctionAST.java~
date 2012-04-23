@@ -49,7 +49,7 @@ public class HCISRSetCallFunctionAST extends HCISRStatementAST{
 		if(specialVar){
 			hl.setLocation(newVal, arrayLocation);
 		}
-		else{
+		else{1
 			sf.setLocation(newVal, arrayLocation);
 		}
 		return null;
